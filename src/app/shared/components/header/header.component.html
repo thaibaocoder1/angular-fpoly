@@ -1,0 +1,104 @@
+<!-- Topbar Start -->
+<div class="container-fluid">
+  <div class="row bg-secondary py-2 px-xl-5">
+    <div class="col-lg-6 d-none d-lg-block">
+      <div class="d-inline-flex align-items-center">
+        <a class="text-dark" href="">FAQs</a>
+        <span class="text-muted px-2">|</span>
+        <a class="text-dark" href="">Help</a>
+        <span class="text-muted px-2">|</span>
+        <a class="text-dark" href="">Support</a>
+      </div>
+    </div>
+    <div class="col-lg-6 text-center text-lg-right">
+      <div class="d-inline-flex align-items-center">
+        <a class="text-dark px-2" href="">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a class="text-dark px-2" href="">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a class="text-dark px-2" href="">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a class="text-dark px-2" href="">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a class="text-dark pl-2" href="">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="row align-items-center py-3 px-xl-5">
+    <div class="col-lg-3 d-none d-lg-block">
+      <a [routerLink]="['/']" class="text-decoration-none">
+        <h1 class="m-0 display-5 font-weight-semi-bold">
+          <span class="text-primary font-weight-bold border px-3 mr-1">B</span
+          >Smart
+        </h1>
+      </a>
+    </div>
+    <div class="col-lg-6 col-6 text-left">
+      <form action="" id="searchForm">
+        <div class="input-group">
+          <input
+            type="text"
+            name="search"
+            id="searchInput"
+            class="form-control"
+            placeholder="Search for products"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text bg-transparent text-primary">
+              <i class="fa fa-search"></i>
+            </span>
+          </div>
+        </div>
+      </form>
+      <div class="search-list col-lg-12 col-12 mt-1"></div>
+    </div>
+    <div class="col-lg-3 col-6 text-right">
+      <a href="list.html" class="btn border">
+        <i class="fas fa-heart text-primary"></i>
+        <span class="badge" id="whitelist-order">0</span>
+      </a>
+      <a href="cart.html" class="btn border">
+        <i class="fas fa-shopping-cart text-primary"></i>
+        <span class="badge" id="num-order">0</span>
+      </a>
+    </div>
+  </div>
+</div>
+<!-- Topbar End -->
+
+<!-- Featured Start -->
+<div class="container-fluid pt-5">
+  <div class="row px-xl-5 pb-3">
+    <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+      <div class="d-flex align-items-center border mb-4" style="padding: 30px">
+        <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
+        <h5 class="font-weight-semi-bold m-0">Quality Product</h5>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+      <div class="d-flex align-items-center border mb-4" style="padding: 30px">
+        <h1 class="fa fa-shipping-fast text-primary m-0 mr-2"></h1>
+        <h5 class="font-weight-semi-bold m-0">Free Shipping</h5>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+      <div class="d-flex align-items-center border mb-4" style="padding: 30px">
+        <h1 class="fas fa-exchange-alt text-primary m-0 mr-3"></h1>
+        <h5 class="font-weight-semi-bold m-0">14-Day Return</h5>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+      <div class="d-flex align-items-center border mb-4" style="padding: 30px">
+        <h1 class="fa fa-phone-volume text-primary m-0 mr-3"></h1>
+        <h5 class="font-weight-semi-bold m-0">24/7 Support</h5>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Featured End -->
