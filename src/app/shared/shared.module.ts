@@ -6,6 +6,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { BannerComponent } from './components/banner/banner.component';
 import { FeaturedComponent } from './components/featured/featured.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     BannerComponent,
     FeaturedComponent,
     NavbarComponent,
+    SidebarComponent,
   ],
   imports: [CommonModule, SharedRoutingModule],
   exports: [
@@ -22,6 +24,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     BannerComponent,
     FeaturedComponent,
     NavbarComponent,
+    SidebarComponent,
   ],
 })
 export class SharedModule {}
