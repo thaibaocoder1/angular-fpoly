@@ -1,5 +1,5 @@
-import { ITodos } from './core/models/todo';
+import { IProducts } from './core/models/products';
 
 export interface AppState {
-  readonly todos: ITodos[];
+  readonly products: IProducts[];
 }

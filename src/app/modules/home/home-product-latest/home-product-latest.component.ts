@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { ITodos } from '../../../core/models/todo';
-import * as TodoActions from '../../../core/state/todo/todo.actions';
+import { IProducts } from '../../../core/models/products';
+import * as TodoActions from '../../../core/state/products/products.actions';
 import { AppState } from '../../../app.state';
 import { Observable } from 'rxjs';
 
@@ -11,14 +11,14 @@ import { Observable } from 'rxjs';
   styleUrl: './home-product-latest.component.css',
 })
 export class HomeProductLatestComponent implements OnInit {
-  todos$: Observable<ITodos[]>;
+  products$: Observable<IProducts[]>;
   constructor(private store: Store<AppState>) {
-    this.todos$ = this.store.pipe(select('todos'));
+    this.products$ = this.store.pipe(select('products'));
   }
   ngOnInit() {
-    this.loadTodos();
+    this.getAll();
   }
-  loadTodos() {
-    this.store.dispatch(TodoActions.loadTodos());
+  getAll() {
+    this.store.dispatch(TodoActions.loadProduct());
   }
 }

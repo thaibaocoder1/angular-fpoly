@@ -8,7 +8,7 @@ export interface IProducts {
   price: number;
   discount: number;
   thumb: {
-    data: Buffer;
+    data: string;
     contentType: string;
     fileName: string;
   };
