@@ -1,1 +1,16 @@
-<p>home-product-latest works!</p>
+<!-- Products Start -->
+<div class="container-fluid pt-5">
+  <div class="text-center mb-4">
+    <h2 class="section-title px-5">
+      <span class="px-2">Latest Product</span>
+    </h2>
+  </div>
+  <div class="row px-xl-5 pb-3" id="latest-product"></div>
+</div>
+<!-- Products End -->
+
+<h1>Todos</h1>
+<ng-container *ngFor="let item of todos$ | async">
+  <h1>{{ item.title }}</h1>
+  <p>{{ item.userId }}</p>
+</ng-container>
