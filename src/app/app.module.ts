@@ -10,7 +10,9 @@ import { SharedModule } from './shared/shared.module';
 import { ModulesModule } from './modules/modules.module';
 import { AppState } from './app.state';
 import { ProductReducer } from './core/state/products/products.reducer';
-import { TodoEffects } from './core/state/products/products.effects';
+import { ProductEffects } from './core/state/products/products.effects';
+import { CatalogReducer } from './core/state/category/category.reducer';
+import { CategoryEffects } from './core/state/category/category.effects';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,8 +22,11 @@ import { TodoEffects } from './core/state/products/products.effects';
     ModulesModule,
     SharedModule,
     HttpClientModule,
-    StoreModule.forRoot<AppState>({ products: ProductReducer }, {}),
-    EffectsModule.forRoot([TodoEffects]),
+    StoreModule.forRoot<AppState>({
+      products: ProductReducer,
+      catalogs: CatalogReducer,
+    }),
+    EffectsModule.forRoot([ProductEffects, CategoryEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
   providers: [],

@@ -6,17 +6,14 @@ import { IProducts } from '../../../core/models/products';
 import * as ProductActions from '../../../core/state/products/products.actions';
 
 @Component({
-  selector: 'app-home-product-arrived',
-  templateUrl: './home-product-arrived.component.html',
-  styleUrl: './home-product-arrived.component.css',
+  selector: 'app-products-list',
+  templateUrl: './products-list.component.html',
+  styleUrl: './products-list.component.css',
 })
-export class HomeProductArrivedComponent {
+export class ProductsListComponent {
   products$: Observable<IProducts[]>;
   constructor(private store: Store<AppState>) {
-    this.products$ = this.store.pipe(
-      select('products'),
-      map((productsState) => productsState.slice(8, 16))
-    );
+    this.products$ = this.store.pipe(select('products'));
   }
   ngOnInit() {
     this.getAll();

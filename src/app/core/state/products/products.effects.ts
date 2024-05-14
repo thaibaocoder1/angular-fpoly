@@ -6,7 +6,7 @@ import * as TodoActions from './products.actions';
 import { ProductsService } from '../../services/products/products.service';
 
 @Injectable()
-export class TodoEffects {
+export class ProductEffects {
   loadProduct$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TodoActions.loadProduct),
