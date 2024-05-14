@@ -12,7 +12,10 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.formLogin = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', Validators.required, Validators.min(6)],
     });
+  }
+  onSubmit() {
+    console.log(this.formLogin.getRawValue());
   }
 }

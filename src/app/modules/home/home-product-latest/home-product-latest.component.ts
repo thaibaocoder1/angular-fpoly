@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { Component, Input, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { IProducts } from '../../../core/models/products';
-import * as ProductActions from '../../../core/state/products/products.actions';
 import { AppState } from '../../../app.state';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-home-product-latest',
@@ -12,17 +10,12 @@ import { map } from 'rxjs/operators';
   styleUrl: './home-product-latest.component.css',
 })
 export class HomeProductLatestComponent implements OnInit {
-  products$: Observable<IProducts[]>;
-  constructor(private store: Store<AppState>) {
-    this.products$ = this.store.pipe(
-      select('products'),
-      map((productsState) => productsState.slice(0, 8))
-    );
-  }
+  @Input() data!: Observable<IProducts[]>;
+  product$: Observable<IProducts[]> | undefined;
+  constructor(private store: Store<AppState>) {}
   ngOnInit() {
-    this.getAll();
-  }
-  getAll() {
-    this.store.dispatch(ProductActions.loadProduct());
+    if (this.data) {
+      this.product$ = this.data.pipe(map((state) => state.slice(0, 8)));
+    }
   }
 }

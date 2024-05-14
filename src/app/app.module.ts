@@ -5,7 +5,6 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppRoutingModule } from './app-routing.module';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { ModulesModule } from './modules/modules.module';
@@ -22,8 +21,6 @@ import { CategoryEffects } from './core/state/category/category.effects';
     AppRoutingModule,
     ModulesModule,
     SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
     HttpClientModule,
     StoreModule.forRoot<AppState>({
       products: ProductReducer,

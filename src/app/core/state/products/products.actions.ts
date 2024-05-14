@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { IProducts } from '../../models/products';
 
-// [GET]
+// [GET] - Without ID
 export const loadProduct = createAction('[Product] Load Products');
 export const loadProductSuccess = createAction(
   '[Product] Load Products Success',
@@ -11,10 +11,10 @@ export const loadProductFailure = createAction(
   '[Product] Load Products Failure',
   props<{ error: any }>()
 );
-
-export const loadProductByIdFailure = createAction(
-  '[Product] Load Product By ID Failure',
-  props<{ error: any }>()
+// [GET] - With ID
+export const loadProductWithCatID = createAction(
+  '[Product] Load Products Catalog',
+  props<{ catID: string }>()
 );
 
 export const addProduct = createAction(
@@ -55,3 +55,5 @@ export const deleteProductFailure = createAction(
   '[Product] Delete Product Failure',
   props<{ error: any }>()
 );
+
+export const resetProductState = createAction('[Product] Reset Product State');

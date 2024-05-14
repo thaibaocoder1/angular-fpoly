@@ -2,49 +2,43 @@ import {
   Component,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
-  SimpleChange,
   SimpleChanges,
 } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, map, switchMap } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { AppState } from '../../../app.state';
 import { IProducts } from '../../../core/models/products';
 import * as ProductActions from '../../../core/state/products/products.actions';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-products-related',
   templateUrl: './products-related.component.html',
   styleUrl: './products-related.component.css',
 })
-export class ProductsRelatedComponent implements OnInit, OnChanges {
+export class ProductsRelatedComponent implements OnInit, OnChanges, OnDestroy {
   @Input() catalogID: string = '';
   products$: Observable<IProducts[]>;
-  id: string = '';
-  constructor(
-    private store: Store<AppState>,
-    private activatedRoute: ActivatedRoute
-  ) {
-    this.products$ = this.activatedRoute.paramMap.pipe(
-      switchMap((params) => {
-        this.id = params.get('id') as string;
-        return this.store.pipe(
-          select('products'),
-          map((products: IProducts[]) =>
-            products.filter((product) => product._id !== this.id).slice(0, 4)
-          )
-        );
+
+  constructor(private store: Store<AppState>) {
+    this.products$ = this.store.pipe(
+      select('products'),
+      map((productsState) => {
+        return productsState.slice(0, 4);
       })
     );
   }
-  ngOnInit() {
-    this.getAll();
-  }
+  ngOnInit() {}
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
+    if (changes['catalogID'] && changes['catalogID']?.currentValue !== '') {
+      this.catalogID = changes['catalogID']?.currentValue;
+      this.store.dispatch(
+        ProductActions.loadProductWithCatID({ catID: this.catalogID })
+      );
+    }
   }
-  getAll() {
-    this.store.dispatch(ProductActions.loadProduct());
+  ngOnDestroy() {
+    this.store.dispatch(ProductActions.resetProductState());
   }
 }

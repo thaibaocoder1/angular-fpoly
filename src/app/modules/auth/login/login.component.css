@@ -5,7 +5,7 @@
   height: 100vh;
 }
 .form {
-  min-width: 360px;
+  width: 560px;
   min-height: 100px;
   padding: 32px 24px;
   text-align: center;
@@ -15,6 +15,7 @@
   align-self: center;
   box-shadow: 0 2px 5px 0 rgba(51, 62, 73, 0.1);
   position: relative;
+  z-index: 10;
 }
 .back-to-home {
   width: 4rem;
@@ -47,12 +48,12 @@
   width: 49.5%;
 }
 .form .heading {
-  font-size: 2rem;
+  font-size: 24px;
 }
 .form .desc {
   text-align: center;
   color: #636d77;
-  font-size: 1.6rem;
+  font-size: 16px;
   font-weight: lighter;
   line-height: 2.4rem;
   margin-top: 8px;
@@ -84,28 +85,21 @@
   border: 1px solid #b3b3b3;
   border-radius: 3px;
   outline: none;
-  font-size: 1.4rem;
+  font-size: 16px;
 }
 
 .form-control:hover {
   border-color: #f33a58;
 }
 
-.form-group.invalid .form-control {
-  border-color: #f33a58;
-}
-
-.form-group.invalid .form-message {
-  color: #f33a58;
-}
-
 .form-message {
-  font-size: 1.2rem;
-  line-height: 1.6rem;
-  padding: 4px 0 0;
+  line-height: 1.4;
+  padding: 4px 0 4px 0;
   position: absolute;
-  bottom: -20px;
+  bottom: -26px;
   left: 0;
+  font-size: 14px;
+  color: #f33a58;
 }
 
 .form-submit {

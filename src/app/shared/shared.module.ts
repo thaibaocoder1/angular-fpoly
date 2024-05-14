@@ -8,6 +8,9 @@ import { FeaturedComponent } from './components/featured/featured.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { OfferComponent } from './components/offer/offer.component';
+import { CommonComponent } from './components/common/common.component';
+import { InputComponent } from './components/input/input.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,8 +21,15 @@ import { OfferComponent } from './components/offer/offer.component';
     NavbarComponent,
     SidebarComponent,
     OfferComponent,
+    CommonComponent,
+    InputComponent,
   ],
-  imports: [CommonModule, SharedRoutingModule],
+  imports: [
+    CommonModule,
+    SharedRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
   exports: [
     HeaderComponent,
     FooterComponent,
@@ -28,6 +38,8 @@ import { OfferComponent } from './components/offer/offer.component';
     NavbarComponent,
     SidebarComponent,
     OfferComponent,
+    CommonComponent,
+    InputComponent,
   ],
 })
 export class SharedModule {}

@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { Component, Input } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable, map } from 'rxjs';
 import { AppState } from '../../../app.state';
 import { IProducts } from '../../../core/models/products';
-import * as ProductActions from '../../../core/state/products/products.actions';
 
 @Component({
   selector: 'app-home-product-arrived',
@@ -11,17 +10,12 @@ import * as ProductActions from '../../../core/state/products/products.actions';
   styleUrl: './home-product-arrived.component.css',
 })
 export class HomeProductArrivedComponent {
-  products$: Observable<IProducts[]>;
-  constructor(private store: Store<AppState>) {
-    this.products$ = this.store.pipe(
-      select('products'),
-      map((productsState) => productsState.slice(8, 16))
-    );
-  }
+  @Input() data!: Observable<IProducts[]>;
+  products$: Observable<IProducts[]> | undefined;
+  constructor(private store: Store<AppState>) {}
   ngOnInit() {
-    this.getAll();
-  }
-  getAll() {
-    this.store.dispatch(ProductActions.loadProduct());
+    if (this.data) {
+      this.products$ = this.data.pipe(map((state) => state.slice(8, 16)));
+    }
   }
 }
