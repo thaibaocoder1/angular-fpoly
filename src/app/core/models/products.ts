@@ -1,3 +1,5 @@
+import { ICategory } from './category';
+
 export interface IProducts {
   _id: string;
   categoryID: string;

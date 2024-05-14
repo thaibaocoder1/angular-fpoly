@@ -13,8 +13,13 @@ const routes: Routes = [
       import('./products/products.module').then((m) => m.ProductsModule),
   },
   {
-    path: 'contact',
-    component: ContactComponent,
+    path: 'pages',
+    loadChildren: () =>
+      import('./pages/pages.module').then((m) => m.PagesModule),
+  },
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
   },
 ];
 

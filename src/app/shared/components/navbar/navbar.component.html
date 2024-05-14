@@ -54,7 +54,7 @@
         </div>
       </div>
       <a
-        [routerLink]="['/contact']"
+        [routerLink]="['/pages']"
         routerLinkActive="active"
         class="nav-item nav-link"
         >Contact</a
@@ -62,13 +62,13 @@
     </div>
     <div class="navbar-nav ml-auto py-0" id="account">
       <a
-        [routerLink]="['/login']"
+        [routerLink]="['/auth', 'login']"
         routerLinkActive="active"
         class="nav-item nav-link"
         >Login</a
       >
       <a
-        [routerLink]="['/register']"
+        [routerLink]="['/auth', 'register']"
         routerLinkActive="active"
         class="nav-item nav-link"
         >Register</a
