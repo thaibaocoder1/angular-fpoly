@@ -12,6 +12,11 @@ export const loadProductFailure = createAction(
   props<{ error: any }>()
 );
 // [GET] - With ID
+export const loadProductDetail = createAction(
+  '[Product] Load Product Detail',
+  props<{ productId: string }>()
+);
+// [GET] - With Catlog ID
 export const loadProductWithCatID = createAction(
   '[Product] Load Products Catalog',
   props<{ catID: string }>()

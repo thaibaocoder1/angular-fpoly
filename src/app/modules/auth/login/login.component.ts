@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UniqueEmail } from '../validators/unique-email';
 
 @Component({
   selector: 'app-login',
@@ -8,14 +9,18 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
   formLogin: FormGroup = new FormGroup({});
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private unique: UniqueEmail) {}
   ngOnInit(): void {
     this.formLogin = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required, Validators.min(6)],
+      email: [
+        '',
+        [Validators.required, Validators.email],
+        [this.unique.validate],
+      ],
+      password: ['', [Validators.required, Validators.min(6)]],
     });
   }
   onSubmit() {
-    console.log(this.formLogin.getRawValue());
+    const values = this.formLogin.getRawValue();
   }
 }

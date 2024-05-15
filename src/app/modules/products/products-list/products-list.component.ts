@@ -1,24 +1,21 @@
-import { Component } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { Observable, map } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { AppState } from '../../../app.state';
 import { IProducts } from '../../../core/models/products';
-import * as ProductActions from '../../../core/state/products/products.actions';
 
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
   styleUrl: './products-list.component.css',
 })
-export class ProductsListComponent {
-  products$: Observable<IProducts[]>;
-  constructor(private store: Store<AppState>) {
-    this.products$ = this.store.pipe(select('products'));
-  }
-  ngOnInit() {
-    this.getAll();
-  }
-  getAll() {
-    this.store.dispatch(ProductActions.loadProduct());
+export class ProductsListComponent implements OnInit {
+  @Input() data!: Observable<IProducts[]>;
+  products$: Observable<IProducts[]> | undefined;
+  constructor(private store: Store<AppState>) {}
+  ngOnInit(): void {
+    if (this.data) {
+      this.products$ = this.data;
+    }
   }
 }

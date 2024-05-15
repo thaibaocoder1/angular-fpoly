@@ -14,8 +14,12 @@ export const ProductReducer = createReducer(
     console.error(error);
     return state;
   }),
+  on(ProductActions.loadProductDetail, (state, { productId }) => {
+    return state.filter((item) => item._id === productId);
+  }),
   on(ProductActions.loadProductWithCatID, (state, { catID }) => {
-    return state.filter((item) => item.categoryID === catID);
+    const stateCopy = state.filter((item) => item.categoryID === catID);
+    return stateCopy;
   }),
   on(ProductActions.resetProductState, () => initialState)
 );

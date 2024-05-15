@@ -20,6 +20,10 @@
         placeholder="VD: abc@gmail.com"
         class="form-control"
         formControlName="email"
+        [ngClass]="{
+          invalid:
+            formLogin.get('email')?.errors && formLogin.get('email')?.touched
+        }"
       />
       <ng-container
         *ngIf="
@@ -39,6 +43,12 @@
         >
           Invalid email format.
         </span>
+        <span
+          class="form-message"
+          *ngIf="formLogin.controls['email'].getError('nonUniqueEmail')"
+        >
+          Email is not exist in system.
+        </span>
       </ng-container>
     </div>
 
@@ -50,6 +60,11 @@
         placeholder="Nhập mật khẩu"
         class="form-control"
         formControlName="password"
+        [ngClass]="{
+          invalid:
+            formLogin.get('password')?.errors &&
+            formLogin.get('password')?.touched
+        }"
       />
       <div
         *ngIf="

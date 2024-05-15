@@ -13,6 +13,7 @@ import { ProductReducer } from './core/state/products/products.reducer';
 import { ProductEffects } from './core/state/products/products.effects';
 import { CatalogReducer } from './core/state/category/category.reducer';
 import { CategoryEffects } from './core/state/category/category.effects';
+// import { UserReducer } from './core/state/users/users.reducer';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +26,7 @@ import { CategoryEffects } from './core/state/category/category.effects';
     StoreModule.forRoot<AppState>({
       products: ProductReducer,
       catalogs: CatalogReducer,
+      // users: UserReducer,
     }),
     EffectsModule.forRoot([ProductEffects, CategoryEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),

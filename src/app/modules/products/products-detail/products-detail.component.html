@@ -1,8 +1,5 @@
 <!-- Shop Detail Start -->
-<div
-  class="container-fluid py-5"
-  *ngIf="selectedProduct$ | async as selectedProduct"
->
+<div class="container-fluid py-5" *ngFor="let item of selectedProduct$ | async">
   <div class="row px-xl-5">
     <div class="col-lg-5 pb-5">
       <div id="product-carousel" class="carousel slide" data-ride="carousel">
@@ -10,8 +7,8 @@
           <div class="carousel-item active">
             <img
               class="w-100 h-100"
-              [src]="selectedProduct.thumb.fileName"
-              [alt]="selectedProduct.name"
+              [src]="item.thumb.fileName"
+              [alt]="item.name"
             />
           </div>
         </div>
@@ -33,7 +30,7 @@
     </div>
 
     <div class="col-lg-7 pb-5" id="info-product">
-      <h3 class="font-weight-semi-bold">{{ selectedProduct.name }}</h3>
+      <h3 class="font-weight-semi-bold">{{ item.name }}</h3>
       <div class="d-flex mb-3">
         <div class="text-primary mr-2">
           <small class="fas fa-star"></small>
@@ -45,16 +42,22 @@
         <small class="pt-1">(50 Reviews)</small>
       </div>
       <h3 class="font-weight-semi-bold mb-4">
-        {{ selectedProduct.price }}
+        {{ item.price }}
       </h3>
       <h4 class="font-weight-semi-bold mb-4" style="color: var(--red)">
-        Sale {{ selectedProduct.discount }}%
+        Sale {{ item.discount }}%
       </h4>
-      <p class="mb-4">{{ selectedProduct.description }}</p>
+      <div class="d-flex mb-3">
+        <p class="text-dark font-weight-medium mb-0 mr-3">Shipping:</p>
+        <span class="text-dark font-weight-normal mb-0 mr-3">
+          Miễn phí vận chuyển
+        </span>
+      </div>
+      <p class="mb-4">{{ item.description }}</p>
       <div class="d-flex mb-3">
         <p class="text-dark font-weight-medium mb-0 mr-3">Quantity:</p>
         <span class="text-dark font-weight-normal mb-0 mr-3">
-          {{ selectedProduct.quantity }} sản phẩm
+          {{ item.quantity }} sản phẩm
         </span>
       </div>
       <div class="d-flex align-items-center mb-4 pt-2">
@@ -117,7 +120,7 @@
         <div class="tab-pane fade show active" id="tab-pane-1">
           <h4 class="mb-3">Product Description</h4>
           <div id="description-product">
-            <p class="mb-4">{{ selectedProduct.description }}</p>
+            <p class="mb-4">{{ item.description }}</p>
           </div>
         </div>
         <div class="tab-pane fade" id="tab-pane-2">

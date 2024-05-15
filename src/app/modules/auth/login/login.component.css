@@ -73,10 +73,9 @@
 }
 
 .form-label {
-  font-weight: 700;
-  padding-bottom: 6px;
+  font-weight: 600;
   line-height: 1.8rem;
-  font-size: 1.4rem;
+  font-size: 1rem;
 }
 
 .form-control {
@@ -101,7 +100,9 @@
   font-size: 14px;
   color: #f33a58;
 }
-
+.invalid {
+  border-color: #f33a40;
+}
 .form-submit {
   outline: none;
   background-color: #f33a58;

@@ -12,7 +12,7 @@ import * as ProductActions from '../../../core/state/products/products.actions';
   styleUrl: './products-detail.component.css',
 })
 export class ProductsDetailComponent implements OnInit {
-  selectedProduct$: Observable<IProducts | undefined>;
+  selectedProduct$: Observable<IProducts[] | undefined>;
   id: string = '';
   catalogID: string = '';
 
@@ -20,28 +20,19 @@ export class ProductsDetailComponent implements OnInit {
     private store: Store<AppState>,
     private activatedRoute: ActivatedRoute
   ) {
-    this.selectedProduct$ = this.activatedRoute.paramMap.pipe(
-      switchMap((params) => {
-        this.id = params.get('id') as string;
-        return this.store.pipe(
-          select('products'),
-          map((products: IProducts[]) => {
-            const selectedProduct = products.find(
-              (product) => product._id === this.id
-            );
-            if (selectedProduct) {
-              this.catalogID = selectedProduct.categoryID;
-            }
-            return selectedProduct;
-          })
-        );
-      })
-    );
+    this.selectedProduct$ = this.store.select('products');
   }
   ngOnInit() {
     this.getById();
   }
   getById() {
-    this.store.dispatch(ProductActions.loadProduct());
+    this.activatedRoute.paramMap
+      .pipe(map((params) => params.get('id')))
+      .subscribe((id) => {
+        this.id = id as string;
+        this.store.dispatch(
+          ProductActions.loadProductDetail({ productId: this.id })
+        );
+      });
   }
 }
