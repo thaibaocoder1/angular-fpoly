@@ -1,5 +1,21 @@
+<!-- Page Header Start -->
+<div class="container-fluid bg-secondary mb-5">
+  <div
+    class="d-flex flex-column align-items-center justify-content-center"
+    style="min-height: 300px"
+  >
+    <h1 class="font-weight-semi-bold text-uppercase mb-3">Shop Detail</h1>
+    <div class="d-inline-flex">
+      <p class="m-0"><a routerLink="/" class="text-decoration-none">Home</a></p>
+      <p class="m-0 px-2">-</p>
+      <p class="m-0">Shop Detail</p>
+    </div>
+  </div>
+</div>
+<!-- Page Header End -->
+
 <!-- Shop Detail Start -->
-<div class="container-fluid py-5" *ngFor="let item of selectedProduct$ | async">
+<div class="container-fluid py-5" *ngIf="selectedProduct$ | async as item">
   <div class="row px-xl-5">
     <div class="col-lg-5 pb-5">
       <div id="product-carousel" class="carousel slide" data-ride="carousel">
@@ -53,7 +69,12 @@
           Miễn phí vận chuyển
         </span>
       </div>
-      <p class="mb-4">{{ item.description }}</p>
+      <p class="text-dark font-weight-medium mb-3">
+        Description:
+        <span class="text-dark font-weight-normal mb-0 mr-3">
+          {{ item.description }}
+        </span>
+      </p>
       <div class="d-flex mb-3">
         <p class="text-dark font-weight-medium mb-0 mr-3">Quantity:</p>
         <span class="text-dark font-weight-normal mb-0 mr-3">
@@ -108,11 +129,22 @@
   </div>
   <div class="row px-xl-5">
     <div class="col">
-      <div class="nav nav-tabs justify-content-center border-secondary mb-4">
-        <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1"
+      <div
+        class="nav nav-tabs justify-content-center border-secondary mb-4"
+        role="tablist"
+      >
+        <a
+          class="nav-item nav-link active"
+          data-bs-toggle="tab"
+          data-bs-target="#tab-pane-1"
+          style="cursor: pointer"
           >Description</a
         >
-        <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-2"
+        <a
+          class="nav-item nav-link"
+          data-bs-toggle="tab"
+          data-bs-target="#tab-pane-2"
+          style="cursor: pointer"
           >Information</a
         >
       </div>
@@ -125,7 +157,9 @@
         </div>
         <div class="tab-pane fade" id="tab-pane-2">
           <h4 class="mb-3">Additional Information</h4>
-          <div id="content-product"></div>
+          <div id="content-product">
+            <p class="mb-4">{{ item.content }}</p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,25 +1,38 @@
 import { createReducer, on } from '@ngrx/store';
-import { IProducts } from '../../models/products';
 import * as ProductActions from './products.actions';
+import { ProductsState } from '../../adapter/products';
+import { IProducts } from '../../models/products';
 
-export const initialState: IProducts[] = [];
+export const initialState: ProductsState = {
+  loading: false,
+  product: null,
+  products: [],
+};
 
 export const ProductReducer = createReducer(
   initialState,
-  on(ProductActions.loadProduct, (state) => state),
-  on(ProductActions.loadProductSuccess, (state, { products }) => {
-    return products;
+  on(ProductActions.loadProduct, (state) => {
+    return { ...state, loading: true };
   }),
-  on(ProductActions.loadProductFailure, (state, { error }) => {
-    console.error(error);
-    return state;
-  }),
-  on(ProductActions.loadProductDetail, (state, { productId }) => {
-    return state.filter((item) => item._id === productId);
+  on(ProductActions.loadProductSuccess, (state, action) => ({
+    ...state,
+    loading: false,
+    products: action.products,
+  })),
+  on(ProductActions.loadProductFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+  on(ProductActions.loadProductDetail, (state, action) => {
+    const selectedProduct = state.products.find(
+      (item) => item._id === action.productId
+    );
+    return { ...state, loading: false, product: selectedProduct || null };
   }),
   on(ProductActions.loadProductWithCatID, (state, { catID }) => {
-    const stateCopy = state.filter((item) => item.categoryID === catID);
-    return stateCopy;
+    const related = state.products.filter((item) => item.categoryID === catID);
+    return { ...state, loading: false, products: related };
   }),
   on(ProductActions.resetProductState, () => initialState)
 );

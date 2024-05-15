@@ -13,7 +13,7 @@ import * as ProductActions from '../../core/state/products/products.actions';
 export class HomeComponent {
   products$: Observable<IProducts[]>;
   constructor(private store: Store<AppState>) {
-    this.products$ = this.store.select('products');
+    this.products$ = this.store.select((state) => state.products.products);
   }
   ngOnInit() {
     this.getAll();

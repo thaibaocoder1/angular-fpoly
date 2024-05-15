@@ -19,17 +19,17 @@ import * as ProductActions from '../../../core/state/products/products.actions';
 })
 export class ProductsRelatedComponent implements OnInit, OnChanges, OnDestroy {
   @Input() catalogID: string = '';
-  products$: Observable<IProducts[]>;
+  products$: Observable<IProducts[] | null> | undefined;
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>) {}
+  ngOnInit() {
     this.products$ = this.store.pipe(
-      select('products'),
+      select((state) => state.products.products),
       map((productsState) => {
         return productsState.slice(0, 4);
       })
     );
   }
-  ngOnInit() {}
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['catalogID'] && changes['catalogID']?.currentValue !== '') {
       this.catalogID = changes['catalogID']?.currentValue;

@@ -1,9 +1,7 @@
 import { ICategory } from './core/models/category';
-import { IProducts } from './core/models/products';
-import { IUsers } from './core/models/users';
+import { ProductsState } from './core/adapter/products';
 
 export interface AppState {
-  readonly products: IProducts[];
+  readonly products: ProductsState;
   readonly catalogs: ICategory[];
-  // readonly users: IUsers[];
 }

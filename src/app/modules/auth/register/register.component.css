@@ -1,0 +1,141 @@
+.main {
+  display: flex;
+  justify-content: center;
+  background-color: #fafafa;
+}
+.form {
+  width: 560px;
+  min-height: 100px;
+  padding: 32px 24px;
+  text-align: center;
+  background: #fff;
+  border-radius: 2px;
+  margin: 24px;
+  align-self: center;
+  box-shadow: 0 2px 5px 0 rgba(51, 62, 73, 0.1);
+  position: relative;
+  z-index: 10;
+}
+.back-to-home {
+  width: 4rem;
+  height: 4rem;
+  background-color: #f33a58;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.25s linear;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  transform: translate(-50%, -50%) scale(0.9);
+  z-index: 10000;
+}
+.back-to-home:hover {
+  background-color: #f33a40;
+  transform: translate(-50%, -50%) scale(1);
+}
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.wrapper > * {
+  width: 49.5%;
+}
+.form .heading {
+  font-size: 24px;
+}
+.form .desc {
+  text-align: center;
+  color: #636d77;
+  font-size: 16px;
+  font-weight: lighter;
+  line-height: 2.4rem;
+  margin-top: 8px;
+  font-weight: 300;
+}
+
+.form-group {
+  display: flex;
+  margin-bottom: 24px;
+  flex-direction: column;
+  position: relative;
+}
+
+.form-label,
+.form-message {
+  text-align: left;
+}
+
+.form-label {
+  font-weight: 600;
+  line-height: 1.8rem;
+  font-size: 1rem;
+}
+
+.form-control {
+  height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #b3b3b3;
+  border-radius: 3px;
+  outline: none;
+  font-size: 16px;
+}
+
+.form-control:hover {
+  border-color: #f33a58;
+}
+
+.form-message {
+  line-height: 1.4;
+  padding: 4px 0 4px 0;
+  position: absolute;
+  bottom: -26px;
+  left: 0;
+  font-size: 14px;
+  color: #f33a58;
+}
+.invalid {
+  border-color: #f33a40;
+}
+.form-submit {
+  outline: none;
+  background-color: #f33a58;
+  margin-top: 12px;
+  padding: 12px 16px;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  width: 100%;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.form-submit:hover {
+  background-color: #f33a58;
+}
+
+.spacer {
+  margin-top: 24px;
+}
+.actions p {
+  font-size: 16px;
+}
+
+.restore {
+  display: flex;
+  justify-content: flex-end;
+}
+.actions--custom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.actions--custom > * {
+  font-size: 14px;
+}

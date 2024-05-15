@@ -66,7 +66,7 @@
             formLogin.get('password')?.touched
         }"
       />
-      <div
+      <ng-container
         *ngIf="
           formLogin.controls['password'].touched &&
           formLogin.controls['password'].invalid
@@ -78,7 +78,7 @@
         >
           Password is required.
         </span>
-      </div>
+      </ng-container>
     </div>
 
     <button type="submit" [disabled]="formLogin.invalid" class="form-submit">

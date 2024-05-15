@@ -9,7 +9,7 @@ export const loadProductSuccess = createAction(
 );
 export const loadProductFailure = createAction(
   '[Product] Load Products Failure',
-  props<{ error: any }>()
+  props<{ error: string }>()
 );
 // [GET] - With ID
 export const loadProductDetail = createAction(

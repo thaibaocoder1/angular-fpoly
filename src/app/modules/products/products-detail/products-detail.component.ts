@@ -12,18 +12,25 @@ import * as ProductActions from '../../../core/state/products/products.actions';
   styleUrl: './products-detail.component.css',
 })
 export class ProductsDetailComponent implements OnInit {
-  selectedProduct$: Observable<IProducts[] | undefined>;
+  selectedProduct$: Observable<IProducts | null> | undefined;
   id: string = '';
   catalogID: string = '';
 
   constructor(
     private store: Store<AppState>,
     private activatedRoute: ActivatedRoute
-  ) {
-    this.selectedProduct$ = this.store.select('products');
-  }
+  ) {}
   ngOnInit() {
     this.getById();
+    this.selectedProduct$ = this.store.pipe(
+      select((state) => state.products.product),
+      map((state) => {
+        if (state) {
+          this.catalogID = state.categoryID;
+        }
+        return state;
+      })
+    );
   }
   getById() {
     this.activatedRoute.paramMap

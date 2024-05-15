@@ -1,1 +1,11 @@
-<p>Common Component!</p>
+<div class="container-fluid mb-5">
+  <div class="row border-top px-xl-5">
+    <div class="col-lg-3 d-none d-lg-block">
+      <app-sidebar></app-sidebar>
+    </div>
+    <div class="col-lg-9">
+      <app-navbar></app-navbar>
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

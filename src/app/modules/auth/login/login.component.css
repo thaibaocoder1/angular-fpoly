@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   background-color: #fafafa;
-  height: 100vh;
 }
 .form {
   width: 560px;

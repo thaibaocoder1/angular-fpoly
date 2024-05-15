@@ -1,14 +1,9 @@
 <app-header></app-header>
-<div class="container-fluid mb-5">
-  <div class="row border-top px-xl-5">
-    <div class="col-lg-3 d-none d-lg-block">
-      <app-sidebar></app-sidebar>
-    </div>
-    <div class="col-lg-9">
-      <app-navbar></app-navbar>
-      <app-banner></app-banner>
-    </div>
-  </div>
-</div>
+<app-common>
+  <ng-container *ngIf="isRoot">
+    <app-banner></app-banner>
+  </ng-container>
+</app-common>
 <router-outlet></router-outlet>
 <app-footer></app-footer>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
