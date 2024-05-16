@@ -11,13 +11,14 @@ import { ModulesModule } from './modules/modules.module';
 import { ProductEffects } from './core/state/products/products.effects';
 import { CategoryEffects } from './core/state/category/category.effects';
 import { localStorageSync } from 'ngrx-store-localstorage';
-import { reducers } from './core/state/reducers';
+import { reducers } from './core/state/rehydrate/reducers';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AdminModule } from './admin/admin.module';
 
 export function localStorageSyncReducer(reducer: any): any {
   return localStorageSync({
-    keys: ['products', 'catalogs'],
+    keys: ['products'],
     rehydrate: true,
   })(reducer);
 }
@@ -28,9 +29,10 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     ModulesModule,
     SharedModule,
+    AdminModule,
+    AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
     NgxSpinnerModule,

@@ -1,9 +1,15 @@
-<app-header></app-header>
-<app-common>
-  <ng-container *ngIf="isRoot">
-    <app-banner></app-banner>
-  </ng-container>
-</app-common>
-<router-outlet></router-outlet>
-<app-footer></app-footer>
-<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
+<ng-container *ngIf="isAdmin; else admin">
+  <app-header *ngIf="isAuth"></app-header>
+  <app-common *ngIf="isAuth">
+    <ng-container *ngIf="isRoot">
+      <app-banner></app-banner>
+    </ng-container>
+  </app-common>
+  <router-outlet></router-outlet>
+  <app-footer *ngIf="isAuth"></app-footer>
+  <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
+</ng-container>
+
+<ng-template #admin>
+  <router-outlet></router-outlet>
+</ng-template>

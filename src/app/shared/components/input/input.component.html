@@ -1,0 +1,34 @@
+<div class="form-group">
+  <label for="{{ htmlFor }}" class="form-label">{{ label }}</label>
+  <input
+    id="{{ htmlFor }}"
+    [type]="type"
+    [placeholder]="placeholder"
+    class="form-control"
+    [formControl]="control"
+    [ngClass]="{
+      invalid: control.errors && control.touched && control.invalid
+    }"
+  />
+  <ng-container *ngIf="control.errors && control.touched && control.invalid">
+    <span class="form-message" *ngIf="control.errors['required']">
+      {{ label }} is required.
+    </span>
+    <span class="form-message" *ngIf="control.errors['pattern']">
+      {{ label }} don't match with pattern
+    </span>
+    <span class="form-message" *ngIf="control.errors['email']">
+      Invalid email format.
+    </span>
+    <span class="form-message" *ngIf="control.errors['nonUniqueEmail']">
+      Email is not exist in system.
+    </span>
+    <span class="form-message" *ngIf="control.errors['minlength']">
+      {{ label }} enterd is {{ control.errors["minlength"]["actualLength"] }}.
+      At least: {{ control.errors["minlength"]["requiredLength"] }}
+    </span>
+    <span class="form-message" *ngIf="control.errors['passwordDontMatch']">
+      Password not match. Try again!
+    </span>
+  </ng-container>
+</div>

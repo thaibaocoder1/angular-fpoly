@@ -9,12 +9,16 @@ import $ from 'jquery';
 })
 export class AppComponent implements AfterViewInit {
   isRoot: boolean = true;
+  isAuth: boolean = true;
+  isAdmin: boolean = true;
   constructor(private router: Router) {}
   title = 'project-angular-fpoly';
   ngOnInit() {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.isRoot = this.router.url === '/';
+        this.isAuth = !this.router.url.includes('/auth');
+        this.isAdmin = !this.router.url.includes('/admin');
       }
     });
   }

@@ -11,9 +11,9 @@ import * as CatalogActions from '../../../core/state/category/category.actions';
   styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent implements OnInit {
-  catalogs$: Observable<ICategory[]>;
+  catalogs$: Observable<ICategory[] | undefined>;
   constructor(private store: Store<AppState>) {
-    this.catalogs$ = this.store.pipe(select('catalogs'));
+    this.catalogs$ = this.store.pipe(select((state) => state.catalogs));
   }
   ngOnInit(): void {
     this.getAll();

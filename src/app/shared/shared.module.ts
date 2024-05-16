@@ -11,6 +11,7 @@ import { OfferComponent } from './components/offer/offer.component';
 import { CommonComponent } from './components/common/common.component';
 import { InputComponent } from './components/input/input.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { SharedComponent } from './shared.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     OfferComponent,
     CommonComponent,
     InputComponent,
+    SharedComponent,
   ],
   imports: [
     CommonModule,
@@ -40,6 +42,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     OfferComponent,
     CommonComponent,
     InputComponent,
+    SharedComponent,
   ],
 })
 export class SharedModule {}

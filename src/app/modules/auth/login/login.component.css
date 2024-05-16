@@ -1,7 +1,9 @@
 .main {
   display: flex;
   justify-content: center;
+  align-items: center;
   background-color: #fafafa;
+  height: 100vh;
 }
 .form {
   width: 560px;
@@ -17,8 +19,8 @@
   z-index: 10;
 }
 .back-to-home {
-  width: 4rem;
-  height: 4rem;
+  width: 3rem;
+  height: 3rem;
   background-color: #f33a58;
   border-radius: 50%;
   display: flex;
@@ -38,14 +40,6 @@
   background-color: #f33a40;
   transform: translate(-50%, -50%) scale(1);
 }
-.wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.wrapper > * {
-  width: 49.5%;
-}
 .form .heading {
   font-size: 24px;
 }
@@ -56,51 +50,7 @@
   font-weight: lighter;
   line-height: 2.4rem;
   margin-top: 8px;
-  font-weight: 300;
-}
-
-.form-group {
-  display: flex;
-  margin-bottom: 24px;
-  flex-direction: column;
-  position: relative;
-}
-
-.form-label,
-.form-message {
-  text-align: left;
-}
-
-.form-label {
-  font-weight: 600;
-  line-height: 1.8rem;
-  font-size: 1rem;
-}
-
-.form-control {
-  height: 40px;
-  padding: 8px 12px;
-  border: 1px solid #b3b3b3;
-  border-radius: 3px;
-  outline: none;
-  font-size: 16px;
-}
-
-.form-control:hover {
-  border-color: #f33a58;
-}
-
-.form-message {
-  line-height: 1.4;
-  padding: 4px 0 4px 0;
-  position: absolute;
-  bottom: -26px;
-  left: 0;
-  font-size: 14px;
-  color: #f33a58;
-}
-.invalid {
-  border-color: #f33a40;
+  font-weight: 400;
 }
 .form-submit {
   outline: none;
@@ -115,18 +65,15 @@
   border-radius: 8px;
   cursor: pointer;
 }
-
 .form-submit:hover {
   background-color: #f33a58;
 }
-
 .spacer {
   margin-top: 24px;
 }
 .actions p {
   font-size: 16px;
 }
-
 .restore {
   display: flex;
   justify-content: flex-end;

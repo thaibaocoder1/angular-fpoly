@@ -1,4 +1,9 @@
-import { AsyncValidator, FormControl, ValidationErrors } from '@angular/forms';
+import {
+  AbstractControl,
+  AsyncValidator,
+  FormControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, debounceTime, map, of, switchMap } from 'rxjs';
 import { AuthService } from '../auth.service';
@@ -10,7 +15,7 @@ import { HttpClient } from '@angular/common/http';
 export class UniqueEmail implements AsyncValidator {
   constructor(private authService: AuthService, private http: HttpClient) {}
   validate = (
-    control: FormControl
+    control: AbstractControl
   ): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
     return control.valueChanges.pipe(
       debounceTime(500),
