@@ -1,14 +1,23 @@
 import { createReducer, on } from '@ngrx/store';
-import { IUsers } from '../../models/users';
 import * as UserActions from './users.actions';
+import { UsersState } from '../../adapter/users';
 
-export const initialState: IUsers[] = [];
+export const initialState: UsersState = {
+  loading: false,
+  user: null,
+  users: [],
+  error: '',
+};
 
 export const UserReducer = createReducer(
   initialState,
-  on(UserActions.addUser, (state) => state),
-  on(UserActions.addUserSuccess, (state, { user }) => [...state, user]),
-  on(UserActions.addUserFailure, (state, { error }) => {
+  on(UserActions.LoginUser, (state, { user }) => {
+    return { ...state, loading: true };
+  }),
+  on(UserActions.LoginUserSuccess, (state, { user }) => {
+    return { ...state, loading: false, user };
+  }),
+  on(UserActions.LoginUserFailure, (state, { error }) => {
     console.error(error);
     return state;
   })

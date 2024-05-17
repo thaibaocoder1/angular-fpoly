@@ -10206,3 +10206,6 @@ button > i {
 .search-price-discount {
   color: var(--dark);
 }
+#toast-container > div {
+  opacity: 1;
+}

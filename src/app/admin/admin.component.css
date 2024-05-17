@@ -1,0 +1,12 @@
+#wrapper {
+  display: flex;
+}
+.d-flex {
+  display: flex !important;
+}
+.flex-column {
+  flex-direction: column !important;
+}
+:host {
+  width: 100%;
+}

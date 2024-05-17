@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 
 interface IApiResponse {
   status: string;
+  success?: boolean;
   results: number;
   data: IProducts[];
 }
@@ -27,6 +28,20 @@ export class ProductsService {
           return data;
         } else {
           throw new Error('API response is not successful.');
+        }
+      })
+    );
+  }
+  // [GET] With Type
+  getWithSlug(slug: string): Observable<IProducts[]> {
+    return this.http.get<IApiResponse>(`${this.apiURL}/list/${slug}`).pipe(
+      map((response: IApiResponse) => {
+        if (response && response.success === true) {
+          const data = response.data;
+          return data;
+        } else {
+          const data = response.data;
+          return data;
         }
       })
     );

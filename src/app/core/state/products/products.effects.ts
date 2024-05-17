@@ -20,6 +20,21 @@ export class ProductEffects {
       )
     )
   );
+  loadProductSlug$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProductActions.loadProductWithSlug),
+      mergeMap((payload) =>
+        this.productService.getWithSlug(payload.slug).pipe(
+          map((products) =>
+            ProductActions.loadProductWithSlugSuccess({ products })
+          ),
+          catchError((error) =>
+            of(ProductActions.loadProductFailure({ error }))
+          )
+        )
+      )
+    )
+  );
 
   constructor(
     private actions$: Actions,

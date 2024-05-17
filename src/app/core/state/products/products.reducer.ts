@@ -1,7 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import * as ProductActions from './products.actions';
 import { ProductsState } from '../../adapter/products';
-import { IProducts } from '../../models/products';
 
 export const initialState: ProductsState = {
   loading: false,
@@ -34,5 +33,14 @@ export const ProductReducer = createReducer(
     const related = state.products.filter((item) => item.categoryID === catID);
     return { ...state, loading: false, products: related };
   }),
-  on(ProductActions.resetProductState, () => initialState)
+  on(ProductActions.loadProductWithCatID, (state, { catID }) => {
+    const related = state.products.filter((item) => item.categoryID === catID);
+    return { ...state, loading: false, products: related };
+  }),
+  on(ProductActions.loadProductWithSlug, (state) => {
+    return state;
+  }),
+  on(ProductActions.loadProductWithSlugSuccess, (state, { products }) => {
+    return { ...state, products: products };
+  })
 );

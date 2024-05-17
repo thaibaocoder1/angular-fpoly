@@ -12,6 +12,8 @@ import { CommonComponent } from './components/common/common.component';
 import { InputComponent } from './components/input/input.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedComponent } from './shared.component';
+import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
+import { AdminNavbarComponent } from './admin/admin-navbar/admin-navbar.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { SharedComponent } from './shared.component';
     CommonComponent,
     InputComponent,
     SharedComponent,
+    AdminSidebarComponent,
+    AdminNavbarComponent,
   ],
   imports: [
     CommonModule,
@@ -43,6 +47,8 @@ import { SharedComponent } from './shared.component';
     CommonComponent,
     InputComponent,
     SharedComponent,
+    AdminSidebarComponent,
+    AdminNavbarComponent,
   ],
 })
 export class SharedModule {}

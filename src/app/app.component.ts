@@ -1,6 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import $ from 'jquery';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ export class AppComponent implements AfterViewInit {
   isRoot: boolean = true;
   isAuth: boolean = true;
   isAdmin: boolean = true;
-  constructor(private router: Router) {}
+  constructor(private router: Router, private toast: ToastrService) {}
   title = 'project-angular-fpoly';
   ngOnInit() {
     this.router.events.subscribe((event) => {

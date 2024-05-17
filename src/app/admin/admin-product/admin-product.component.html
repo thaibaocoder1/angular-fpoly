@@ -1,0 +1,71 @@
+<app-admin-common>
+  <app-admin-navbar></app-admin-navbar>
+  <div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <div class="d-inline-flex">
+        <h1 class="h3 mb-0 text-gray-800 mr-3">Trang sản phẩm</h1>
+        <a href="/admin/add-edit-product.html" class="btn btn-info">Tạo mới</a>
+      </div>
+      <form
+        class="d-none d-sm-inline-block form-inline ml-md-3 my-2 my-md-0 mw-100 navbar-search"
+      >
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control bg-gradient-light text-dark border-0 small"
+            placeholder="Search for..."
+            aria-label="Search"
+            aria-describedby="basic-addon2"
+            id="searchInput"
+          />
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="button">
+              <i class="fas fa-search fa-sm"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row pl-3">
+      <table class="table table-striped" id="table-product">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Tên sản phẩm</th>
+            <th scope="col">Giá tiền</th>
+            <th scope="col">Sale (%)</th>
+            <th scope="col">Số lượng</th>
+            <th scope="col">Hình ảnh</th>
+            <!-- <th scope="col">Ngày tạo</th>
+            <th scope="col">Ngày cập nhật</th> -->
+            <th scope="col">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of products$ | async">
+            <td>{{ item._id }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.discount }}%</td>
+            <td>{{ item.quantity }}</td>
+            <td>
+              <img
+                height="80"
+                src="{{ item.thumb.fileName }}"
+                alt="{{ item.name }}"
+              />
+            </td>
+            <td>
+              <button class="btn btn-primary btn-sm" id="btn-edit">
+                Chỉnh sửa
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-admin-common>

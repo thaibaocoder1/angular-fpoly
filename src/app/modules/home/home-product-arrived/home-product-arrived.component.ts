@@ -1,7 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Observable, map } from 'rxjs';
-import { AppState } from '../../../app.state';
 import { IProducts } from '../../../core/models/products';
 
 @Component({
@@ -12,7 +10,7 @@ import { IProducts } from '../../../core/models/products';
 export class HomeProductArrivedComponent {
   @Input() data!: Observable<IProducts[]>;
   products$: Observable<IProducts[]> | undefined;
-  constructor(private store: Store<AppState>) {}
+  constructor() {}
   ngOnInit() {
     if (this.data) {
       this.products$ = this.data.pipe(map((state) => state.slice(8, 16)));

@@ -40,4 +40,8 @@ export class AuthService {
       password: value.password,
     });
   }
+  // Check Login
+  isLoggin() {
+    return this.currentUserSignal();
+  }
 }

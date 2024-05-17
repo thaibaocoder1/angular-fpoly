@@ -1,28 +1,23 @@
-// import { Injectable } from '@angular/core';
-// import { Actions, ofType, createEffect } from '@ngrx/effects';
-// import { of } from 'rxjs';
-// import { catchError, map, mergeMap } from 'rxjs/operators';
-// import * as CatalogActions from './users.actions';
-// import { CategoryService } from '../../services/category/category.service';
+import { Injectable } from '@angular/core';
+import { Actions, ofType, createEffect } from '@ngrx/effects';
+import { of } from 'rxjs';
+import { catchError, map, mergeMap } from 'rxjs/operators';
+import * as UserActions from './users.actions';
+import { UsersService } from '../../services/users/users.service';
 
-// @Injectable()
-// export class UserEffects {
-//   loadCatalog$ = createEffect(() =>
-//     this.actions$.pipe(
-//       ofType(CatalogActions.loadCatalog),
-//       mergeMap(() =>
-//         this.catalogService.getAll().pipe(
-//           map((catalogs) => CatalogActions.loadCatalogSuccess({ catalogs })),
-//           catchError((error) =>
-//             of(CatalogActions.loadCatalogFailure({ error }))
-//           )
-//         )
-//       )
-//     )
-//   );
+@Injectable()
+export class UserEffects {
+  loadUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.LoginUser),
+      mergeMap((payload) =>
+        this.userService.login(payload.user).pipe(
+          map((user) => UserActions.LoginUserSuccess({ user })),
+          catchError((error) => of(UserActions.LoginUserFailure({ error })))
+        )
+      )
+    )
+  );
 
-//   constructor(
-//     private actions$: Actions,
-//     private catalogService: CategoryService
-//   ) {}
-// }
+  constructor(private actions$: Actions, private userService: UsersService) {}
+}

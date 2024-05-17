@@ -9,7 +9,10 @@
   <app-footer *ngIf="isAuth"></app-footer>
   <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 </ng-container>
-
-<ng-template #admin>
-  <router-outlet></router-outlet>
+<a routerLink="/admin">Admin</a>
+<ng-template #admin style="display: flex">
+  <div id="wrapper">
+    <app-admin-sidebar></app-admin-sidebar>
+    <router-outlet></router-outlet>
+  </div>
 </ng-template>

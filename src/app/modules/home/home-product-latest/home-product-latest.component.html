@@ -27,7 +27,7 @@
         <div
           class="card-header product-img position-relative overflow-hidden bg-transparent border p-0"
         >
-          <a [routerLink]="['/products', item._id]"
+          <a [routerLink]="['/products', 'detail', item._id]"
             ><img
               class="img-fluid w-100"
               style="height: 220px; object-fit: contain; margin: 0 auto"
@@ -38,7 +38,9 @@
         <div
           class="card-body border-left border-right text-center p-0 pt-4 pb-3"
         >
-          <a [routerLink]="['/products', item._id]" class="text-decoration-none"
+          <a
+            [routerLink]="['/products', 'detail', item._id]"
+            class="text-decoration-none"
             ><h6 class="text-truncate mb-3">{{ item.name }}</h6></a
           >
           <div class="d-flex justify-content-center">
@@ -50,7 +52,7 @@
         </div>
         <div class="card-footer d-flex justify-content-between bg-light border">
           <a
-            [routerLink]="['/products', item._id]"
+            [routerLink]="['/products', 'detail', item._id]"
             class="btn btn-sm text-dark p-0"
             ><i class="fas fa-eye text-primary mr-1"></i>View Detail</a
           >

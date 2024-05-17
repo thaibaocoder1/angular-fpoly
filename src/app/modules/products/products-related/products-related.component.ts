@@ -2,7 +2,6 @@ import {
   Component,
   Input,
   OnChanges,
-  OnDestroy,
   OnInit,
   SimpleChanges,
 } from '@angular/core';
@@ -17,7 +16,7 @@ import * as ProductActions from '../../../core/state/products/products.actions';
   templateUrl: './products-related.component.html',
   styleUrl: './products-related.component.css',
 })
-export class ProductsRelatedComponent implements OnInit, OnChanges, OnDestroy {
+export class ProductsRelatedComponent implements OnInit, OnChanges {
   @Input() catalogID: string = '';
   products$: Observable<IProducts[] | null> | undefined;
 
@@ -37,8 +36,5 @@ export class ProductsRelatedComponent implements OnInit, OnChanges, OnDestroy {
         ProductActions.loadProductWithCatID({ catID: this.catalogID })
       );
     }
-  }
-  ngOnDestroy() {
-    this.store.dispatch(ProductActions.resetProductState());
   }
 }
