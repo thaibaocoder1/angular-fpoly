@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+
 import { SharedModule } from '../../shared/shared.module';
 import { ProductsComponent } from './products.component';
 import { ProductsDetailComponent } from './products-detail/products-detail.component';
@@ -16,6 +18,14 @@ import { ProductsTypeComponent } from './products-type/products-type.component';
     ProductsRelatedComponent,
     ProductsTypeComponent,
   ],
-  imports: [CommonModule, ProductsRoutingModule, SharedModule],
+  imports: [
+    CommonModule,
+    ProductsRoutingModule,
+    SharedModule,
+    NgxSkeletonLoaderModule.forRoot({
+      animation: 'pulse',
+      loadingText: 'This item is actually loading...',
+    }),
+  ],
 })
 export class ProductsModule {}

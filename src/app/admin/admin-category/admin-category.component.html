@@ -3,7 +3,7 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <div class="d-inline-flex">
-        <h1 class="h3 mb-0 text-gray-800 mr-3">Trang sản phẩm</h1>
+        <h1 class="h3 mb-0 text-gray-800 mr-3">Trang danh mục</h1>
         <a href="/admin/add-edit-product.html" class="btn btn-info">Tạo mới</a>
       </div>
       <form
@@ -29,33 +29,21 @@
 
     <!-- Content Row -->
     <div class="row pl-3">
-      <table class="table table-bordered" id="table-product">
+      <table class="table table-striped" id="table-product">
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Tên sản phẩm</th>
-            <th scope="col">Giá tiền</th>
-            <th scope="col">Sale (%)</th>
-            <th scope="col">Số lượng</th>
-            <th scope="col">Hình ảnh</th>
+            <th scope="col">Tên danh mục</th>
+            <th scope="col">Ngày tạo</th>
             <th scope="col">Ngày cập nhật</th>
             <th scope="col">Thao tác</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of products$ | async">
+          <tr *ngFor="let item of cataglos$ | async">
             <td>{{ item._id }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.price | currency : "VND" }}</td>
-            <td>{{ item.discount }}%</td>
-            <td>{{ item.quantity }}</td>
-            <td>
-              <img
-                src="{{ item.thumb.fileName }}"
-                alt="{{ item.name }}"
-                height="80"
-              />
-            </td>
+            <td>{{ item.title }}</td>
+            <td>{{ item.createdAt | date : "dd/MM/yyyy" }}</td>
             <td>{{ item.updatedAt | date : "dd/MM/yyyy" }}</td>
             <td>
               <button class="btn btn-primary btn-sm">Chỉnh sửa</button>

@@ -62,7 +62,7 @@
         href="#"
         id="alertsDropdown"
         role="button"
-        data-toggle="dropdown"
+        data-bs-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded="false"
       >
@@ -125,7 +125,7 @@
         href="#"
         id="messagesDropdown"
         role="button"
-        data-toggle="dropdown"
+        data-bs-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded="false"
       >
@@ -139,57 +139,6 @@
         aria-labelledby="messagesDropdown"
       >
         <h6 class="dropdown-header">Message Center</h6>
-        <a class="dropdown-item d-flex align-items-center" href="#">
-          <div class="dropdown-list-image mr-3">
-            <img
-              class="rounded-circle"
-              src="img/undraw_profile_1.svg"
-              alt="..."
-            />
-            <div class="status-indicator bg-success"></div>
-          </div>
-          <div class="font-weight-bold">
-            <div class="text-truncate">
-              Hi there! I am wondering if you can help me with a problem I've
-              been having.
-            </div>
-            <div class="small text-gray-500">Emily Fowler · 58m</div>
-          </div>
-        </a>
-        <a class="dropdown-item d-flex align-items-center" href="#">
-          <div class="dropdown-list-image mr-3">
-            <img
-              class="rounded-circle"
-              src="img/undraw_profile_2.svg"
-              alt="..."
-            />
-            <div class="status-indicator"></div>
-          </div>
-          <div>
-            <div class="text-truncate">
-              I have the photos that you ordered last month, how would you like
-              them sent to you?
-            </div>
-            <div class="small text-gray-500">Jae Chun · 1d</div>
-          </div>
-        </a>
-        <a class="dropdown-item d-flex align-items-center" href="#">
-          <div class="dropdown-list-image mr-3">
-            <img
-              class="rounded-circle"
-              src="img/undraw_profile_3.svg"
-              alt="..."
-            />
-            <div class="status-indicator bg-warning"></div>
-          </div>
-          <div>
-            <div class="text-truncate">
-              Last month's report looks great, I am very happy with the progress
-              so far, keep up the good work!
-            </div>
-            <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-          </div>
-        </a>
         <a class="dropdown-item d-flex align-items-center" href="#">
           <div class="dropdown-list-image mr-3">
             <img
@@ -222,14 +171,18 @@
         href="#"
         id="userDropdown"
         role="button"
-        data-toggle="dropdown"
+        data-bs-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded="false"
       >
         <span class="mr-2 d-none d-lg-inline text-gray-600 small"
           >thaibaocoder1</span
         >
-        <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
+        <img
+          class="img-profile rounded-circle"
+          src="assets/images/img-admin.png"
+          style="height: 2rem; width: 2rem"
+        />
       </a>
       <!-- Dropdown - User Information -->
       <div

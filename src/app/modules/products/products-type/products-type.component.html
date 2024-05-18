@@ -160,7 +160,7 @@
           </div>
         </div>
       </div>
-      <div class="row pb-3" id="list-product">
+      <div class="row pb-3">
         <div
           class="col-lg-4 col-md-6 col-sm-12 pb-1"
           *ngFor="let item of products$ | async"
@@ -199,9 +199,9 @@
                 ><h6 class="text-truncate mb-3">{{ item.name }}</h6></a
               >
               <div class="d-flex justify-content-center">
-                <h6>{{ item.price }}</h6>
+                <h6>{{ item.price | currency : "VND" }}</h6>
                 <h6 class="text-muted ml-2">
-                  <del>{{ item.price }}</del>
+                  <del>{{ item.price | currency : "VND" }}</del>
                 </h6>
               </div>
             </div>
