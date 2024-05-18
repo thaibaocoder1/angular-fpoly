@@ -57,9 +57,7 @@
         </div>
         <small class="pt-1">(50 Reviews)</small>
       </div>
-      <h3 class="font-weight-semi-bold mb-4">
-        {{ item.price | currency : "VND" }}
-      </h3>
+      <h3 [appFormat]="item" class="font-weight-semi-bold mb-4"></h3>
       <h4 class="font-weight-semi-bold mb-4" style="color: var(--red)">
         Sale {{ item.discount }}%
       </h4>

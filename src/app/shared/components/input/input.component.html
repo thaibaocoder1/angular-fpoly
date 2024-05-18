@@ -23,6 +23,9 @@
     <span class="form-message" *ngIf="control.errors['nonUniqueEmail']">
       Email is not exist in system.
     </span>
+    <span class="form-message" *ngIf="control.errors['existEmail']">
+      Email is exist in system.
+    </span>
     <span class="form-message" *ngIf="control.errors['minlength']">
       {{ label }} enterd is {{ control.errors["minlength"]["actualLength"] }}.
       At least: {{ control.errors["minlength"]["requiredLength"] }}

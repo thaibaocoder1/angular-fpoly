@@ -20,5 +20,9 @@ export const UserReducer = createReducer(
   on(UserActions.LoginUserFailure, (state, { error }) => {
     console.error(error);
     return state;
+  }),
+  on(UserActions.RegUser, (state, { user }) => {
+    console.log(user);
+    return { ...state };
   })
 );

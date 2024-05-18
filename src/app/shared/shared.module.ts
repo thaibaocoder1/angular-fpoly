@@ -14,6 +14,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedComponent } from './shared.component';
 import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
 import { AdminNavbarComponent } from './admin/admin-navbar/admin-navbar.component';
+import { FormatDirective } from './directives/format.directive';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { AdminNavbarComponent } from './admin/admin-navbar/admin-navbar.componen
     SharedComponent,
     AdminSidebarComponent,
     AdminNavbarComponent,
+    FormatDirective,
   ],
   imports: [
     CommonModule,
@@ -49,6 +51,7 @@ import { AdminNavbarComponent } from './admin/admin-navbar/admin-navbar.componen
     SharedComponent,
     AdminSidebarComponent,
     AdminNavbarComponent,
+    FormatDirective,
   ],
 })
 export class SharedModule {}

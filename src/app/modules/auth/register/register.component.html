@@ -70,14 +70,6 @@
         [control]="formReg.controls.passwordConfirmation"
         style="width: 49%"
       ></app-input>
-      <ng-container>
-        <span
-          class="form-message"
-          *ngIf="formReg.errors?.['passwordDontMatch']"
-        >
-          Email is not exist in system.dasad
-        </span>
-      </ng-container>
     </div>
 
     <button [disabled]="formReg.invalid" type="submit" class="form-submit">

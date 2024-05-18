@@ -18,6 +18,17 @@ export class UserEffects {
       )
     )
   );
+  regUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.RegUser),
+      mergeMap((payload) =>
+        this.userService.register(payload.user).pipe(
+          map((user) => UserActions.RegUserSuccess({ user })),
+          catchError((error) => of(UserActions.RegUserFailure({ error })))
+        )
+      )
+    )
+  );
 
   constructor(private actions$: Actions, private userService: UsersService) {}
 }

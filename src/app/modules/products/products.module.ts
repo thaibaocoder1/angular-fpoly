@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { SharedModule } from '../../shared/shared.module';
 import { ProductsComponent } from './products.component';
@@ -26,6 +27,7 @@ import { ProductsTypeComponent } from './products-type/products-type.component';
       animation: 'pulse',
       loadingText: 'This item is actually loading...',
     }),
+    NgxPaginationModule,
   ],
 })
 export class ProductsModule {}

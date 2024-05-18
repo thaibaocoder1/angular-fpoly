@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { IUsers } from '../../models/users';
 
 type Data = {
   accessToken: string;
@@ -31,6 +32,12 @@ export class UsersService {
     return this.http.post<ApiResponse>(`${this.apiURL}/login`, {
       email: value.email,
       password: value.password,
+    });
+  }
+  // Register
+  register(value: Partial<IUsers>): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiURL}/save`, {
+      value,
     });
   }
 }

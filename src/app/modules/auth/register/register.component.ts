@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { UniqueEmail } from '../validators/unique-email';
 import { matchPassword } from '../validators/match.directive';
+import { CheckEmail } from '../validators/check-email';
+import { IUsers } from '../../../core/models/users';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../app.state';
+import * as UserActions from '../../../core/state/users/users.actions';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +20,11 @@ export class RegisterComponent implements OnInit {
         '',
         [Validators.required, Validators.pattern(/^[a-z]{6,32}$/i)],
       ],
-      email: ['', [Validators.required, Validators.email]],
+      email: [
+        '',
+        [Validators.required, Validators.email],
+        [this.unique.validate.bind(this.unique)],
+      ],
       phone: [
         '',
         [
@@ -32,9 +40,15 @@ export class RegisterComponent implements OnInit {
     },
     { validators: matchPassword }
   );
-  constructor(private fb: FormBuilder, private unique: UniqueEmail) {}
+  constructor(
+    private fb: FormBuilder,
+    private unique: CheckEmail,
+    private store: Store<AppState>
+  ) {}
   ngOnInit(): void {}
   onSubmit() {
-    console.log(this.formReg.getRawValue());
+    const values: Partial<IUsers> =
+      this.formReg.getRawValue() as unknown as IUsers;
+    this.store.dispatch(UserActions.RegUser({ user: values }));
   }
 }

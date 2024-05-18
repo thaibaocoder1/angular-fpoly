@@ -33,11 +33,10 @@ export class AuthService {
       email: value,
     });
   }
-  // Login
-  login(value: IUser): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(`${this.apiURL}/login`, {
-      email: value.email,
-      password: value.password,
+  // Check exist email
+  checkExistEmail(value: string): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiURL}/check-exist`, {
+      email: value,
     });
   }
   // Check Login

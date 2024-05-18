@@ -16,4 +16,5 @@ export class HomeProductLatestComponent implements OnInit {
       this.product$ = this.data.pipe(map((state) => state.slice(0, 8)));
     }
   }
+  addToCart(id: string) {}
 }
