@@ -4,6 +4,7 @@ import { UsersState } from '../../adapter/users';
 
 export const initialState: UsersState = {
   loading: false,
+  auth: null,
   user: null,
   users: [],
   error: '',
@@ -14,15 +15,21 @@ export const UserReducer = createReducer(
   on(UserActions.LoginUser, (state, { user }) => {
     return { ...state, loading: true };
   }),
-  on(UserActions.LoginUserSuccess, (state, { user }) => {
-    return { ...state, loading: false, user };
+  on(UserActions.LoginUserSuccess, (state, { auth }) => {
+    return { ...state, loading: false, auth };
   }),
   on(UserActions.LoginUserFailure, (state, { error }) => {
     console.error(error);
     return state;
   }),
   on(UserActions.RegUser, (state, { user }) => {
-    console.log(user);
-    return { ...state };
+    return { ...state, loading: true };
+  }),
+  on(UserActions.RegUserSuccess, (state, { user }) => {
+    return { ...state, loading: false };
+  }),
+  on(UserActions.RegUserFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error: error };
   })
 );

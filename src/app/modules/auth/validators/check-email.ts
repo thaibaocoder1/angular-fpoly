@@ -4,7 +4,15 @@ import {
   AsyncValidator,
   ValidationErrors,
 } from '@angular/forms';
-import { Observable, catchError, debounceTime, map, of, switchMap } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  debounceTime,
+  map,
+  of,
+  switchMap,
+  take,
+} from 'rxjs';
 import { AuthService } from '../auth.service';
 
 @Injectable({
@@ -16,7 +24,8 @@ export class CheckEmail implements AsyncValidator {
     control: AbstractControl<any, any>
   ): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
     return control.valueChanges.pipe(
-      debounceTime(500),
+      debounceTime(1000),
+      take(1),
       switchMap((value) => {
         return this.auth.checkExistEmail(value);
       }),

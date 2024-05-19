@@ -3,7 +3,7 @@
     [formGroup]="formLogin"
     class="form"
     autocomplete="off"
-    (ngSubmit)="onSubmit()"
+    (ngSubmit)="formSubmit$.next(true)"
   >
     <h3 class="heading">Thành viên đăng nhập</h3>
     <p class="desc">

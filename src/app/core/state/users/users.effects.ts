@@ -12,7 +12,7 @@ export class UserEffects {
       ofType(UserActions.LoginUser),
       mergeMap((payload) =>
         this.userService.login(payload.user).pipe(
-          map((user) => UserActions.LoginUserSuccess({ user })),
+          map((auth) => UserActions.LoginUserSuccess({ auth })),
           catchError((error) => of(UserActions.LoginUserFailure({ error })))
         )
       )

@@ -1,11 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { matchPassword } from '../validators/match.directive';
-import { CheckEmail } from '../validators/check-email';
 import { IUsers } from '../../../core/models/users';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../app.state';
 import * as UserActions from '../../../core/state/users/users.actions';
+import {
+  Observable,
+  Subject,
+  catchError,
+  distinctUntilChanged,
+  filter,
+  map,
+  of,
+  startWith,
+  switchMap,
+  take,
+  tap,
+  throwError,
+} from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { CheckEmail } from '../validators/check-email';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -13,6 +29,8 @@ import * as UserActions from '../../../core/state/users/users.actions';
   styleUrl: './register.component.css',
 })
 export class RegisterComponent implements OnInit {
+  formSubmit$ = new Subject<boolean | null>();
+
   formReg = this.fb.group(
     {
       fullname: ['', [Validators.required]],
@@ -33,7 +51,7 @@ export class RegisterComponent implements OnInit {
         ],
       ],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      passwordConfirmation: [
+      password_confirmation: [
         '',
         [Validators.required, Validators.minLength(6)],
       ],
@@ -42,13 +60,51 @@ export class RegisterComponent implements OnInit {
   );
   constructor(
     private fb: FormBuilder,
+    private store: Store<AppState>,
     private unique: CheckEmail,
-    private store: Store<AppState>
+    private spinner: NgxSpinnerService,
+    private router: Router
   ) {}
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.formSubmit$
+      .pipe(
+        tap(() => this.formReg.markAsDirty()),
+        switchMap(() =>
+          this.formReg.statusChanges.pipe(
+            startWith(this.formReg.status),
+            filter((status) => status !== 'PENDING'),
+            take(1)
+          )
+        ),
+        filter((status) => status === 'VALID')
+      )
+      .subscribe((validationSuccessful) => this.onSubmit());
+  }
   onSubmit() {
     const values: Partial<IUsers> =
       this.formReg.getRawValue() as unknown as IUsers;
     this.store.dispatch(UserActions.RegUser({ user: values }));
+    this.store
+      .pipe(
+        select((state) => state.users.loading),
+        distinctUntilChanged(),
+        tap(() => {
+          this.spinner.show();
+        }),
+        filter((loading) => !loading),
+        tap(() => {
+          this.spinner.hide();
+        }),
+        switchMap(() => {
+          return this.store.pipe(select((state) => state.users.user));
+        }),
+        take(1)
+      )
+      .subscribe((res) => {
+        console.log('🚀 ~ RegisterComponent ~ .subscribe ~ res:', res);
+        // if (res?.success) {
+        //   this.router.navigateByUrl('/login');
+        // }
+      });
   }
 }

@@ -60,7 +60,7 @@
         >Contact</a
       >
     </div>
-    <div class="navbar-nav ml-auto py-0" id="account">
+    <div class="navbar-nav ml-auto py-0" *ngIf="!isLogin; else hasLogin">
       <a
         [routerLink]="['/auth', 'login']"
         routerLinkActive="active"
@@ -74,5 +74,15 @@
         >Register</a
       >
     </div>
+    <ng-template #hasLogin>
+      <div class="navbar-nav">
+        <a
+          [routerLink]="['/account']"
+          routerLinkActive="active"
+          class="nav-item nav-link"
+          >Account</a
+        >
+      </div>
+    </ng-template>
   </div>
 </nav>

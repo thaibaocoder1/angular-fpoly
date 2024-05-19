@@ -14,7 +14,8 @@ interface ApiResponse {
 }
 export interface UsersState {
   loading: boolean;
-  user: ApiResponse | null;
+  auth: ApiResponse | null;
+  user: IUsers | null;
   users: IUsers[];
   error?: string;
 }

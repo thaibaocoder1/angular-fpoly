@@ -23,7 +23,7 @@ export const LoginUser = createAction(
 );
 export const LoginUserSuccess = createAction(
   '[User] Login User Success',
-  props<{ user: ApiResponse }>()
+  props<{ auth: ApiResponse }>()
 );
 export const LoginUserFailure = createAction(
   '[User] Login User Failure',

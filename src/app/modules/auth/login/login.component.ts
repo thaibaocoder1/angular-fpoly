@@ -1,9 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { UniqueEmail } from '../validators/unique-email';
-import { AuthService } from '../auth.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { distinctUntilChanged, filter, switchMap, take, tap } from 'rxjs';
+import {
+  Subject,
+  distinctUntilChanged,
+  filter,
+  startWith,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../app.state';
@@ -18,23 +25,40 @@ interface IUser {
   styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit {
-  formLogin = new FormGroup({
-    email: new FormControl('', {
-      validators: [Validators.required, Validators.email],
-      asyncValidators: [this.unique.validate.bind(this.unique)],
-    }),
-    password: new FormControl('', {
-      validators: [Validators.required, Validators.min(6)],
-    }),
+  formSubmit$ = new Subject<boolean | null>();
+  formLogin = this.fb.group({
+    email: [
+      '',
+      Validators.compose([Validators.required, Validators.email]),
+      this.unique.validate,
+    ],
+    password: [
+      '',
+      Validators.compose([Validators.required, Validators.minLength(6)]),
+    ],
   });
   constructor(
     private unique: UniqueEmail,
-    private auth: AuthService,
     private spinner: NgxSpinnerService,
     private router: Router,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private fb: FormBuilder
   ) {}
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.formSubmit$
+      .pipe(
+        tap(() => this.formLogin.markAsDirty()),
+        switchMap(() =>
+          this.formLogin.statusChanges.pipe(
+            startWith(this.formLogin.status),
+            filter((status) => status !== 'PENDING'),
+            take(1)
+          )
+        ),
+        filter((status) => status === 'VALID')
+      )
+      .subscribe((validationSuccessful) => this.onSubmit());
+  }
   onSubmit() {
     const values = this.formLogin.getRawValue() as IUser;
     this.store.dispatch(UserAction.LoginUser({ user: values }));
@@ -50,37 +74,15 @@ export class LoginComponent implements OnInit {
           this.spinner.hide();
         }),
         switchMap(() => {
-          return this.store.pipe(select((state) => state.users.user));
+          return this.store.pipe(select((state) => state.users.auth));
         }),
         take(1)
       )
       .subscribe((res) => {
         if (res?.success) {
           localStorage.setItem('access_token', res.data?.accessToken as string);
-          this.auth.currentUserSignal.set(res.data);
           this.router.navigateByUrl('/');
         }
       });
-
-    // this.auth
-    //   .login(values)
-    //   .pipe(
-    //     tap(() => {
-    //       this.spinner.show();
-    //     }),
-    //     switchMap(() => {
-    //       return this.auth.login(values);
-    //     }),
-    //     tap(() => {
-    //       this.spinner.hide();
-    //     })
-    //   )
-    //   .subscribe((res) => {
-    //     if (res.success) {
-    //       localStorage.setItem('access_token', res.data?.accessToken as string);
-    //       this.auth.currentUserSignal.set(res.data);
-    //       // this.router.navigateByUrl('/');
-    //     }
-    //   });
   }
 }

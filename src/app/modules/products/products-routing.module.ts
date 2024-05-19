@@ -8,14 +8,20 @@ const routes: Routes = [
   {
     path: '',
     component: ProductsComponent,
-  },
-  {
-    path: ':slug',
-    component: ProductsTypeComponent,
-  },
-  {
-    path: 'detail/:id',
-    component: ProductsDetailComponent,
+    children: [
+      {
+        path: '',
+        component: ProductsComponent,
+      },
+      {
+        path: ':slug',
+        component: ProductsTypeComponent,
+      },
+      {
+        path: 'detail/:id',
+        component: ProductsDetailComponent,
+      },
+    ],
   },
 ];
 

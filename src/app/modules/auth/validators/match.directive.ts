@@ -4,7 +4,7 @@ export const matchPassword: ValidatorFn = (
   control: AbstractControl
 ): ValidationErrors | null => {
   const password = control.get('password');
-  const passwordConfirmation = control.get('passwordConfirmation');
+  const passwordConfirmation = control.get('password_confirmation');
 
   if (!password || !passwordConfirmation) {
     return null;
@@ -20,9 +20,7 @@ export const matchPassword: ValidatorFn = (
   if (password.value !== passwordConfirmation.value) {
     passwordConfirmation.setErrors({ passwordDontMatch: true });
   } else {
-    if (passwordConfirmation.hasError('passwordDontMatch')) {
-      delete passwordConfirmation.errors?.['passwordDontMatch'];
-    }
+    passwordConfirmation.setErrors(null);
   }
 
   return null;

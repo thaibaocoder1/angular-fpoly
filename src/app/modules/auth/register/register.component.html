@@ -3,7 +3,7 @@
     [formGroup]="formReg"
     class="form"
     autocomplete="off"
-    (ngSubmit)="onSubmit()"
+    (ngSubmit)="formSubmit$.next(true)"
   >
     <h3 class="heading">Thành viên đăng ký</h3>
     <p class="desc">
@@ -41,7 +41,6 @@
         [control]="formReg.controls.email"
         style="width: 49%"
       ></app-input>
-
       <app-input
         label="Phone"
         placeholder="VD: +84 89xx 98xx"
@@ -67,7 +66,7 @@
         placeholder="Enter confirm password here"
         type="password"
         htmlFor="passwordConfirmation"
-        [control]="formReg.controls.passwordConfirmation"
+        [control]="formReg.controls.password_confirmation"
         style="width: 49%"
       ></app-input>
     </div>
@@ -75,6 +74,8 @@
     <button [disabled]="formReg.invalid" type="submit" class="form-submit">
       Đăng ký
     </button>
+    {{ formReg.value | json }}
+    {{ formReg.status | json }}
     <div class="spacer actions actions--custom">
       <a routerLink="../login">Đăng nhập ngay</a>
       <a routerLink="../recovery">Khôi phục tài khoản</a>

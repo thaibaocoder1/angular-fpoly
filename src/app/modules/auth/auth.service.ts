@@ -24,7 +24,6 @@ interface IUser {
 })
 export class AuthService {
   private apiURL = environment.API_URL + 'users';
-  currentUserSignal = signal<Data | undefined | null>(undefined);
   constructor(private http: HttpClient) {}
 
   // Check unique email
@@ -38,9 +37,5 @@ export class AuthService {
     return this.http.post<ApiResponse>(`${this.apiURL}/check-exist`, {
       email: value,
     });
-  }
-  // Check Login
-  isLoggin() {
-    return this.currentUserSignal();
   }
 }
