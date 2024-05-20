@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import * as UserActions from './users.actions';
 import { UsersState } from '../../adapter/users';
+import { IUsers } from '../../models/users';
 
 export const initialState: UsersState = {
   loading: false,
@@ -31,5 +32,12 @@ export const UserReducer = createReducer(
   on(UserActions.RegUserFailure, (state, { error }) => {
     console.error(error);
     return { ...state, loading: false, error: error };
+  }),
+  on(UserActions.GetUser, (state, { userId }) => {
+    return { ...state, loading: true };
+  }),
+  on(UserActions.GetUserSuccess, (state, { user }) => {
+    const { data } = user;
+    return { ...state, loading: false, user: data as IUsers };
   })
 );

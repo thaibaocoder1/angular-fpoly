@@ -9,19 +9,22 @@
         <div class="navbar-nav w-100" style="height: max-content">
           <a href="" class="nav-item nav-link">Update</a>
           <a href="" class="nav-item nav-link">Orders</a>
-          <a href="" class="nav-item nav-link">Logout</a>
+          <a routerLink="/logout" class="nav-item nav-link">Logout</a>
         </div>
       </nav>
     </div>
     <div class="col-lg-9">
       <div class="mt-2">
-        <form class="d-flex align-items-start justify-content-between">
+        <form
+          class="d-flex align-items-start justify-content-between"
+          *ngIf="user$ | async as user"
+        >
           <div class="w-50">
             <img
-              src="https://placehold.co/300x300"
+              [src]="user.imageUrl.fileName"
               class="img-thumbnail rounded-circle"
               style="width: 300px; height: 300px; object-fit: cover"
-              alt="Avatar"
+              alt="{{ user.fullname }}"
             />
           </div>
           <div class="w-50">
@@ -33,6 +36,7 @@
                 id="fullname"
                 name="fullname"
                 readonly
+                value="{{ user.fullname }}"
               />
             </div>
             <div class="mb-3">
@@ -43,6 +47,7 @@
                 id="username"
                 name="username"
                 readonly
+                value="{{ user.username }}"
               />
             </div>
             <div class="mb-3">
@@ -53,6 +58,7 @@
                 id="email"
                 name="email"
                 readonly
+                value="{{ user.email }}"
               />
             </div>
             <div class="mb-3">
@@ -63,6 +69,7 @@
                 id="role"
                 name="role"
                 readonly
+                value="{{ user.role }}"
               />
             </div>
           </div>

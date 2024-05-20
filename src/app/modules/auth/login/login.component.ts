@@ -15,10 +15,8 @@ import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../app.state';
 import * as UserAction from '../../../core/state/users/users.actions';
-interface IUser {
-  email: string;
-  password: string;
-}
+import { IUser } from '../../../core/adapter/users';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -80,8 +78,13 @@ export class LoginComponent implements OnInit {
       )
       .subscribe((res) => {
         if (res?.success) {
-          localStorage.setItem('access_token', res.data?.accessToken as string);
-          this.router.navigateByUrl('/');
+          if ('data' in res) {
+            const { data } = res;
+            if ('accessToken' in data) {
+              localStorage.setItem('access_token', data.accessToken as string);
+              this.router.navigateByUrl('/');
+            }
+          }
         }
       });
   }

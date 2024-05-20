@@ -1,21 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { IUsers } from '../../models/users';
+import { ApiResponse, IUser } from '../../adapter/users';
 
-interface IUser {
-  email: string;
-  password: string;
-}
-type Data = {
-  accessToken: string;
-  expireIns: number;
-  id: string;
-  role: string;
-};
-interface ApiResponse {
-  success: boolean;
-  message: string;
-  data?: Data;
-}
 // [LOGIN]
 export const LoginUser = createAction(
   '[User] Login User',
@@ -40,5 +26,18 @@ export const RegUserSuccess = createAction(
 );
 export const RegUserFailure = createAction(
   '[User] Register User Failure',
+  props<{ error: string }>()
+);
+// [GET]
+export const GetUser = createAction(
+  '[User] Get User',
+  props<{ userId: string }>()
+);
+export const GetUserSuccess = createAction(
+  '[User] Get User Success',
+  props<{ user: ApiResponse }>()
+);
+export const GetUserFailure = createAction(
+  '[User] Get User Failure',
   props<{ error: string }>()
 );

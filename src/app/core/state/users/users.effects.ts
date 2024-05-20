@@ -29,6 +29,17 @@ export class UserEffects {
       )
     )
   );
+  getUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.GetUser),
+      mergeMap((payload) =>
+        this.userService.getUser(payload.userId).pipe(
+          map((user) => UserActions.GetUserSuccess({ user })),
+          catchError((error) => of(UserActions.GetUserFailure({ error })))
+        )
+      )
+    )
+  );
 
   constructor(private actions$: Actions, private userService: UsersService) {}
 }

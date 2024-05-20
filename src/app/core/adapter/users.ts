@@ -1,17 +1,27 @@
 import { IUsers } from '../models/users';
 
-type Data = {
+export interface IUser {
+  email: string;
+  password: string;
+}
+export interface Data {
   accessToken: string;
   expireIns: number;
   id: string;
   role: string;
-};
-
-interface ApiResponse {
+}
+export interface ApiResponseV1 {
   success: boolean;
   message: string;
-  data?: Data;
+  data: Data;
 }
+export interface ApiResponseV2 {
+  success: boolean;
+  message: string;
+  data: IUsers;
+}
+export type ApiResponse = ApiResponseV1 | ApiResponseV2;
+
 export interface UsersState {
   loading: boolean;
   auth: ApiResponse | null;

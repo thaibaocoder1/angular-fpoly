@@ -3,22 +3,8 @@ import { environment } from '../../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IUsers } from '../../models/users';
+import { ApiResponse, IUser } from '../../adapter/users';
 
-type Data = {
-  accessToken: string;
-  expireIns: number;
-  id: string;
-  role: string;
-};
-interface IUser {
-  email: string;
-  password: string;
-}
-interface ApiResponse {
-  success: boolean;
-  message: string;
-  data?: Data;
-}
 @Injectable({
   providedIn: 'root',
 })
@@ -39,5 +25,9 @@ export class UsersService {
     return this.http.post<ApiResponse>(`${this.apiURL}/save`, {
       value,
     });
+  }
+  // Get
+  getUser(userId: string): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiURL}/${userId}`);
   }
 }
