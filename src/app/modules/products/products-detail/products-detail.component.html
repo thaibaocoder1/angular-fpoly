@@ -82,7 +82,7 @@
       <div class="d-flex align-items-center mb-4 pt-2">
         <div class="input-group quantity mr-3" style="width: 130px">
           <div class="input-group-btn">
-            <button class="btn btn-primary btn-minus" id="btn-minus">
+            <button class="btn btn-primary btn-minus">
               <i class="fa fa-minus"></i>
             </button>
           </div>
@@ -91,15 +91,14 @@
             class="form-control bg-secondary text-center"
             value="1"
             name="order"
-            data-value="1"
           />
           <div class="input-group-btn">
-            <button class="btn btn-primary btn-plus" id="btn-plus">
+            <button class="btn btn-primary btn-plus">
               <i class="fa fa-plus"></i>
             </button>
           </div>
         </div>
-        <button class="btn btn-primary px-3 mr-2" id="btn-add-cart">
+        <button class="btn btn-primary px-3 mr-2" (click)="addToCart(item._id)">
           <i class="fa fa-shopping-cart mr-1"></i> Add To Cart
         </button>
         <button class="btn btn-secondary px-3" id="btn-buy-now">

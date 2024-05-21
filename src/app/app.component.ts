@@ -1,7 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import $ from 'jquery';
-import { ToastrService } from 'ngx-toastr';
+import { CartService } from './core/services/cart/cart.service';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +12,8 @@ export class AppComponent implements AfterViewInit {
   isRoot: boolean = true;
   isAuth: boolean = true;
   isAdmin: boolean = true;
-  constructor(private router: Router, private toast: ToastrService) {}
   title = 'project-angular-fpoly';
+  constructor(private router: Router) {}
   ngOnInit() {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {

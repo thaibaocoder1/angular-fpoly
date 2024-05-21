@@ -21,6 +21,16 @@ const routes: Routes = [
         (m) => m.AdminCategoryModule
       ),
   },
+  {
+    path: 'user',
+    loadChildren: () =>
+      import('./admin-user/admin-user.module').then((m) => m.AdminUserModule),
+  },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./admin-auth/admin-auth.module').then((m) => m.AdminAuthModule),
+  },
 ];
 
 @NgModule({

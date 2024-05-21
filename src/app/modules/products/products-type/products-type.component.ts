@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { IProducts } from '../../../core/models/products';
 import { AppState } from '../../../app.state';
 import * as ProductActions from '../../../core/state/products/products.actions';
+import { CartService } from '../../../core/services/cart/cart.service';
 
 @Component({
   selector: 'app-products-type',
@@ -18,7 +19,8 @@ export class ProductsTypeComponent implements OnInit {
   constructor(
     private activated: ActivatedRoute,
     private store: Store<AppState>,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private cartService: CartService
   ) {
     this.products$ = this.store.pipe(
       select((state) => state.products.products),
@@ -41,5 +43,12 @@ export class ProductsTypeComponent implements OnInit {
     this.toast.error('Vui lòng thử lại', 'Sản phẩm đang phát triển!', {
       timeOut: 3000,
     });
+  }
+  addToCart(id: string) {
+    this.toast.success('Add to cart successfully!', 'Thank you', {
+      closeButton: true,
+      progressBar: true,
+    });
+    this.cartService.addToCart(id);
   }
 }

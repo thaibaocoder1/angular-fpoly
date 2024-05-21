@@ -25,7 +25,6 @@
           <input
             type="text"
             name="search"
-            id="searchInput"
             class="form-control"
             placeholder="Search for products"
           />
@@ -43,9 +42,9 @@
         <i class="fas fa-heart text-primary"></i>
         <span class="badge" id="whitelist-order">0</span>
       </a>
-      <a href="cart.html" class="btn border">
+      <a routerLink="/cart" class="btn border">
         <i class="fas fa-shopping-cart text-primary"></i>
-        <span class="badge" id="num-order">0</span>
+        <span class="badge">{{ number }}</span>
       </a>
     </div>
   </div>

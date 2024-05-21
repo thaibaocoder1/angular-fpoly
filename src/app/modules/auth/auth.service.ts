@@ -1,24 +1,9 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
-import { IUsers } from '../../core/models/users';
+import { ApiResponse } from '../../core/adapter/users';
 
-type Data = {
-  accessToken: string;
-  expireIns: number;
-  id: string;
-  role: string;
-};
-interface ApiResponse {
-  success: boolean;
-  message: string;
-  data?: Data;
-}
-interface IUser {
-  email: string;
-  password: string;
-}
 @Injectable({
   providedIn: 'root',
 })

@@ -28,7 +28,7 @@ export const RegUserFailure = createAction(
   '[User] Register User Failure',
   props<{ error: string }>()
 );
-// [GET]
+// [GET ONE]
 export const GetUser = createAction(
   '[User] Get User',
   props<{ userId: string }>()
@@ -39,5 +39,25 @@ export const GetUserSuccess = createAction(
 );
 export const GetUserFailure = createAction(
   '[User] Get User Failure',
+  props<{ error: string }>()
+);
+// [GET ALL]
+export const GetAllUser = createAction('[User] Get All User');
+export const GetAllUserSuccess = createAction(
+  '[User] Get All User Success',
+  props<{ users: ApiResponse }>()
+);
+export const GetAllUserFailure = createAction(
+  '[User] Get All User Failure',
+  props<{ error: string }>()
+);
+// [LOGOUT]
+export const LogoutUser = createAction(
+  '[User] Logout User',
+  props<{ userId: string }>()
+);
+export const LogoutUserSuccess = createAction('[User] Logout User Success');
+export const LogoutUserFailure = createAction(
+  '[User] Logout User Failure',
   props<{ error: string }>()
 );

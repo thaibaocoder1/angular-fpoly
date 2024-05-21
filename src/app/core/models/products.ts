@@ -14,6 +14,7 @@ export interface IProducts {
   };
   content: string;
   quantity: number;
+  quantityBuy?: number;
   createdAt: string;
   updatedAt: string;
 }

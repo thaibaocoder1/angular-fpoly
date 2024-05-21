@@ -1,6 +1,10 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  HttpClientModule,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { MetaReducer, StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -18,6 +22,7 @@ import { CategoryEffects } from './core/state/category/category.effects';
 import { reducers } from './core/state/rehydrate/reducers';
 import { AdminModule } from './admin/admin.module';
 import { UserEffects } from './core/state/users/users.effects';
+import { authInterceptor } from './core/migration/auth.interceptor';
 
 export function localStorageSyncReducer(reducer: any): any {
   return localStorageSync({
@@ -44,7 +49,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     EffectsModule.forRoot([ProductEffects, CategoryEffects, UserEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
-  providers: [],
+  providers: [provideHttpClient(withInterceptors([authInterceptor]))],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
 })

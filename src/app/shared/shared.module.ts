@@ -15,6 +15,7 @@ import { SharedComponent } from './shared.component';
 import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
 import { AdminNavbarComponent } from './admin/admin-navbar/admin-navbar.component';
 import { FormatDirective } from './directives/format.directive';
+import { AccountSidebarComponent } from './components/account-sidebar/account-sidebar.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { FormatDirective } from './directives/format.directive';
     AdminSidebarComponent,
     AdminNavbarComponent,
     FormatDirective,
+    AccountSidebarComponent,
   ],
   imports: [
     CommonModule,
@@ -52,6 +54,7 @@ import { FormatDirective } from './directives/format.directive';
     AdminSidebarComponent,
     AdminNavbarComponent,
     FormatDirective,
+    AccountSidebarComponent,
   ],
 })
 export class SharedModule {}

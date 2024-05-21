@@ -178,8 +178,18 @@
       data-parent="#accordionSidebar"
     >
       <div class="bg-white py-2 collapse-inner rounded">
-        <a class="collapse-item" routerLink="get">Danh sách</a>
-        <a class="collapse-item" routerLink="create">Thêm mới</a>
+        <a
+          class="collapse-item"
+          [routerLink]="['admin', 'user']"
+          routerLinkActive="active"
+          >Danh sách</a
+        >
+        <a
+          class="collapse-item"
+          [routerLink]="['admin', 'user', 'create']"
+          routerLinkActive="active"
+          >Thêm mới</a
+        >
       </div>
     </div>
   </li>

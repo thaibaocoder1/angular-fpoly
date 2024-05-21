@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { AppState } from '../../../app.state';
 import { IProducts } from '../../../core/models/products';
 import * as ProductActions from '../../../core/state/products/products.actions';
+import { ToastrService } from 'ngx-toastr';
+import { CartService } from '../../../core/services/cart/cart.service';
 
 @Component({
   selector: 'app-products-detail',
@@ -18,7 +20,9 @@ export class ProductsDetailComponent implements OnInit {
 
   constructor(
     private store: Store<AppState>,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private toast: ToastrService,
+    private cartService: CartService
   ) {}
   ngOnInit() {
     this.getById();
@@ -41,5 +45,12 @@ export class ProductsDetailComponent implements OnInit {
           ProductActions.loadProductDetail({ productId: this.id })
         );
       });
+  }
+  addToCart(id: string) {
+    this.toast.success('Add to cart successfully!', 'Thank you', {
+      closeButton: true,
+      progressBar: true,
+    });
+    this.cartService.addToCart(id);
   }
 }

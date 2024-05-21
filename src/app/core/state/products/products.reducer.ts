@@ -6,6 +6,7 @@ export const initialState: ProductsState = {
   loading: false,
   product: null,
   products: [],
+  error: '',
 };
 
 export const ProductReducer = createReducer(
@@ -17,6 +18,7 @@ export const ProductReducer = createReducer(
     ...state,
     loading: false,
     products: action.products,
+    error: '',
   })),
   on(ProductActions.loadProductFailure, (state, { error }) => ({
     ...state,

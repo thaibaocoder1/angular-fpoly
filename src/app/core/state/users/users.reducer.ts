@@ -39,5 +39,33 @@ export const UserReducer = createReducer(
   on(UserActions.GetUserSuccess, (state, { user }) => {
     const { data } = user;
     return { ...state, loading: false, user: data as IUsers };
+  }),
+  on(UserActions.GetUserFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false };
+  }),
+  on(UserActions.GetAllUser, (state) => {
+    return { ...state, loading: true };
+  }),
+  on(UserActions.GetAllUserSuccess, (state, { users }) => {
+    return {
+      ...state,
+      loading: false,
+      users: users.data as unknown as IUsers[],
+    };
+  }),
+  on(UserActions.GetAllUserFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false };
+  }),
+  on(UserActions.LogoutUser, (state) => {
+    return { ...state, loading: true };
+  }),
+  on(UserActions.LogoutUserSuccess, (state) => {
+    return { ...state, loading: false, auth: null, user: null };
+  }),
+  on(UserActions.LogoutUserFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
   })
 );

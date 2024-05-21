@@ -6,9 +6,10 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
+import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent],
+  declarations: [LoginComponent, RegisterComponent, AdminComponent],
   imports: [
     CommonModule,
     AuthRoutingModule,

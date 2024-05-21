@@ -16,6 +16,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../app.state';
 import * as UserAction from '../../../core/state/users/users.actions';
 import { IUser } from '../../../core/adapter/users';
+import { UsersService } from '../../../core/services/users/users.service';
 
 @Component({
   selector: 'app-login',
@@ -40,7 +41,8 @@ export class LoginComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private router: Router,
     private store: Store<AppState>,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private userService: UsersService
   ) {}
   ngOnInit(): void {
     this.formSubmit$
@@ -82,6 +84,7 @@ export class LoginComponent implements OnInit {
             const { data } = res;
             if ('accessToken' in data) {
               localStorage.setItem('access_token', data.accessToken as string);
+              this.userService.userSignals.set(res);
               this.router.navigateByUrl('/');
             }
           }

@@ -40,6 +40,28 @@ export class UserEffects {
       )
     )
   );
+  getAllUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.GetAllUser),
+      mergeMap(() =>
+        this.userService.getAllUser().pipe(
+          map((users) => UserActions.GetAllUserSuccess({ users })),
+          catchError((error) => of(UserActions.GetAllUserFailure({ error })))
+        )
+      )
+    )
+  );
+  logoutUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.LogoutUser),
+      mergeMap((payload) =>
+        this.userService.logout(payload.userId).pipe(
+          map(() => UserActions.LogoutUserSuccess()),
+          catchError((error) => of(UserActions.LogoutUserFailure({ error })))
+        )
+      )
+    )
+  );
 
   constructor(private actions$: Actions, private userService: UsersService) {}
 }

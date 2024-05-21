@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -10,6 +10,7 @@ import { ApiResponse, IUser } from '../../adapter/users';
 })
 export class UsersService {
   private apiURL = environment.API_URL + 'users';
+  userSignals = signal<ApiResponse | undefined | null>(undefined);
 
   constructor(private http: HttpClient) {}
 
@@ -26,8 +27,20 @@ export class UsersService {
       value,
     });
   }
-  // Get
+  // Refresh token
+  refresh(): Observable<void> {
+    return this.http.get<void>(`${environment.API_URL}refresh`);
+  }
+  // Logout
+  logout(userId: string): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiURL}/logout/${userId}`);
+  }
+  // Get one
   getUser(userId: string): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.apiURL}/${userId}`);
+  }
+  // Get all
+  getAllUser(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiURL}`);
   }
 }

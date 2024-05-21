@@ -4,6 +4,8 @@ import { AppState } from '../../../app.state';
 import { Observable, Subscription } from 'rxjs';
 import * as UserActions from '../../../core/state/users/users.actions';
 import { IUsers } from '../../../core/models/users';
+import { UsersService } from '../../../core/services/users/users.service';
+import { Router } from '@angular/router';
 
 type Data = {
   accessToken: string;
@@ -24,7 +26,11 @@ interface ApiResponse {
 export class InfoComponent implements OnInit, OnDestroy {
   private subscription: Subscription | undefined;
   user$: Observable<IUsers | null> | undefined;
-  constructor(private store: Store<AppState>) {
+  constructor(
+    private store: Store<AppState>,
+    private userService: UsersService,
+    private router: Router
+  ) {
     this.user$ = this.store.select((state) => state.users.user);
   }
   ngOnInit(): void {

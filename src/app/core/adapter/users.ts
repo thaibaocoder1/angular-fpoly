@@ -6,7 +6,7 @@ export interface IUser {
 }
 export interface Data {
   accessToken: string;
-  expireIns: number;
+  refreshToken: string;
   id: string;
   role: string;
 }
