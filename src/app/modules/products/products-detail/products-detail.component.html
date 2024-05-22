@@ -82,26 +82,38 @@
       <div class="d-flex align-items-center mb-4 pt-2">
         <div class="input-group quantity mr-3" style="width: 130px">
           <div class="input-group-btn">
-            <button class="btn btn-primary btn-minus">
+            <button
+              class="btn btn-primary"
+              (click)="changeQuantity('DECREMENT')"
+            >
               <i class="fa fa-minus"></i>
             </button>
           </div>
           <input
             type="text"
             class="form-control bg-secondary text-center"
-            value="1"
+            value="{{ valueInput }}"
             name="order"
           />
           <div class="input-group-btn">
-            <button class="btn btn-primary btn-plus">
+            <button
+              class="btn btn-primary"
+              (click)="changeQuantity('INCREMENT')"
+            >
               <i class="fa fa-plus"></i>
             </button>
           </div>
         </div>
-        <button class="btn btn-primary px-3 mr-2" (click)="addToCart(item._id)">
+        <button
+          class="btn btn-primary px-3 mr-2"
+          (click)="addToCart(item._id, valueInput)"
+        >
           <i class="fa fa-shopping-cart mr-1"></i> Add To Cart
         </button>
-        <button class="btn btn-secondary px-3" id="btn-buy-now">
+        <button
+          class="btn btn-secondary px-3"
+          (click)="handleBuyNow(item._id, valueInput)"
+        >
           <i class="fa fa-money-bill mr-1"></i> Buy Now
         </button>
       </div>
@@ -131,14 +143,14 @@
         role="tablist"
       >
         <a
-          class="nav-item nav-link active"
+          class="text-primary nav-item nav-link active"
           data-bs-toggle="tab"
           data-bs-target="#tab-pane-1"
           style="cursor: pointer"
           >Description</a
         >
         <a
-          class="nav-item nav-link"
+          class="text-primary nav-item nav-link"
           data-bs-toggle="tab"
           data-bs-target="#tab-pane-2"
           style="cursor: pointer"

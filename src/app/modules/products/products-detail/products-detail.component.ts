@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, map, switchMap } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { Observable, map } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../../app.state';
 import { IProducts } from '../../../core/models/products';
 import * as ProductActions from '../../../core/state/products/products.actions';
@@ -17,12 +17,14 @@ export class ProductsDetailComponent implements OnInit {
   selectedProduct$: Observable<IProducts | null> | undefined;
   id: string = '';
   catalogID: string = '';
+  valueInput: number = 1;
 
   constructor(
     private store: Store<AppState>,
     private activatedRoute: ActivatedRoute,
     private toast: ToastrService,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router
   ) {}
   ngOnInit() {
     this.getById();
@@ -46,11 +48,40 @@ export class ProductsDetailComponent implements OnInit {
         );
       });
   }
-  addToCart(id: string) {
+  addToCart(id: string, qty: number = 1) {
     this.toast.success('Add to cart successfully!', 'Thank you', {
       closeButton: true,
       progressBar: true,
+      timeOut: 2000,
     });
-    this.cartService.addToCart(id);
+    this.cartService.addToCart(id, qty);
+  }
+  handleBuyNow(productId: string, qty: number = 1) {
+    this.toast.success('Wait to redirect checkout!', 'Thank you', {
+      closeButton: true,
+      progressBar: true,
+      timeOut: 2000,
+    });
+    this.cartService.addToCart(productId, qty, true);
+    setTimeout(() => {
+      this.router.navigateByUrl('/checkout');
+    }, 2000);
+  }
+  changeQuantity(type: string) {
+    switch (type) {
+      case 'INCREMENT':
+        this.valueInput++;
+        break;
+      case 'DECREMENT':
+        {
+          const value = this.valueInput--;
+          if (value < 2) {
+            this.valueInput = 1;
+          }
+        }
+        break;
+      default:
+        break;
+    }
   }
 }

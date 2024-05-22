@@ -5,6 +5,7 @@ import { AppState } from '../../../app.state';
 import { IProducts } from '../../../core/models/products';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { ToastrService } from 'ngx-toastr';
+import * as ProductActions from '../../../core/state/products/products.actions';
 
 @Component({
   selector: 'app-products-list',
@@ -12,17 +13,19 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './products-list.component.css',
 })
 export class ProductsListComponent implements OnInit {
-  @Input() data!: Observable<IProducts[]>;
-  products$: Observable<IProducts[]> | undefined;
+  products$: Observable<IProducts[]>;
   constructor(
     private store: Store<AppState>,
-    private cartService: CartService,
-    private toast: ToastrService
-  ) {}
-  ngOnInit(): void {
-    if (this.data) {
-      this.products$ = this.data;
-    }
+    private toast: ToastrService,
+    private cartService: CartService
+  ) {
+    this.products$ = this.store.select((state) => state.products.products);
+  }
+  ngOnInit() {
+    this.getAll();
+  }
+  getAll() {
+    this.store.dispatch(ProductActions.loadProduct());
   }
   addToCart(id: string) {
     this.toast.success('Add to cart successfully!', 'Thank you', {

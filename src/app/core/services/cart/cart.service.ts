@@ -15,20 +15,22 @@ export class CartService {
     this.loadCart();
     this.updateCartItemCount();
   }
+
   getCart(): Observable<CartItem[]> {
     return this.cartSubject.asObservable();
   }
   getCartItemCount() {
     return this.cartItemCount.asObservable();
   }
-  addToCart(productId: string) {
+
+  addToCart(productId: string, qty: number = 1, flag: boolean = false) {
     const cart = this.cartSubject.getValue();
     const index = cart.findIndex((item) => item.productId === productId);
 
     if (index === -1) {
-      cart.push({ productId, quantity: 1 });
+      cart.push({ productId, quantity: qty, isBuyNow: flag });
     } else {
-      cart[index].quantity += 1;
+      cart[index].quantity += qty;
     }
 
     this.saveCart(cart);
@@ -46,8 +48,7 @@ export class CartService {
     }
     return cart[index].quantity;
   }
-
-  decrementQuantity(productId: string): void {
+  decrementQuantity(productId: string): number {
     const cart = this.cartSubject.getValue();
     const index = cart.findIndex((item) => item.productId === productId);
     if (index !== -1 && cart[index].quantity > 1) {
@@ -56,7 +57,21 @@ export class CartService {
       this.cartSubject.next(cart);
       this.updateCartItemCount();
     }
+    return cart[index].quantity;
   }
+  removeToCart(productId: string): boolean {
+    const cart = this.cartSubject.getValue();
+    const index = cart.findIndex((item) => item.productId === productId);
+    if (index !== -1) {
+      cart.splice(index, 1);
+      this.saveCart(cart);
+      this.cartSubject.next(cart);
+      this.updateCartItemCount();
+      return true;
+    }
+    return false;
+  }
+
   private saveCart(cart: CartItem[]): void {
     localStorage.setItem('carts', JSON.stringify(cart));
   }
