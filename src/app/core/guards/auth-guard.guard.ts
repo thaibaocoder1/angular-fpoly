@@ -14,11 +14,13 @@ export const authGuardGuard: CanActivateFn = (route, state) => {
     map((res) => {
       if (res && res?.success) {
         const { data } = res;
-        console.log(data);
+        if (data?.role === 'User') {
+          router.navigateByUrl('/auth/permission');
+          return false;
+        }
         return true;
       } else {
-        console.log(132);
-        router.navigateByUrl('/auth/test');
+        router.navigateByUrl('/auth/permission');
         return false;
       }
     })

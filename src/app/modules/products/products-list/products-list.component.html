@@ -174,7 +174,12 @@
                 <i class="fas fa-heart" style="color: inherit"></i>
               </span>
             </div>
-            <div class="card-modal">
+            <div
+              class="card-modal"
+              data-bs-toggle="modal"
+              data-bs-target="#viewModalV2"
+              (click)="handleQuickViewProduct(item._id)"
+            >
               <span>
                 <i class="fas fa-eye" style="color: inherit"></i>
               </span>
@@ -240,3 +245,25 @@
 </div>
 <!-- Shop End -->
 <app-featured></app-featured>
+
+<app-modal
+  [modalId]="'viewModalV2'"
+  [title]="'Product Info'"
+  [textButton]="'Add to cart'"
+>
+  <div class="d-flex flex-column" *ngIf="productSelected$ as product">
+    <img
+      [src]="product.thumb.fileName"
+      class="img-fluid"
+      alt="{{ product.name }}"
+    />
+    <div class="modal-body-inner">
+      <h4 class="font-weight-semi-bold">{{ product.name }}</h4>
+      <h4 class="font-weight-semi-bold" [appFormat]="product"></h4>
+      <h4 class="font-weight-semi-bold" style="color: var(--red)">
+        Sale: {{ product.discount }}%
+      </h4>
+      <p class="font-weight-medium">{{ product.description }}</p>
+    </div>
+  </div>
+</app-modal>

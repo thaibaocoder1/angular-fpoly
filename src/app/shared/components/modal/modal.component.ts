@@ -17,6 +17,7 @@ export class ModalComponent implements OnInit, OnDestroy {
   @Input() title: string = 'Modal title';
   @Input() modalId: string = 'removeItem';
   @Input() productId: string = '';
+  @Input() textButton: string = 'Save changes';
   @Output() confirm = new EventEmitter<string>();
 
   constructor(private el: ElementRef) {}

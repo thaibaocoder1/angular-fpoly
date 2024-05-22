@@ -51,7 +51,7 @@ export class CartService {
   decrementQuantity(productId: string): number {
     const cart = this.cartSubject.getValue();
     const index = cart.findIndex((item) => item.productId === productId);
-    if (index !== -1 && cart[index].quantity > 1) {
+    if (index !== -1) {
       cart[index].quantity -= 1;
       this.saveCart(cart);
       this.cartSubject.next(cart);

@@ -17,17 +17,26 @@ export const UserReducer = createReducer(
     return { ...state, loading: true };
   }),
   on(UserActions.LoginUserSuccess, (state, { auth }) => {
-    return { ...state, loading: false, auth };
+    return { ...state, loading: false, auth, error: '' };
   }),
   on(UserActions.LoginUserFailure, (state, { error }) => {
     console.error(error);
-    return state;
+    return { ...state, loading: false, error };
   }),
   on(UserActions.RegUser, (state, { user }) => {
     return { ...state, loading: true };
   }),
   on(UserActions.RegUserSuccess, (state, { user }) => {
-    return { ...state, loading: false };
+    let values: IUsers;
+    if (user.success) {
+      if ('data' in user) {
+        const { data } = user;
+        if ('password' in data) {
+          values = data;
+        }
+      }
+    }
+    return { ...state, loading: false, error: '', user: values! };
   }),
   on(UserActions.RegUserFailure, (state, { error }) => {
     console.error(error);

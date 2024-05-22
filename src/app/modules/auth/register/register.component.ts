@@ -6,18 +6,13 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../app.state';
 import * as UserActions from '../../../core/state/users/users.actions';
 import {
-  Observable,
   Subject,
-  catchError,
   distinctUntilChanged,
   filter,
-  map,
-  of,
   startWith,
   switchMap,
   take,
   tap,
-  throwError,
 } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CheckEmail } from '../validators/check-email';
@@ -101,10 +96,9 @@ export class RegisterComponent implements OnInit {
         take(1)
       )
       .subscribe((res) => {
-        console.log('🚀 ~ RegisterComponent ~ .subscribe ~ res:', res);
-        // if (res?.success) {
-        //   this.router.navigateByUrl('/login');
-        // }
+        if (res) {
+          this.router.navigateByUrl('/auth/login');
+        }
       });
   }
 }

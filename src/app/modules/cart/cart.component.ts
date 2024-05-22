@@ -37,6 +37,7 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
     private store: Store<AppState>,
     private toast: ToastrService
   ) {}
+
   ngOnInit(): void {
     this.cart$ = this.cartService.getCart();
     this.subscription = combineLatest([
@@ -79,13 +80,16 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
   get total() {
     return this.subTotal - this.shipCost;
   }
-  changeSubtotal(item: IProducts, index: number, type: string) {
+  changeSubtotal(item: IProducts, type: string) {
     switch (type) {
       case 'INCREMENT':
         this.cartService.incrementQuantity(item._id);
         break;
       case 'DECREMENT':
-        this.cartService.decrementQuantity(item._id);
+        const quantity = this.cartService.decrementQuantity(item._id);
+        if (quantity < 1) {
+          alert('?');
+        }
         break;
       default:
         break;

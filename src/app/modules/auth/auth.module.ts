@@ -6,10 +6,10 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
-import { AdminComponent } from './admin/admin.component';
+import { PermissionComponent } from './permission/permission.component';
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent, AdminComponent],
+  declarations: [LoginComponent, RegisterComponent, PermissionComponent],
   imports: [
     CommonModule,
     AuthRoutingModule,
