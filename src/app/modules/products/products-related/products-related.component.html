@@ -59,7 +59,10 @@
               class="btn btn-sm text-dark p-0"
               ><i class="fas fa-eye text-primary mr-1"></i>View Detail</a
             >
-            <button class="btn-sm border-0 bg-transparent text-dark p-0">
+            <button
+              (click)="addToCart(item._id)"
+              class="btn-sm border-0 bg-transparent text-dark p-0"
+            >
               <i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart
             </button>
           </div>

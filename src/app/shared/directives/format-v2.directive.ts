@@ -8,7 +8,9 @@ import { IProducts } from '../../core/models/products';
 export class FormatV2Directive {
   constructor(private ref: ElementRef, private pipe: CurrencyPipe) {}
   @Input('appFormatV2') set format(item: IProducts) {
-    const salePrice = (item.price * (100 - item.discount)) / 100;
+    const salePrice =
+      ((item.price * (100 - item.discount)) / 100) *
+      (item.quantityBuy as number);
     this.ref.nativeElement.textContent = this.pipe.transform(salePrice, 'VND');
   }
 }

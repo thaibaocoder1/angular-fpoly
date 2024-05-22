@@ -21,7 +21,8 @@
       <table class="table table-bordered text-center mb-0" id="table-cart">
         <thead class="bg-secondary text-dark">
           <tr>
-            <th>Products</th>
+            <th>Name</th>
+            <th>Image</th>
             <th>Price</th>
             <th>Quantity</th>
             <th>Total</th>
@@ -29,7 +30,14 @@
           </tr>
         </thead>
         <tbody class="align-middle" *ngIf="productsList$?.length; else empty">
-          <tr *ngFor="let item of productsList$; index as i">
+          <tr *ngFor="let item of productsList$; index as i; trackBy: identify">
+            <td class="align-middle">
+              <a
+                class="text-decoration-none"
+                routerLink="/products/detail/{{ item._id }}"
+                >{{ item.name }}</a
+              >
+            </td>
             <td class="align-middle">
               <img
                 src="{{ item.thumb.fileName }}"
@@ -41,13 +49,15 @@
             <td class="align-middle">
               <div class="input-group quantity mx-auto" style="width: 100px">
                 <div class="input-group-btn">
-                  <button class="btn btn-sm btn-primary btn-minus">
+                  <button
+                    class="btn btn-sm btn-primary"
+                    (click)="changeSubtotal(item, i, 'DECREMENT')"
+                  >
                     <i class="fa fa-minus"></i>
                   </button>
                 </div>
                 <input
                   type="text"
-                  [(ngModel)]="item.quantityBuy"
                   class="form-control form-control-sm bg-secondary text-center"
                   value="{{ item.quantityBuy }}"
                   name="quantity"
@@ -55,16 +65,24 @@
                 <div class="input-group-btn">
                   <button
                     class="btn btn-sm btn-primary"
-                    (click)="changeSubtotal(item._id, 'INCREMENT')"
+                    (click)="changeSubtotal(item, i, 'INCREMENT')"
                   >
                     <i class="fa fa-plus"></i>
                   </button>
                 </div>
               </div>
             </td>
-            <td class="align-middle" #subTotal [appFormat]="item"></td>
+            <td
+              style="min-width: 150px"
+              class="align-middle"
+              #subTotal
+              [appFormatV2]="item"
+            ></td>
             <td class="align-middle">
-              <button class="btn btn-sm btn-primary btn-trash">
+              <button
+                class="btn btn-sm btn-primary"
+                (click)="removeItem(item, i)"
+              >
                 <i class="fa fa-times"></i>
               </button>
             </td>
@@ -114,6 +132,7 @@
   </div>
 </div>
 <!-- Cart End -->
+
 <ng-template #empty>
   <tr>
     <td colspan="5">

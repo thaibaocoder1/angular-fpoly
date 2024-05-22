@@ -1,7 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import $ from 'jquery';
-import { CartService } from './core/services/cart/cart.service';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +12,7 @@ export class AppComponent implements AfterViewInit {
   isAuth: boolean = true;
   isAdmin: boolean = true;
   title = 'project-angular-fpoly';
+
   constructor(private router: Router) {}
   ngOnInit() {
     this.router.events.subscribe((event) => {

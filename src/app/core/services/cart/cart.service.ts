@@ -35,7 +35,7 @@ export class CartService {
     this.cartSubject.next(cart);
     this.updateCartItemCount();
   }
-  incrementQuantity(productId: string): void {
+  incrementQuantity(productId: string): number {
     const cart = this.cartSubject.getValue();
     const index = cart.findIndex((item) => item.productId === productId);
     if (index !== -1) {
@@ -44,6 +44,7 @@ export class CartService {
       this.cartSubject.next(cart);
       this.updateCartItemCount();
     }
+    return cart[index].quantity;
   }
 
   decrementQuantity(productId: string): void {

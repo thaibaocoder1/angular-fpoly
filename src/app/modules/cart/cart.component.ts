@@ -56,17 +56,32 @@ export class CartComponent implements OnInit, OnDestroy {
         this.productsList$ = filteredProducts;
       });
   }
-  changeSubtotal(id: string, type: string) {
+  changeSubtotal(item: IProducts, index: number, type: string) {
     switch (type) {
       case 'INCREMENT':
-        this.cartService.incrementQuantity(id);
+        {
+          const quantity = this.cartService.incrementQuantity(item._id);
+          const price = (item.price * (100 - item.discount)) / 100;
+          const subTotal = quantity * price;
+          const subTotalElement = this.subTotalItems?.toArray()[index];
+          if (subTotalElement) {
+            const nativeElement = subTotalElement.nativeElement;
+            if (nativeElement) {
+              nativeElement.textContent = 'abc';
+            }
+          }
+        }
         break;
       case 'DECREMENT':
-        this.cartService.decrementQuantity(id);
+        this.cartService.decrementQuantity(item._id);
         break;
       default:
         break;
     }
+  }
+  removeItem(item: IProducts, index: number) {}
+  identify(index: number, item: IProducts) {
+    return item._id;
   }
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();

@@ -1,6 +1,6 @@
 <!-- Topbar Start -->
 <div
-  class="container-fluid"
+  class="container-fluid shadow-sm rounded-lg"
   style="
     position: sticky;
     top: 0;
@@ -40,11 +40,11 @@
     <div class="col-lg-3 col-6 text-right">
       <a href="list.html" class="btn border">
         <i class="fas fa-heart text-primary"></i>
-        <span class="badge" id="whitelist-order">0</span>
+        <span class="badge text-primary">0</span>
       </a>
       <a routerLink="/cart" class="btn border">
         <i class="fas fa-shopping-cart text-primary"></i>
-        <span class="badge">{{ number }}</span>
+        <span class="text-primary badge">{{ number }}</span>
       </a>
     </div>
   </div>
