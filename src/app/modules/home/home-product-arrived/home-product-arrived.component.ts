@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { Observable, map, take } from 'rxjs';
 import { IProducts } from '../../../core/models/products';
 import { CartService } from '../../../core/services/cart/cart.service';
@@ -10,7 +10,7 @@ import { ModalComponent } from '../../../shared/components/modal/modal.component
   templateUrl: './home-product-arrived.component.html',
   styleUrl: './home-product-arrived.component.css',
 })
-export class HomeProductArrivedComponent {
+export class HomeProductArrivedComponent implements AfterViewInit {
   @Input() data!: Observable<IProducts[]>;
   products$: Observable<IProducts[]> | undefined;
   @ViewChild(ModalComponent, { static: true }) modalElement:
@@ -37,6 +37,11 @@ export class HomeProductArrivedComponent {
       .subscribe((product) => {
         this.productSelected$ = product;
       });
+  }
+  ngAfterViewInit(): void {
+    this.modalElement?.confirm.subscribe((id: string) => {
+      this.addToCart(id);
+    });
   }
   addToCart(id: string) {
     this.toast.success('Add to cart successfully!', 'Thank you', {

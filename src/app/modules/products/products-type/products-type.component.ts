@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Observable, map, take } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -15,7 +15,9 @@ import { ModalComponent } from '../../../shared/components/modal/modal.component
   templateUrl: './products-type.component.html',
   styleUrl: './products-type.component.css',
 })
-export class ProductsTypeComponent implements OnInit {
+export class ProductsTypeComponent implements OnInit, AfterViewInit {
+  page: number = 1;
+  itemsPerPage: number = 6;
   products$: Observable<IProducts[]> | undefined;
   @ViewChild(ModalComponent, { static: true }) modalElement:
     | ModalComponent
@@ -63,10 +65,16 @@ export class ProductsTypeComponent implements OnInit {
         this.productSelected$ = product;
       });
   }
+  ngAfterViewInit(): void {
+    this.modalElement?.confirm.subscribe((productId: string) => {
+      this.addToCart(productId);
+    });
+  }
   addToCart(id: string) {
     this.toast.success('Add to cart successfully!', 'Thank you', {
       closeButton: true,
       progressBar: true,
+      timeOut: 2000,
     });
     this.cartService.addToCart(id);
   }

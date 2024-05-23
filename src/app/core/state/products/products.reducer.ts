@@ -29,20 +29,21 @@ export const ProductReducer = createReducer(
     const selectedProduct = state.products.find(
       (item) => item._id === action.productId
     );
-    return { ...state, loading: false, product: selectedProduct || null };
+    return {
+      ...state,
+      loading: false,
+      product: selectedProduct || null,
+      error: '',
+    };
   }),
   on(ProductActions.loadProductWithCatID, (state, { catID }) => {
     const related = state.products.filter((item) => item.categoryID === catID);
-    return { ...state, loading: false, products: related };
+    return { ...state, loading: false, products: related, error: '' };
   }),
-  on(ProductActions.loadProductWithCatID, (state, { catID }) => {
-    const related = state.products.filter((item) => item.categoryID === catID);
-    return { ...state, loading: false, products: related };
-  }),
-  on(ProductActions.loadProductWithSlug, (state) => {
+  on(ProductActions.loadProductWithSlug, (state, { slug }) => {
     return state;
   }),
   on(ProductActions.loadProductWithSlugSuccess, (state, { products }) => {
-    return { ...state, products: products };
+    return { ...state, products: products, error: '' };
   })
 );

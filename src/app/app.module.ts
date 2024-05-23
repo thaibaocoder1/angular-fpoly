@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +24,7 @@ import { reducers } from './core/state/rehydrate/reducers';
 import { AdminModule } from './admin/admin.module';
 import { UserEffects } from './core/state/users/users.effects';
 import { authInterceptor } from './core/migration/auth.interceptor';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 export function localStorageSyncReducer(reducer: any): any {
   return localStorageSync({
@@ -44,7 +46,9 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     HttpClientModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    ModalModule.forRoot(),
     NgxSpinnerModule,
+    NgxPaginationModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot([ProductEffects, CategoryEffects, UserEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),

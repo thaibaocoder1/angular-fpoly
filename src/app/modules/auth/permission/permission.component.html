@@ -1,11 +1,34 @@
 <div class="main">
-  <form class="form" autocomplete="off">
+  <form
+    class="form"
+    autocomplete="off"
+    [formGroup]="formLogin"
+    (ngSubmit)="formSubmit$.next(true)"
+  >
     <h3 class="heading">Quản trị viên đăng nhập</h3>
     <p class="desc">
       Cùng nhau trở thành thành viên của BSmart ngay hôm nay ❤️
     </p>
 
     <div class="spacer"></div>
+    <app-input
+      [control]="formLogin.controls.email"
+      placeholder="VD: emailtest@gmail.com"
+      type="text"
+      htmlFor="email"
+      label="Email"
+    ></app-input>
+    <app-input
+      [control]="formLogin.controls.password"
+      type="password"
+      htmlFor="password"
+      placeholder="Enter password here"
+      label="Password"
+    ></app-input>
+
+    <button type="submit" [disabled]="formLogin.invalid" class="form-submit">
+      Đăng nhập
+    </button>
 
     <a routerLink="/">
       <div class="back-to-home">

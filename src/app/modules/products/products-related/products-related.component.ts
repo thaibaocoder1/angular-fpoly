@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   Input,
   OnChanges,
@@ -20,7 +21,9 @@ import { ModalComponent } from '../../../shared/components/modal/modal.component
   templateUrl: './products-related.component.html',
   styleUrl: './products-related.component.css',
 })
-export class ProductsRelatedComponent implements OnInit, OnChanges {
+export class ProductsRelatedComponent
+  implements OnInit, OnChanges, AfterViewInit
+{
   @Input() catalogID: string = '';
   products$: Observable<IProducts[] | null> | undefined;
   @ViewChild(ModalComponent, { static: true }) modalElement:
@@ -61,6 +64,11 @@ export class ProductsRelatedComponent implements OnInit, OnChanges {
       timeOut: 2000,
     });
     this.cartService.addToCart(id);
+  }
+  ngAfterViewInit(): void {
+    this.modalElement?.confirm.subscribe((productId: string) => {
+      this.addToCart(productId);
+    });
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['catalogID'] && changes['catalogID']?.currentValue !== '') {

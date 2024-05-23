@@ -53,9 +53,13 @@ export class CartService {
     const index = cart.findIndex((item) => item.productId === productId);
     if (index !== -1) {
       cart[index].quantity -= 1;
-      this.saveCart(cart);
-      this.cartSubject.next(cart);
-      this.updateCartItemCount();
+      if (cart[index].quantity < 1) {
+        return cart[index].quantity;
+      } else {
+        this.saveCart(cart);
+        this.cartSubject.next(cart);
+        this.updateCartItemCount();
+      }
     }
     return cart[index].quantity;
   }

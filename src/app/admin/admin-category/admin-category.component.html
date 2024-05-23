@@ -4,8 +4,16 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <div class="d-inline-flex">
         <h1 class="h3 mb-0 text-gray-800 mr-3">Trang danh mục</h1>
-        <a href="/admin/add-edit-product.html" class="btn btn-info">Tạo mới</a>
+        <button
+          type="button"
+          class="btn btn-info"
+          data-bs-toggle="modal"
+          data-bs-target="#createCategoryModal"
+        >
+          Tạo mới
+        </button>
       </div>
+
       <form
         class="d-none d-sm-inline-block form-inline ml-md-3 my-2 my-md-0 mw-100 navbar-search"
       >
@@ -54,3 +62,12 @@
     </div>
   </div>
 </app-admin-common>
+
+<app-modal [modalId]="'createCategoryModal'" [title]="'Tạo danh mục'">
+  <div class="row">
+    <form class="w-100" novalidate [formGroup]="formCatalog">
+      <div class="mb-3"></div>
+      <button type="submit" class="btn btn-primary">Cập nhật</button>
+    </form>
+  </div>
+</app-modal>

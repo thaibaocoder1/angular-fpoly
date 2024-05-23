@@ -160,3 +160,5 @@
 <app-modal #modal [title]="'Remove item? Please confirm here?'">
   <p>Item will be remove from cart. Continue?</p>
 </app-modal>
+
+<app-modal-dynamic (confirmDynamic)="onConfirm($event)"></app-modal-dynamic>

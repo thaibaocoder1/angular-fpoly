@@ -7,6 +7,7 @@ export const initialState: UsersState = {
   loading: false,
   auth: null,
   user: null,
+  admin: null,
   users: [],
   error: '',
 };

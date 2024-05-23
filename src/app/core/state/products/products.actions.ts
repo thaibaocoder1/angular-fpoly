@@ -31,6 +31,7 @@ export const loadProductWithSlugSuccess = createAction(
   props<{ products: IProducts[] }>()
 );
 
+// CRUD
 export const addProduct = createAction(
   '[Product] Add Product',
   props<{ product: IProducts }>()

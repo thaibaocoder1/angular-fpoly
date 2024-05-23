@@ -17,6 +17,11 @@ import { IProducts } from '../../core/models/products';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { ToastrService } from 'ngx-toastr';
 import { CurrencyPipe } from '@angular/common';
+import * as ProductActions from '../../core/state/products/products.actions';
+import {
+  IEmit,
+  ModalDynamicComponent,
+} from '../../shared/components/modal-dynamic/modal-dynamic.component';
 
 @Component({
   selector: 'app-cart',
@@ -31,6 +36,9 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
   private subscription: Subscription | undefined;
   @ViewChildren('subTotal') subTotalItems: QueryList<ElementRef> | undefined;
   @ViewChild('modal', { static: true }) modal: ModalComponent | undefined;
+  @ViewChild(ModalDynamicComponent) modalDynamic:
+    | ModalDynamicComponent
+    | undefined;
 
   constructor(
     private cartService: CartService,
@@ -39,24 +47,27 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    this.getAllProduct();
     this.cart$ = this.cartService.getCart();
     this.subscription = combineLatest([
       this.store.pipe(select((state) => state.products.products)),
       this.cart$,
     ])
       .pipe(
-        map(([products, cartItems]) =>
-          products
+        map(([products, cartItems]) => {
+          return products
             .filter((product) =>
               cartItems.some((item) => item.productId === product._id)
             )
-            .map((product) => ({
-              ...product,
-              quantityBuy: cartItems.find(
-                (item) => item.productId === product._id
-              )?.quantity,
-            }))
-        )
+            .map((product) => {
+              return {
+                ...product,
+                quantityBuy: cartItems.find(
+                  (item) => item.productId === product._id
+                )?.quantity,
+              };
+            });
+        })
       )
       .subscribe((filteredProducts) => {
         this.productsList$ = filteredProducts;
@@ -88,7 +99,9 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'DECREMENT':
         const quantity = this.cartService.decrementQuantity(item._id);
         if (quantity < 1) {
-          alert('?');
+          this.setDynamicProductId(item._id);
+        } else {
+          this.unset();
         }
         break;
       default:
@@ -110,8 +123,34 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
       this.modal.productId = productId;
     }
   }
+  setDynamicProductId(productId: string) {
+    if (this.modalDynamic) {
+      this.modalDynamic.productId = productId;
+      this.modalDynamic?.show();
+    }
+  }
+  unset() {
+    if (this.modalDynamic) {
+      this.modalDynamic.isShow = false;
+    }
+  }
   identify(index: number, item: IProducts) {
     return item._id;
+  }
+  getAllProduct() {
+    this.store.dispatch(ProductActions.loadProduct());
+  }
+  onConfirm(value: IEmit) {
+    if (value.flag) {
+      this.cartService.incrementQuantity(value.id);
+    } else {
+      this.removeItem(value.id);
+    }
+    // if (id === '') {
+    //   this.cartService.incrementQuantity(id);
+    // } else {
+    //   this.removeItem(id);
+    // }
   }
   ngAfterViewInit(): void {
     this.modal?.confirm.subscribe((productId: string) => {

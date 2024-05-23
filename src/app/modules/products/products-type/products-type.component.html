@@ -160,10 +160,13 @@
           </div>
         </div>
       </div>
-      <div class="row pb-3">
+      <div class="row pb-3" *ngIf="products$ | async as products">
         <div
           class="col-lg-4 col-md-6 col-sm-12 pb-1"
-          *ngFor="let item of products$ | async"
+          *ngFor="
+            let item of products
+              | paginate : { itemsPerPage, currentPage: page }
+          "
         >
           <div class="card product-item border-0 mb-4" id="card-custom">
             <div class="card-sale">
@@ -230,13 +233,10 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-12 pb-1">
-          <nav aria-label="Page navigation">
-            <ul
-              class="pagination justify-content-center mb-3"
-              id="pagination"
-            ></ul>
-          </nav>
+        <div class="col-12 pb-1 d-flex justify-content-center">
+          <pagination-controls
+            (pageChange)="page = $event"
+          ></pagination-controls>
         </div>
       </div>
     </div>
