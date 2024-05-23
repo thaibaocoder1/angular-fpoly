@@ -20,6 +20,17 @@ export class CategoryEffects {
       )
     )
   );
+  addCatalog$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CatalogActions.addCatalog),
+      mergeMap((actions) =>
+        this.catalogService.add(actions.value).pipe(
+          map((detail) => CatalogActions.addCatalogSuccess({ detail })),
+          catchError((error) => of(CatalogActions.addCatalogFailure({ error })))
+        )
+      )
+    )
+  );
 
   constructor(
     private actions$: Actions,

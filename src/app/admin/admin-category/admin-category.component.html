@@ -48,13 +48,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of cataglos$ | async">
+          <tr *ngFor="let item of cataglogs$ | async">
             <td>{{ item._id }}</td>
             <td>{{ item.title }}</td>
             <td>{{ item.createdAt | date : "dd/MM/yyyy" }}</td>
             <td>{{ item.updatedAt | date : "dd/MM/yyyy" }}</td>
             <td>
-              <button class="btn btn-primary btn-sm">Chỉnh sửa</button>
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                (click)="editCategory(item._id)"
+                data-bs-toggle="modal"
+                data-bs-target="#editCategoryModal"
+              >
+                Chỉnh sửa
+              </button>
             </td>
           </tr>
         </tbody>
@@ -63,11 +71,62 @@
   </div>
 </app-admin-common>
 
-<app-modal [modalId]="'createCategoryModal'" [title]="'Tạo danh mục'">
-  <div class="row">
-    <form class="w-100" novalidate [formGroup]="formCatalog">
-      <div class="mb-3"></div>
-      <button type="submit" class="btn btn-primary">Cập nhật</button>
-    </form>
-  </div>
+<app-modal
+  [modalId]="'createCategoryModal'"
+  [title]="'Tạo danh mục'"
+  [showButton]="false"
+>
+  <form
+    class="w-100"
+    novalidate
+    [formGroup]="formCatalog"
+    (ngSubmit)="handleSubmit()"
+  >
+    <div class="mb-3">
+      <app-input
+        [placeholder]="'Enter value here...'"
+        [htmlFor]="'title'"
+        [label]="'Tên danh mục'"
+        [control]="formCatalog.controls.title"
+      ></app-input>
+    </div>
+    <button
+      type="submit"
+      [disabled]="formCatalog.invalid"
+      class="btn btn-primary"
+    >
+      Save
+    </button>
+  </form>
+</app-modal>
+
+<app-modal
+  [modalId]="'editCategoryModal'"
+  [title]="'Sửa danh mục'"
+  [showButton]="false"
+  [isEdit]="true"
+>
+  <form
+    class="w-100"
+    novalidate
+    [formGroup]="formCatalog"
+    (ngSubmit)="handleSubmit()"
+  >
+    <div class="mb-3" *ngIf="cataglog$ | async as item">
+      <app-input
+        [placeholder]="'Enter value here...'"
+        [htmlFor]="'title'"
+        [label]="'Tên danh mục'"
+        [control]="formCatalog.controls.title"
+        [value]="item.title"
+      ></app-input>
+    </div>
+    <button
+      type="submit"
+      [disabled]="formCatalog.invalid"
+      class="btn btn-primary"
+    >
+      Save
+    </button>
+  </form>
 </app-modal>

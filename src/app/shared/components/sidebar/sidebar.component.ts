@@ -13,7 +13,7 @@ import * as CatalogActions from '../../../core/state/category/category.actions';
 export class SidebarComponent implements OnInit {
   catalogs$: Observable<ICategory[] | undefined>;
   constructor(private store: Store<AppState>) {
-    this.catalogs$ = this.store.pipe(select((state) => state.catalogs));
+    this.catalogs$ = this.store.pipe(select((state) => state.catalogs.catalog));
   }
   ngOnInit(): void {
     this.getAll();

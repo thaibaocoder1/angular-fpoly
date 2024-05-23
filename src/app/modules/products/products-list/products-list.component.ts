@@ -1,12 +1,23 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, map, take } from 'rxjs';
+import {
+  Observable,
+  asyncScheduler,
+  concat,
+  debounceTime,
+  map,
+  of,
+  scheduled,
+  switchMap,
+  take,
+} from 'rxjs';
 import { AppState } from '../../../app.state';
 import { IProducts } from '../../../core/models/products';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { ToastrService } from 'ngx-toastr';
 import * as ProductActions from '../../../core/state/products/products.actions';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-products-list',
@@ -16,21 +27,46 @@ import { ModalComponent } from '../../../shared/components/modal/modal.component
 export class ProductsListComponent implements OnInit, AfterViewInit {
   page: number = 1;
   itemsPerPage: number = 6;
-  products$: Observable<IProducts[]>;
+  searchTerm: string = '';
+  products$: Observable<IProducts[]> | undefined;
   @ViewChild(ModalComponent, { static: true }) modalElement:
     | ModalComponent
     | undefined;
   productSelected$: IProducts | undefined;
+  searchControl: FormControl = new FormControl();
 
   constructor(
     private store: Store<AppState>,
     private toast: ToastrService,
     private cartService: CartService
-  ) {
-    this.products$ = this.store.select((state) => state.products.products);
-  }
+  ) {}
   ngOnInit() {
     this.getAll();
+    this.products$ = this.store.select((state) => state.products.products);
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(500),
+        switchMap((value) => {
+          this.searchTerm = value || '';
+          if (!this.products$) {
+            return of([]);
+          }
+          return this.products$.pipe(
+            map((data) => {
+              console.log('🚀 ~ ProductsListComponent ~ map ~ data:', data);
+              if (this.searchTerm === '') {
+                return data;
+              }
+              return data.filter((x) =>
+                x.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+              );
+            })
+          );
+        })
+      )
+      .subscribe((data) => {
+        this.products$ = of(data);
+      });
   }
   getAll() {
     this.store.dispatch(ProductActions.loadProduct());

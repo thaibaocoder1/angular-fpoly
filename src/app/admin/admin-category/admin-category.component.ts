@@ -1,11 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AppState } from '../../app.state';
 import { IProducts } from '../../core/models/products';
 import * as CategoryActions from '../../core/state/category/category.actions';
 import { ICategory } from '../../core/models/category';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-category',
@@ -13,14 +20,48 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrl: './admin-category.component.css',
 })
 export class AdminCategoryComponent implements OnInit {
-  cataglos$: Observable<ICategory[]>;
-  formCatalog: FormGroup = new FormGroup({
-    title: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(6)],
-    }),
+  cataglogs$: Observable<ICategory[]> | undefined;
+  cataglog$: Observable<ICategory | null> | undefined;
+
+  formCatalog = this.fb.group({
+    title: [
+      '',
+      Validators.compose([Validators.required, Validators.minLength(6)]),
+    ],
   });
-  constructor(private store: Store<AppState>) {
-    this.cataglos$ = this.store.select((state) => state.catalogs);
+  constructor(
+    private store: Store<AppState>,
+    private fb: FormBuilder,
+    private toast: ToastrService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+  ngOnInit(): void {
+    this.getAll();
+    this.cataglogs$ = this.store.select((state) => state.catalogs.catalog);
+    this.cataglog$ = this.store.select((state) => state.catalogs.detail);
   }
-  ngOnInit(): void {}
+  editCategory(id: string) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { edit: id },
+      queryParamsHandling: 'merge',
+    });
+    this.store.dispatch(CategoryActions.loadCatalogDetail({ productId: id }));
+  }
+  handleSubmit() {
+    const values: Partial<ICategory> =
+      this.formCatalog.getRawValue() as ICategory;
+    if (values) {
+      this.store.dispatch(CategoryActions.addCatalog({ value: values }));
+      this.getAll();
+      this.toast.success('Add success', undefined, {
+        timeOut: 2000,
+        progressBar: true,
+      });
+    }
+  }
+  getAll() {
+    this.store.dispatch(CategoryActions.loadCatalog());
+  }
 }

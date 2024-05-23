@@ -61,7 +61,6 @@ export class PermissionComponent implements OnInit {
   }
   onSubmit() {
     const values = this.formLogin.getRawValue() as IUser;
-    console.log(values);
     this.store.dispatch(UserActions.LoginUser({ user: values }));
     this.store
       .pipe(

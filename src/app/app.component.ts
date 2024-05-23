@@ -1,6 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import $ from 'jquery';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,7 @@ export class AppComponent implements AfterViewInit {
     this.setupBackToTopButton();
   }
   setupBackToTopButton(): void {
-    $(window).scroll(function () {
+    $(window).on('scroll', function () {
       if ($(this).scrollTop() !== undefined && $(this).scrollTop()! > 100) {
         $('.back-to-top').fadeIn('slow');
       } else {
@@ -35,7 +36,7 @@ export class AppComponent implements AfterViewInit {
       }
     });
 
-    $('.back-to-top').click(function () {
+    $('.back-to-top').on('click', function () {
       $('html, body').animate({ scrollTop: 0 }, 500);
     });
   }

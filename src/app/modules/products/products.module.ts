@@ -10,6 +10,7 @@ import { ProductsRoutingModule } from './products-routing.module';
 import { ProductsListComponent } from './products-list/products-list.component';
 import { ProductsRelatedComponent } from './products-related/products-related.component';
 import { ProductsTypeComponent } from './products-type/products-type.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,8 @@ import { ProductsTypeComponent } from './products-type/products-type.component';
       loadingText: 'This item is actually loading...',
     }),
     NgxPaginationModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class ProductsModule {}
