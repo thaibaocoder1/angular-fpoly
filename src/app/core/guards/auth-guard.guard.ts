@@ -15,7 +15,7 @@ export const authGuardGuard: CanActivateFn = (route, state) => {
       if (res && res?.success) {
         const { data } = res;
         if (data?.role === 'User') {
-          router.navigateByUrl('/auth/permission');
+          router.navigateByUrl('/auth/forbidden');
           return false;
         }
         return true;

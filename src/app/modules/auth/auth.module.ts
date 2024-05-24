@@ -7,9 +7,10 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { PermissionComponent } from './permission/permission.component';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent, PermissionComponent],
+  declarations: [LoginComponent, RegisterComponent, PermissionComponent, ForbiddenComponent],
   imports: [
     CommonModule,
     AuthRoutingModule,

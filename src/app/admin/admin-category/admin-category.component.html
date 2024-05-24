@@ -86,7 +86,7 @@
       <app-input
         [placeholder]="'Enter value here...'"
         [htmlFor]="'title'"
-        [label]="'Tên danh mục'"
+        [label]="'Category name'"
         [control]="formCatalog.controls.title"
       ></app-input>
     </div>
@@ -105,25 +105,25 @@
   [title]="'Sửa danh mục'"
   [showButton]="false"
   [isEdit]="true"
+  #editModal
 >
   <form
     class="w-100"
     novalidate
-    [formGroup]="formCatalog"
-    (ngSubmit)="handleSubmit()"
+    [formGroup]="formCatalogV2"
+    (ngSubmit)="handleSubmitEdit()"
   >
     <div class="mb-3" *ngIf="cataglog$ | async as item">
       <app-input
         [placeholder]="'Enter value here...'"
         [htmlFor]="'title'"
         [label]="'Tên danh mục'"
-        [control]="formCatalog.controls.title"
-        [value]="item.title"
+        [control]="formCatalogV2.controls.title"
       ></app-input>
     </div>
     <button
       type="submit"
-      [disabled]="formCatalog.invalid"
+      [disabled]="formCatalogV2.invalid"
       class="btn btn-primary"
     >
       Save

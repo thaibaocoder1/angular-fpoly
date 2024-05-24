@@ -4,7 +4,14 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <div class="d-inline-flex">
         <h1 class="h3 mb-0 text-gray-800 mr-3">Trang sản phẩm</h1>
-        <a href="/admin/add-edit-product.html" class="btn btn-info">Tạo mới</a>
+        <button
+          type="button"
+          class="btn btn-info"
+          data-bs-toggle="modal"
+          data-bs-target="#createProductModal"
+        >
+          Tạo mới
+        </button>
       </div>
       <form
         class="d-none d-sm-inline-block form-inline ml-md-3 my-2 my-md-0 mw-100 navbar-search"
@@ -66,3 +73,88 @@
     </div>
   </div>
 </app-admin-common>
+
+<app-modal [modalId]="'createProductModal'" [large]="true">
+  <form class="row" novalidate enctype="multipart/form-data">
+    <div class="mb-3 col-lg-4">
+      <label for="file" class="form-label">Hình ảnh</label>
+      <input
+        class="form-control mb-3"
+        style="height: 45px"
+        type="file"
+        id="file"
+        name="thumb"
+      />
+      <img
+        src="https://placehold.co/350x350"
+        alt=""
+        class="rounded-right rounded-top w-100 d-block"
+        style="object-fit: cover; height: 380px"
+        id="imageUrl"
+      />
+    </div>
+    <div id="main" class="col-lg-8">
+      <div class="d-flex align-items-center" style="gap: 0 10px">
+        <div class="mb-3 w-50">
+          <label for="name" class="form-label">Tên sản phẩm</label>
+          <input type="text" class="form-control" id="name" name="name" />
+          <span class="invalid-feedback"></span>
+        </div>
+        <div class="mb-3 w-50">
+          <label for="code" class="form-label">Mã sản phẩm</label>
+          <input type="text" class="form-control" id="code" name="code" />
+          <span class="invalid-feedback"></span>
+        </div>
+      </div>
+      <div class="d-flex align-items-center" style="gap: 0 10px">
+        <div class="mb-3" style="width: calc(100% / 3)">
+          <label for="price" class="form-label">Giá tiền</label>
+          <input type="number" class="form-control" id="price" name="price" />
+          <span class="invalid-feedback"></span>
+        </div>
+        <div class="mb-3" style="width: calc(100% / 3)">
+          <label for="discount" class="form-label">Sale (%)</label>
+          <input
+            type="number"
+            class="form-control"
+            id="discount"
+            name="discount"
+          />
+          <span class="invalid-feedback"></span>
+        </div>
+        <div class="mb-3" style="width: calc(100% / 3)">
+          <label for="quantity" class="form-label">Số lượng</label>
+          <input
+            type="number"
+            class="form-control"
+            id="quantity"
+            name="quantity"
+          />
+          <span class="invalid-feedback"></span>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="categoryID" class="form-label">Danh mục</label>
+        <select class="form-control" id="categoryID" name="categoryID"></select>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Mô tả</label>
+        <textarea
+          name="description"
+          id="description"
+          class="form-control"
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="content" class="form-label">Nội dung</label>
+        <textarea name="content" id="content" class="form-control"></textarea>
+      </div>
+    </div>
+    <button
+      type="submit"
+      class="btn btn-primary d-inline-block w-50 mx-auto rounded-lg"
+    >
+      Cập nhật
+    </button>
+  </form>
+</app-modal>

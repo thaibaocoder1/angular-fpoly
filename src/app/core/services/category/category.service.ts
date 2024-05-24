@@ -32,10 +32,40 @@ export class CategoryService {
       })
     );
   }
+  // [GET]
+  getOne(id: string): Observable<ICategory> {
+    return this.http.get<ApiResponseCategory>(this.apiURL + '/' + id).pipe(
+      map((response: ApiResponseCategory) => {
+        if (response && response.success) {
+          const data = response.data;
+          return data;
+        } else {
+          throw new Error('API response is not successful.');
+        }
+      })
+    );
+  }
   // [ADD]
   add(value: Partial<ICategory>): Observable<ICategory> {
     return this.http
       .post<ApiResponseCategory>(`${this.apiURL}/save`, {
+        value,
+      })
+      .pipe(
+        map((response: ApiResponseCategory) => {
+          if (response && response.success) {
+            const data = response.data;
+            return data;
+          } else {
+            throw new Error('API response is not successful.');
+          }
+        })
+      );
+  }
+  // [UPDATE]
+  update(value: Partial<ICategory>): Observable<ICategory> {
+    return this.http
+      .patch<ApiResponseCategory>(`${this.apiURL}/${value._id}`, {
         value,
       })
       .pipe(

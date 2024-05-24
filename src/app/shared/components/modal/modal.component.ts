@@ -6,18 +6,16 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
-  OnChanges,
-  SimpleChanges,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.css',
 })
-export class ModalComponent implements OnInit, OnDestroy, OnChanges {
+export class ModalComponent implements OnInit, OnDestroy {
   @Input() title: string = 'Modal title';
+  @Input() large: boolean = false;
   @Input() modalId: string = 'removeItem';
   @Input() productId: string = '';
   @Input() isEdit: boolean = false;
@@ -25,32 +23,18 @@ export class ModalComponent implements OnInit, OnDestroy, OnChanges {
   @Input() textButton: string = 'Save changes';
   @Output() confirm = new EventEmitter<string>();
 
-  constructor(
-    private el: ElementRef,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private el: ElementRef) {}
 
   ngOnInit(): void {
     document.body.appendChild(this.el.nativeElement);
   }
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['isEdit']) {
-      document.addEventListener('click', (e: Event) => {
-        if ((e.target as HTMLElement).tagName !== 'BUTTON') {
-          this.router.navigate([], {
-            relativeTo: this.route,
-            queryParams: { edit: null },
-            queryParamsHandling: 'merge',
-          });
-        }
-      });
-    }
-  }
   onClick() {
-    this.confirm.emit(this.productId);
+    if (this.productId !== '') {
+      this.confirm.emit(this.productId);
+    }
   }
   ngOnDestroy(): void {
     this.el.nativeElement.remove();
+    document.querySelector('.modal-backdrop')?.classList.remove('show');
   }
 }

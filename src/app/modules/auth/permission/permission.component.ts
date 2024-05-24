@@ -17,6 +17,7 @@ import { IUser } from '../../../core/adapter/users';
 import { UsersService } from '../../../core/services/users/users.service';
 import { UniqueEmail } from '../validators/unique-email';
 import * as UserActions from '../../../core/state/users/users.actions';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-permission',
@@ -42,7 +43,8 @@ export class PermissionComponent implements OnInit {
     private router: Router,
     private store: Store<AppState>,
     private fb: FormBuilder,
-    private userService: UsersService
+    private userService: UsersService,
+    private toast: ToastrService
   ) {}
   ngOnInit(): void {
     this.formSubmit$
@@ -82,10 +84,16 @@ export class PermissionComponent implements OnInit {
         if (res?.success) {
           if ('data' in res) {
             const { data } = res;
-            if ('accessToken' in data) {
+            if ('accessToken' in data && data.role === 'Admin') {
               localStorage.setItem('access_token', data.accessToken as string);
               this.userService.userSignals.set(res);
               this.router.navigateByUrl('/admin');
+            } else {
+              this.toast.error("You don't have access this route", undefined, {
+                timeOut: 2000,
+                progressBar: true,
+              });
+              this.store.dispatch(UserActions.ResetState());
             }
           }
         }

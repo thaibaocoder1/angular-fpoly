@@ -1,29 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { AppState } from '../../app.state';
-import { IProducts } from '../../core/models/products';
 import * as CategoryActions from '../../core/state/category/category.actions';
 import { ICategory } from '../../core/models/category';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ModalComponent } from '../../shared/components/modal/modal.component';
+import { SlugifyPipe } from '../../shared/pipes/slugify.pipe';
 
 @Component({
   selector: 'app-admin-category',
   templateUrl: './admin-category.component.html',
   styleUrl: './admin-category.component.css',
 })
-export class AdminCategoryComponent implements OnInit {
+export class AdminCategoryComponent implements OnInit, OnDestroy {
   cataglogs$: Observable<ICategory[]> | undefined;
   cataglog$: Observable<ICategory | null> | undefined;
+  private unsubscribe$ = new Subject<void>();
+  @ViewChild('editModal', { static: true }) editModal:
+    | ModalComponent
+    | undefined;
 
   formCatalog = this.fb.group({
+    title: [
+      '',
+      Validators.compose([Validators.required, Validators.minLength(6)]),
+    ],
+  });
+  formCatalogV2 = this.fb.group({
     title: [
       '',
       Validators.compose([Validators.required, Validators.minLength(6)]),
@@ -33,35 +38,54 @@ export class AdminCategoryComponent implements OnInit {
     private store: Store<AppState>,
     private fb: FormBuilder,
     private toast: ToastrService,
-    private router: Router,
-    private route: ActivatedRoute
+    private slug: SlugifyPipe
   ) {}
   ngOnInit(): void {
-    this.getAll();
     this.cataglogs$ = this.store.select((state) => state.catalogs.catalog);
     this.cataglog$ = this.store.select((state) => state.catalogs.detail);
   }
   editCategory(id: string) {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { edit: id },
-      queryParamsHandling: 'merge',
-    });
+    this.getDetail(id);
+  }
+  getDetail(id: string) {
     this.store.dispatch(CategoryActions.loadCatalogDetail({ productId: id }));
+    this.editModal && (this.editModal.productId = id);
+    this.cataglog$?.pipe(takeUntil(this.unsubscribe$)).subscribe((item) => {
+      this.formCatalogV2.patchValue({ title: item?.title });
+    });
   }
   handleSubmit() {
     const values: Partial<ICategory> =
       this.formCatalog.getRawValue() as ICategory;
     if (values) {
       this.store.dispatch(CategoryActions.addCatalog({ value: values }));
-      this.getAll();
-      this.toast.success('Add success', undefined, {
-        timeOut: 2000,
-        progressBar: true,
-      });
+      this.formCatalog.reset();
     }
+    this.fetch();
+  }
+  handleSubmitEdit() {
+    let values: Partial<ICategory> =
+      this.formCatalogV2.getRawValue() as ICategory;
+    values._id = this.editModal?.productId;
+    values.slug = this.slug.transform(values.title as string);
+    if (values) {
+      this.store.dispatch(CategoryActions.updateCatalog({ value: values }));
+      this.formCatalogV2.reset();
+    }
+    this.fetch();
+  }
+  fetch() {
+    this.getAll();
+    this.toast.success('Action success!', undefined, {
+      timeOut: 2000,
+      progressBar: true,
+    });
   }
   getAll() {
     this.store.dispatch(CategoryActions.loadCatalog());
+  }
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

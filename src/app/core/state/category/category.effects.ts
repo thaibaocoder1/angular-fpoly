@@ -20,6 +20,21 @@ export class CategoryEffects {
       )
     )
   );
+  loadOneCatalog$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CatalogActions.loadCatalogDetail),
+      mergeMap((actions) =>
+        this.catalogService.getOne(actions.productId).pipe(
+          map((catalog) =>
+            CatalogActions.loadCatalogDetailSuccess({ catalog })
+          ),
+          catchError((error) =>
+            of(CatalogActions.loadCatalogDetailFailure({ error }))
+          )
+        )
+      )
+    )
+  );
   addCatalog$ = createEffect(() =>
     this.actions$.pipe(
       ofType(CatalogActions.addCatalog),
@@ -27,6 +42,19 @@ export class CategoryEffects {
         this.catalogService.add(actions.value).pipe(
           map((detail) => CatalogActions.addCatalogSuccess({ detail })),
           catchError((error) => of(CatalogActions.addCatalogFailure({ error })))
+        )
+      )
+    )
+  );
+  updateCatalog$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CatalogActions.updateCatalog),
+      mergeMap((actions) =>
+        this.catalogService.update(actions.value).pipe(
+          map((detail) => CatalogActions.updateCatalogSuccess({ detail })),
+          catchError((error) =>
+            of(CatalogActions.updateCatalogFailure({ error }))
+          )
         )
       )
     )

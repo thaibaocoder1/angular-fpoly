@@ -24,10 +24,14 @@ export const CatalogReducer = createReducer(
     return { ...state, loading: false, error };
   }),
   on(CatalogActions.loadCatalogDetail, (state, { productId }) => {
-    const detail = state.catalog.find(
-      (item) => item._id === productId
-    ) as ICategory;
-    return { ...state, loading: false, detail };
+    return { ...state, loading: true };
+  }),
+  on(CatalogActions.loadCatalogDetailSuccess, (state, { catalog }) => {
+    return { ...state, loading: false, error: '', detail: catalog };
+  }),
+  on(CatalogActions.loadCatalogDetailFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
   }),
   on(CatalogActions.addCatalog, (state) => {
     return { ...state, loading: true };
@@ -36,6 +40,16 @@ export const CatalogReducer = createReducer(
     return { ...state, loading: false, detail, error: '' };
   }),
   on(CatalogActions.addCatalogFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
+  }),
+  on(CatalogActions.updateCatalog, (state) => {
+    return { ...state, loading: true };
+  }),
+  on(CatalogActions.updateCatalogSuccess, (state, { detail }) => {
+    return { ...state, loading: false, detail, error: '' };
+  }),
+  on(CatalogActions.updateCatalogFailure, (state, { error }) => {
     console.error(error);
     return { ...state, loading: false, error };
   })

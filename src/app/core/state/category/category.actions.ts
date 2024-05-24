@@ -16,6 +16,14 @@ export const loadCatalogDetail = createAction(
   '[Catalog] Load Catalog Detail',
   props<{ productId: string }>()
 );
+export const loadCatalogDetailSuccess = createAction(
+  '[Catalog] Load Catalog Detail Success',
+  props<{ catalog: ICategory }>()
+);
+export const loadCatalogDetailFailure = createAction(
+  '[Catalog] Load Catalog Detail Failure',
+  props<{ error: string }>()
+);
 // [ADD] - Category
 export const addCatalog = createAction(
   '[Catalog] Add Catalog',
@@ -27,5 +35,18 @@ export const addCatalogSuccess = createAction(
 );
 export const addCatalogFailure = createAction(
   '[Catalog] Add Catalog Failure',
+  props<{ error: string }>()
+);
+// [UPDATE] - Category
+export const updateCatalog = createAction(
+  '[Catalog] Update Catalog',
+  props<{ value: Partial<ICategory> }>()
+);
+export const updateCatalogSuccess = createAction(
+  '[Catalog] Update Catalog Success',
+  props<{ detail: ICategory }>()
+);
+export const updateCatalogFailure = createAction(
+  '[Catalog] Update Catalog Failure',
   props<{ error: string }>()
 );

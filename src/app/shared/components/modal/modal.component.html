@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div
-  class="modal fade"
+  [ngClass]="['modal', 'fade', large ? 'modal-xl' : '']"
   [id]="modalId"
   tabindex="-1"
   aria-labelledby="removeItemLabel"

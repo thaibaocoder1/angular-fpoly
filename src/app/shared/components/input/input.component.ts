@@ -12,7 +12,6 @@ export class InputComponent implements OnInit {
   @Input() label: string = '';
   @Input() type: string = 'text';
   @Input() htmlFor: string = '';
-  @Input() value: string = '';
   constructor() {}
   ngOnInit(): void {}
 }

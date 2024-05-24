@@ -2,12 +2,10 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   Observable,
-  asyncScheduler,
-  concat,
   debounceTime,
+  filter,
   map,
   of,
-  scheduled,
   switchMap,
   take,
 } from 'rxjs';
@@ -33,6 +31,7 @@ export class ProductsListComponent implements OnInit, AfterViewInit {
     | ModalComponent
     | undefined;
   productSelected$: IProducts | undefined;
+  // searchControl: Partial<IProducts> = { name: '' };
   searchControl: FormControl = new FormControl();
 
   constructor(
@@ -53,10 +52,6 @@ export class ProductsListComponent implements OnInit, AfterViewInit {
           }
           return this.products$.pipe(
             map((data) => {
-              console.log('🚀 ~ ProductsListComponent ~ map ~ data:', data);
-              if (this.searchTerm === '') {
-                return data;
-              }
               return data.filter((x) =>
                 x.name.toLowerCase().includes(this.searchTerm.toLowerCase())
               );

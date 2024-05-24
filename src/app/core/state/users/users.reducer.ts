@@ -72,10 +72,21 @@ export const UserReducer = createReducer(
     return { ...state, loading: true };
   }),
   on(UserActions.LogoutUserSuccess, (state) => {
-    return { ...state, loading: false, auth: null, user: null };
+    return { ...state, loading: false, auth: null, user: null, users: [] };
   }),
   on(UserActions.LogoutUserFailure, (state, { error }) => {
     console.error(error);
     return { ...state, loading: false, error };
+  }),
+  on(UserActions.ResetState, (state) => {
+    return {
+      ...state,
+      loading: false,
+      auth: null,
+      user: null,
+      admin: null,
+      users: [],
+      error: '',
+    };
   })
 );

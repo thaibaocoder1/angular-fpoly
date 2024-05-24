@@ -11,6 +11,7 @@ import { ProductsListComponent } from './products-list/products-list.component';
 import { ProductsRelatedComponent } from './products-related/products-related.component';
 import { ProductsTypeComponent } from './products-type/products-type.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FilterPipeModule } from 'ngx-filter-pipe';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NgxPaginationModule,
     FormsModule,
     ReactiveFormsModule,
+    FilterPipeModule,
   ],
 })
 export class ProductsModule {}
