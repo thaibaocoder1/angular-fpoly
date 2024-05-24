@@ -11,6 +11,11 @@ interface IApiResponse {
   results: number;
   data: IProducts[];
 }
+interface ApiResCheck {
+  success: boolean;
+  message: string;
+  data: boolean;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -45,5 +50,11 @@ export class ProductsService {
         }
       })
     );
+  }
+  // [CHECK] Code
+  checkCode(value: string): Observable<ApiResCheck> {
+    return this.http.post<ApiResCheck>(`${this.apiURL}/check`, {
+      value: value,
+    });
   }
 }

@@ -6,6 +6,7 @@
         <h1 class="h3 mb-0 text-gray-800 mr-3">Trang sản phẩm</h1>
         <button
           type="button"
+          (click)="createProduct()"
           class="btn btn-info"
           data-bs-toggle="modal"
           data-bs-target="#createProductModal"
@@ -75,80 +76,92 @@
 </app-admin-common>
 
 <app-modal [modalId]="'createProductModal'" [large]="true">
-  <form class="row" novalidate enctype="multipart/form-data">
+  <form
+    class="row"
+    novalidate
+    enctype="multipart/form-data"
+    [formGroup]="formProduct"
+  >
     <div class="mb-3 col-lg-4">
       <label for="file" class="form-label">Hình ảnh</label>
       <input
         class="form-control mb-3"
-        style="height: 45px"
         type="file"
         id="file"
         name="thumb"
+        formControlName="thumb"
       />
       <img
         src="https://placehold.co/350x350"
         alt=""
         class="rounded-right rounded-top w-100 d-block"
-        style="object-fit: cover; height: 380px"
+        style="object-fit: cover; height: 420px"
         id="imageUrl"
       />
     </div>
     <div id="main" class="col-lg-8">
       <div class="d-flex align-items-center" style="gap: 0 10px">
-        <div class="mb-3 w-50">
-          <label for="name" class="form-label">Tên sản phẩm</label>
-          <input type="text" class="form-control" id="name" name="name" />
-          <span class="invalid-feedback"></span>
+        <div class="w-50">
+          <app-input
+            [placeholder]="'Enter name here...'"
+            [htmlFor]="'name'"
+            [label]="'Name'"
+            [control]="formProduct.controls.name"
+          ></app-input>
         </div>
-        <div class="mb-3 w-50">
-          <label for="code" class="form-label">Mã sản phẩm</label>
-          <input type="text" class="form-control" id="code" name="code" />
-          <span class="invalid-feedback"></span>
+        <div class="w-50">
+          <app-input
+            [placeholder]="'Enter code here...'"
+            [htmlFor]="'code'"
+            [label]="'Product code'"
+            [control]="formProduct.controls.code"
+          ></app-input>
         </div>
       </div>
       <div class="d-flex align-items-center" style="gap: 0 10px">
-        <div class="mb-3" style="width: calc(100% / 3)">
-          <label for="price" class="form-label">Giá tiền</label>
-          <input type="number" class="form-control" id="price" name="price" />
-          <span class="invalid-feedback"></span>
+        <div style="width: calc(100% / 3)">
+          <app-input
+            [placeholder]="'Enter price here...'"
+            [htmlFor]="'price'"
+            [type]="'number'"
+            [label]="'Price'"
+            [control]="formProduct.controls.price"
+          ></app-input>
         </div>
-        <div class="mb-3" style="width: calc(100% / 3)">
-          <label for="discount" class="form-label">Sale (%)</label>
-          <input
-            type="number"
-            class="form-control"
-            id="discount"
-            name="discount"
-          />
-          <span class="invalid-feedback"></span>
+        <div style="width: calc(100% / 3)">
+          <app-input
+            [placeholder]="'Enter discount here...'"
+            [htmlFor]="'discount'"
+            [type]="'number'"
+            [label]="'Discount'"
+            [control]="formProduct.controls.discount"
+          ></app-input>
         </div>
-        <div class="mb-3" style="width: calc(100% / 3)">
-          <label for="quantity" class="form-label">Số lượng</label>
-          <input
-            type="number"
-            class="form-control"
-            id="quantity"
-            name="quantity"
-          />
-          <span class="invalid-feedback"></span>
+        <div style="width: calc(100% / 3)">
+          <app-input
+            [placeholder]="'Enter quantity here...'"
+            [htmlFor]="'quantity'"
+            [type]="'number'"
+            [label]="'Quantity'"
+            [control]="formProduct.controls.quantity"
+          ></app-input>
         </div>
       </div>
-      <div class="mb-3">
-        <label for="categoryID" class="form-label">Danh mục</label>
-        <select class="form-control" id="categoryID" name="categoryID"></select>
-      </div>
-      <div class="mb-3">
-        <label for="description" class="form-label">Mô tả</label>
-        <textarea
-          name="description"
-          id="description"
-          class="form-control"
-        ></textarea>
-      </div>
-      <div class="mb-3">
-        <label for="content" class="form-label">Nội dung</label>
-        <textarea name="content" id="content" class="form-control"></textarea>
-      </div>
+      <app-select
+        [htmlFor]="'category'"
+        [label]="'Category'"
+        [state]="catalogs$"
+      ></app-select>
+      <app-textarea
+        [htmlFor]="'description'"
+        [label]="'Description'"
+        [control]="formProduct.controls.description"
+      ></app-textarea>
+      <app-textarea
+        [htmlFor]="'content'"
+        [label]="'Content'"
+        [control]="formProduct.controls.content"
+      ></app-textarea>
     </div>
     <button
       type="submit"

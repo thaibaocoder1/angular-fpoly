@@ -1,0 +1,8 @@
+<div class="form-group" *ngIf="state | async">
+  <label for="{{ htmlFor }}" class="form-label">{{ label }}</label>
+  <select class="form-control" id="{{ htmlFor }}">
+    <ng-container *ngFor="let data of state | async">
+      <option value="{{ data._id }}">{{ data.title }}</option>
+    </ng-container>
+  </select>
+</div>

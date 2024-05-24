@@ -1,11 +1,4 @@
-import {
-  HttpInterceptorFn,
-  HttpResponse,
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpEventType,
-} from '@angular/common/http';
+import { HttpInterceptorFn, HttpEventType } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { tap, catchError, switchMap, throwError, of } from 'rxjs';
 import { UsersService } from '../services/users/users.service';

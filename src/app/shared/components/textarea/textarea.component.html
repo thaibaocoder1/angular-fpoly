@@ -1,0 +1,13 @@
+<div class="form-group">
+  <label for="{{ htmlFor }}" class="form-label">{{ label }}</label>
+  <textarea
+    id="{{ htmlFor }}"
+    [formControl]="control"
+    class="form-control"
+  ></textarea>
+  <ng-container *ngIf="control.errors && control.touched && control.invalid">
+    <span class="form-message" *ngIf="control.errors['required']">
+      {{ label }} is required.
+    </span>
+  </ng-container>
+</div>

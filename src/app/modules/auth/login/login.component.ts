@@ -85,7 +85,11 @@ export class LoginComponent implements OnInit {
             if ('accessToken' in data) {
               localStorage.setItem('access_token', data.accessToken as string);
               this.userService.userSignals.set(res);
-              this.router.navigateByUrl('/');
+              if (data.role === 'User') {
+                this.router.navigateByUrl('/');
+              } else {
+                this.router.navigateByUrl('/admin');
+              }
             }
           }
         }

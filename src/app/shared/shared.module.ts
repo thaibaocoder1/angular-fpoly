@@ -19,6 +19,8 @@ import { AccountSidebarComponent } from './components/account-sidebar/account-si
 import { FormatV2Directive } from './directives/format-v2.directive';
 import { ModalComponent } from './components/modal/modal.component';
 import { ModalDynamicComponent } from './components/modal-dynamic/modal-dynamic.component';
+import { TextareaComponent } from './components/textarea/textarea.component';
+import { SelectComponent } from './components/select/select.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { ModalDynamicComponent } from './components/modal-dynamic/modal-dynamic.
     FormatV2Directive,
     ModalComponent,
     ModalDynamicComponent,
+    TextareaComponent,
+    SelectComponent,
   ],
   imports: [
     CommonModule,
@@ -64,6 +68,8 @@ import { ModalDynamicComponent } from './components/modal-dynamic/modal-dynamic.
     FormatV2Directive,
     ModalComponent,
     ModalDynamicComponent,
+    TextareaComponent,
+    SelectComponent,
   ],
 })
 export class SharedModule {}
