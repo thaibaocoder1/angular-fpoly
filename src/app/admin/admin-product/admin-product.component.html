@@ -50,8 +50,13 @@
             <th scope="col">Thao tác</th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor="let item of products$ | async">
+        <tbody *ngIf="products$ | async as products">
+          <tr
+            *ngFor="
+              let item of products
+                | paginate : { itemsPerPage, currentPage: page }
+            "
+          >
             <td>{{ item._id }}</td>
             <td>{{ item.name }}</td>
             <td [appFormat]="item"></td>
@@ -71,6 +76,9 @@
           </tr>
         </tbody>
       </table>
+      <div class="d-flex justify-content-end">
+        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+      </div>
     </div>
   </div>
 </app-admin-common>
@@ -81,15 +89,16 @@
     novalidate
     enctype="multipart/form-data"
     [formGroup]="formProduct"
+    (ngSubmit)="formSubmitSubject$.next(true)"
   >
-    <div class="mb-3 col-lg-4">
+    <div class="col-lg-4">
       <label for="file" class="form-label">Hình ảnh</label>
       <input
         class="form-control mb-3"
         type="file"
         id="file"
         name="thumb"
-        formControlName="thumb"
+        (change)="onImagePicked($event)"
       />
       <img
         src="https://placehold.co/350x350"
@@ -150,6 +159,7 @@
       <app-select
         [htmlFor]="'category'"
         [label]="'Category'"
+        [control]="formProduct.controls.categoryID"
         [state]="catalogs$"
       ></app-select>
       <app-textarea
@@ -164,6 +174,7 @@
       ></app-textarea>
     </div>
     <button
+      [disabled]="formProduct.invalid || formProduct.status === 'PENDING'"
       type="submit"
       class="btn btn-primary d-inline-block w-50 mx-auto rounded-lg"
     >
