@@ -30,8 +30,7 @@ export const loadProductWithSlugSuccess = createAction(
   '[Product] Load Products With Slug Success',
   props<{ products: IProducts[] }>()
 );
-
-// CRUD
+// [ADD]
 export const addProduct = createAction(
   '[Product] Add Product',
   props<{ product: IProducts }>()
@@ -51,7 +50,7 @@ export const updateProduct = createAction(
 );
 export const updateProductSuccess = createAction(
   '[Product] Update Product Success',
-  props<{ product: IProducts }>()
+  props<{ products: IProducts }>()
 );
 export const updateProductFailure = createAction(
   '[Product] Update Product Failure',

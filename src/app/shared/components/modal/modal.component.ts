@@ -35,6 +35,6 @@ export class ModalComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.el.nativeElement.remove();
-    document.querySelector('.modal-backdrop')?.classList.remove('show');
+    document.querySelector('.modal-backdrop')?.remove();
   }
 }

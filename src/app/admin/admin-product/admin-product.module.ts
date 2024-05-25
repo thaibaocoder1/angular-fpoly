@@ -7,6 +7,7 @@ import { AdminCommonModule } from '../admin-common/admin-common.module';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [AdminProductComponent],
@@ -18,6 +19,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     FormsModule,
     ReactiveFormsModule,
     NgxPaginationModule,
+    NgxSpinnerModule,
   ],
 })
 export class AdminProductModule {}

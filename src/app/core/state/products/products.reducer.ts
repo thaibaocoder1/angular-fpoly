@@ -45,5 +45,15 @@ export const ProductReducer = createReducer(
   }),
   on(ProductActions.loadProductWithSlugSuccess, (state, { products }) => {
     return { ...state, products: products, error: '' };
+  }),
+  on(ProductActions.addProduct, (state, { product }) => {
+    return { ...state, loading: true };
+  }),
+  on(ProductActions.addProductSuccess, (state, { product }) => {
+    return { ...state, loading: false, product, error: '' };
+  }),
+  on(ProductActions.addProductFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
   })
 );

@@ -71,7 +71,15 @@
             </td>
             <td>{{ item.updatedAt | date : "dd/MM/yyyy" }}</td>
             <td>
-              <button class="btn btn-primary btn-sm">Chỉnh sửa</button>
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="editProduct(item._id)"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#editProductModal"
+              >
+                Chỉnh sửa
+              </button>
             </td>
           </tr>
         </tbody>
@@ -83,7 +91,7 @@
   </div>
 </app-admin-common>
 
-<app-modal [modalId]="'createProductModal'" [large]="true">
+<app-modal [modalId]="'createProductModal'" [large]="true" [showButton]="false">
   <form
     class="row"
     novalidate
@@ -102,9 +110,9 @@
       />
       <img
         src="https://placehold.co/350x350"
-        alt=""
-        class="rounded-right rounded-top w-100 d-block"
-        style="object-fit: cover; height: 420px"
+        alt="Preview"
+        class="rounded-right rounded-top w-100 d-block object-fit-cover"
+        style="height: 420px"
         id="imageUrl"
       />
     </div>
@@ -182,3 +190,119 @@
     </button>
   </form>
 </app-modal>
+
+<app-modal
+  [modalId]="'editProductModal'"
+  [large]="true"
+  [showButton]="false"
+  [isEdit]="true"
+>
+  <form
+    class="row"
+    novalidate
+    enctype="multipart/form-data"
+    [formGroup]="formProductEdit"
+    (ngSubmit)="formSubmitSubject$.next(true)"
+  >
+    <div class="col-lg-4">
+      <label for="file" class="form-label">Hình ảnh</label>
+      <input
+        class="form-control mb-3"
+        type="file"
+        id="file"
+        name="thumb"
+        (change)="onImagePicked($event)"
+      />
+      <img
+        src="https://placehold.co/350x350"
+        alt="Preview"
+        class="rounded-right rounded-top w-100 d-block object-fit-cover"
+        style="height: 420px"
+        id="imageUrl"
+      />
+    </div>
+    <div id="main" class="col-lg-8">
+      <div class="d-flex align-items-center" style="gap: 0 10px">
+        <div class="w-50">
+          <app-input
+            [placeholder]="'Enter name here...'"
+            [htmlFor]="'name'"
+            [label]="'Name'"
+            [control]="formProductEdit.controls.name"
+          ></app-input>
+        </div>
+        <div class="w-50">
+          <app-input
+            [placeholder]="'Enter code here...'"
+            [htmlFor]="'code'"
+            [label]="'Product code'"
+            [control]="formProductEdit.controls.code"
+          ></app-input>
+        </div>
+      </div>
+      <div class="d-flex align-items-center" style="gap: 0 10px">
+        <div style="width: calc(100% / 3)">
+          <app-input
+            [placeholder]="'Enter price here...'"
+            [htmlFor]="'price'"
+            [type]="'number'"
+            [label]="'Price'"
+            [control]="formProductEdit.controls.price"
+          ></app-input>
+        </div>
+        <div style="width: calc(100% / 3)">
+          <app-input
+            [placeholder]="'Enter discount here...'"
+            [htmlFor]="'discount'"
+            [type]="'number'"
+            [label]="'Discount'"
+            [control]="formProductEdit.controls.discount"
+          ></app-input>
+        </div>
+        <div style="width: calc(100% / 3)">
+          <app-input
+            [placeholder]="'Enter quantity here...'"
+            [htmlFor]="'quantity'"
+            [type]="'number'"
+            [label]="'Quantity'"
+            [control]="formProductEdit.controls.quantity"
+          ></app-input>
+        </div>
+      </div>
+      <app-select
+        [htmlFor]="'category'"
+        [label]="'Category'"
+        [control]="formProductEdit.controls.categoryID"
+        [state]="catalogs$"
+      ></app-select>
+      <app-textarea
+        [htmlFor]="'description'"
+        [label]="'Description'"
+        [control]="formProductEdit.controls.description"
+      ></app-textarea>
+      <app-textarea
+        [htmlFor]="'content'"
+        [label]="'Content'"
+        [control]="formProductEdit.controls.content"
+      ></app-textarea>
+    </div>
+    <button
+      [disabled]="
+        formProductEdit.invalid || formProductEdit.status === 'PENDING'
+      "
+      type="submit"
+      class="btn btn-primary d-inline-block w-50 mx-auto rounded-lg mt-3"
+    >
+      Cập nhật
+    </button>
+  </form>
+</app-modal>
+
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

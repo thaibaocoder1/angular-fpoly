@@ -11,6 +11,11 @@ interface IApiResponse {
   results: number;
   data: IProducts[];
 }
+interface IApiResponseV2 {
+  success: boolean;
+  results: number;
+  data: IProducts;
+}
 interface ApiResCheck {
   success: boolean;
   message: string;
@@ -56,5 +61,32 @@ export class ProductsService {
     return this.http.post<ApiResCheck>(`${this.apiURL}/check`, {
       value: value,
     });
+  }
+  // [POST]
+  addProduct(values: IProducts): Observable<IProducts> {
+    const formData = new FormData();
+    for (const key in values) {
+      if (values.hasOwnProperty(key)) {
+        if (key === 'thumb') {
+          const file = values[key] as File;
+          formData.append(key, file);
+        } else if (key === 'name' && typeof values[key] === 'string') {
+          formData.append(key, String(values[key]));
+        } else {
+          const productKey = key as keyof IProducts;
+          formData.append(key, String(values[productKey]));
+        }
+      }
+    }
+    return this.http.post<IApiResponseV2>(`${this.apiURL}/save`, formData).pipe(
+      map((response: IApiResponseV2) => {
+        if (response && response.success) {
+          const data = response.data;
+          return data;
+        } else {
+          throw new Error('API response is not successful.');
+        }
+      })
+    );
   }
 }

@@ -47,7 +47,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     ModalModule.forRoot(),
-    NgxSpinnerModule,
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
     NgxPaginationModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot([ProductEffects, CategoryEffects, UserEffects]),

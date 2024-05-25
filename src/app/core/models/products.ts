@@ -8,9 +8,9 @@ export interface IProducts {
   price: number;
   discount: number;
   thumb: {
-    data: string;
-    contentType: string;
-    fileName: string;
+    data?: string;
+    contentType?: string;
+    fileName?: string;
   };
   content: string;
   quantity: number;
