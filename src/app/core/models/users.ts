@@ -9,9 +9,9 @@ export interface IUsers {
   role: string;
   isActive: boolean;
   imageUrl: {
-    data: string;
-    contentType: string;
-    fileName: string;
+    data?: string;
+    contentType?: string;
+    fileName?: string;
   };
   refreshToken: string;
   resetedAt?: number;

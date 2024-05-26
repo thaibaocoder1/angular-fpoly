@@ -67,7 +67,7 @@ export class ProductsService {
     const formData = new FormData();
     for (const key in values) {
       if (values.hasOwnProperty(key)) {
-        if (key === 'thumb') {
+        if (key === 'thumb' && typeof values[key] === 'object') {
           const file = values[key] as File;
           formData.append(key, file);
         } else if (key === 'name' && typeof values[key] === 'string') {
@@ -88,5 +88,36 @@ export class ProductsService {
         }
       })
     );
+  }
+  // [PATCH]
+  updateProduct(values: IProducts): Observable<IProducts> {
+    const formData = new FormData();
+    for (const key in values) {
+      if (key === 'thumb' && typeof values[key] === 'object') {
+        const file = values[key] as File;
+        if (file.hasOwnProperty('fileName')) {
+          continue;
+        } else {
+          formData.append(key, file);
+        }
+      } else if (key === 'name' && typeof values[key] === 'string') {
+        formData.append(key, String(values[key]));
+      } else {
+        const productKey = key as keyof IProducts;
+        formData.append(key, String(values[productKey]));
+      }
+    }
+    return this.http
+      .patch<IApiResponseV2>(`${this.apiURL}/update/${values._id}`, formData)
+      .pipe(
+        map((response: IApiResponseV2) => {
+          if (response && response.success) {
+            const data = response.data;
+            return data;
+          } else {
+            throw new Error('API response is not successful.');
+          }
+        })
+      );
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { IUsers } from '../../models/users';
 import { ApiResponse, IUser } from '../../adapter/users';
 
@@ -42,5 +42,28 @@ export class UsersService {
   // Get all
   getAllUser(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.apiURL}`);
+  }
+  // Post
+  addUser(values: IUsers): Observable<IUsers> {
+    const formData = new FormData();
+    for (const key in values) {
+      if (key === 'imageUrl' && typeof values[key] === 'object') {
+        const file = values[key] as File;
+        formData.append(key, file);
+      } else {
+        const keyRest = key as keyof IUsers;
+        formData.append(key, String(values[keyRest]));
+      }
+    }
+    return this.http.post<ApiResponse>(`${this.apiURL}/create`, formData).pipe(
+      map((res: ApiResponse) => {
+        if (res && res.success) {
+          const data = res.data as IUsers;
+          return data;
+        } else {
+          throw new Error('API response is not successful.');
+        }
+      })
+    );
   }
 }

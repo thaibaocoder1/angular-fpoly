@@ -55,5 +55,15 @@ export const ProductReducer = createReducer(
   on(ProductActions.addProductFailure, (state, { error }) => {
     console.error(error);
     return { ...state, loading: false, error };
+  }),
+  on(ProductActions.updateProduct, (state, { product }) => {
+    return { ...state, loading: true };
+  }),
+  on(ProductActions.updateProductSuccess, (state, { product }) => {
+    return { ...state, loading: false, product, error: '' };
+  }),
+  on(ProductActions.updateProductFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
   })
 );

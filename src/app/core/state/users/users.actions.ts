@@ -61,5 +61,18 @@ export const LogoutUserFailure = createAction(
   '[User] Logout User Failure',
   props<{ error: string }>()
 );
+// [ADD]
+export const AddUser = createAction(
+  '[User] Add User',
+  props<{ user: IUsers }>()
+);
+export const AddUserSuccess = createAction(
+  '[User] Add User Success',
+  props<{ user: IUsers }>()
+);
+export const AddUserFailure = createAction(
+  '[User] Add User Failure',
+  props<{ error: string }>()
+);
 // RESET
 export const ResetState = createAction('[User] Reset All');

@@ -43,18 +43,18 @@ export const addProductFailure = createAction(
   '[Product] Add Product Failure',
   props<{ error: any }>()
 );
-
+// [UPDATE]
 export const updateProduct = createAction(
   '[Product] Update Product',
   props<{ product: IProducts }>()
 );
 export const updateProductSuccess = createAction(
   '[Product] Update Product Success',
-  props<{ products: IProducts }>()
+  props<{ product: IProducts }>()
 );
 export const updateProductFailure = createAction(
   '[Product] Update Product Failure',
-  props<{ error: any }>()
+  props<{ error: string }>()
 );
 
 export const deleteProduct = createAction(

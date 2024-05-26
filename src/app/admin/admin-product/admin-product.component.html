@@ -202,23 +202,23 @@
     novalidate
     enctype="multipart/form-data"
     [formGroup]="formProductEdit"
-    (ngSubmit)="formSubmitSubject$.next(true)"
+    (ngSubmit)="formSubmitSubjectEdit$.next(true)"
   >
     <div class="col-lg-4">
       <label for="file" class="form-label">Hình ảnh</label>
       <input
         class="form-control mb-3"
         type="file"
-        id="file"
+        id="fileEdit"
         name="thumb"
-        (change)="onImagePicked($event)"
+        (change)="onImagePicked($event, true)"
       />
       <img
         src="https://placehold.co/350x350"
         alt="Preview"
         class="rounded-right rounded-top w-100 d-block object-fit-cover"
         style="height: 420px"
-        id="imageUrl"
+        id="imageUrlEdit"
       />
     </div>
     <div id="main" class="col-lg-8">

@@ -7,7 +7,6 @@ export const initialState: UsersState = {
   loading: false,
   auth: null,
   user: null,
-  admin: null,
   users: [],
   error: '',
 };
@@ -48,11 +47,11 @@ export const UserReducer = createReducer(
   }),
   on(UserActions.GetUserSuccess, (state, { user }) => {
     const { data } = user;
-    return { ...state, loading: false, user: data as IUsers };
+    return { ...state, loading: false, user: data as IUsers, error: '' };
   }),
   on(UserActions.GetUserFailure, (state, { error }) => {
     console.error(error);
-    return { ...state, loading: false };
+    return { ...state, loading: false, error };
   }),
   on(UserActions.GetAllUser, (state) => {
     return { ...state, loading: true };
@@ -75,6 +74,16 @@ export const UserReducer = createReducer(
     return { ...state, loading: false, auth: null, user: null, users: [] };
   }),
   on(UserActions.LogoutUserFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
+  }),
+  on(UserActions.AddUser, (state, { user }) => {
+    return { ...state, loading: true };
+  }),
+  on(UserActions.AddUserSuccess, (state, { user }) => {
+    return { ...state, loading: false, user, error: '' };
+  }),
+  on(UserActions.AddUserFailure, (state, { error }) => {
     console.error(error);
     return { ...state, loading: false, error };
   }),

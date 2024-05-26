@@ -14,7 +14,7 @@ import {
 } from 'rxjs';
 import { AppState } from '../../app.state';
 import { IProducts } from '../../core/models/products';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ICategory } from '../../core/models/category';
 import { UniqueCodeValidator } from '../validators/check-code';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -31,6 +31,7 @@ export class AdminProductComponent implements OnInit, OnDestroy {
   catalogs$: Observable<ICategory[]> | undefined;
   page: number = 1;
   itemsPerPage: number = 4;
+  private editProductId: string = '';
   formProduct = this.fb.group({
     name: [
       '',
@@ -65,7 +66,6 @@ export class AdminProductComponent implements OnInit, OnDestroy {
         Validators.required,
         Validators.pattern(/^BAODEV(0[1-9]|[1-9][0-9])$/),
       ]),
-      [this.uniqueCode.validate.bind(this.uniqueCode)],
     ],
     price: ['', Validators.compose([Validators.required])],
     discount: [''],
@@ -74,6 +74,7 @@ export class AdminProductComponent implements OnInit, OnDestroy {
     thumb: [null as any],
   });
   formSubmitSubject$ = new Subject<boolean>();
+  formSubmitSubjectEdit$ = new Subject<boolean>();
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -99,61 +100,53 @@ export class AdminProductComponent implements OnInit, OnDestroy {
         filter((status) => status === 'VALID')
       )
       .subscribe((validationSuccessful) => this.submitForm());
+    this.formSubmitSubjectEdit$
+      .pipe(
+        tap(() => this.formProductEdit.markAsDirty()),
+        switchMap(() =>
+          this.formProductEdit.statusChanges.pipe(
+            startWith(this.formProductEdit.status),
+            filter((status) => status !== 'PENDING'),
+            take(1)
+          )
+        ),
+        filter((status) => status === 'VALID')
+      )
+      .subscribe((validationSuccessful) => this.submitFormEdit());
   }
-  onImagePicked(event: Event) {
+  onImagePicked(event: Event, isEdit: boolean = false) {
     const input = event.target as HTMLInputElement;
-    const previewImage = document.getElementById(
-      'imageUrl'
-    ) as HTMLImageElement;
-    if (input.files && input.files[0] !== null) {
-      const file = input.files[0];
-      this.formProduct.patchValue({
-        thumb: file,
-      });
-      if (previewImage) {
-        previewImage.src = URL.createObjectURL(file);
-      }
-    }
-  }
-  submitForm() {
-    const values = this.formProduct.getRawValue() as unknown as IProducts;
-    const previewImage = document.getElementById(
-      'imageUrl'
-    ) as HTMLImageElement;
-    const uploadFile = document.getElementById('file') as HTMLInputElement;
-    if (values) {
-      this.store.dispatch(ProductActions.addProduct({ product: values }));
-      this.store
-        .pipe(
-          select((state) => state.products.loading),
-          distinctUntilChanged(),
-          tap(() => this.spinner.show()),
-          filter((loading) => !loading),
-          tap(() => this.spinner.hide()),
-          switchMap(() => {
-            return this.store.pipe(select((state) => state.products.product));
-          }),
-          take(1)
-        )
-        .subscribe((data) => {
-          if (data) {
-            this.toast.success('Action success!', undefined, {
-              timeOut: 2000,
-              progressBar: true,
-            });
-            this.formProduct.reset();
-            previewImage && (previewImage.src = 'https://placehold.co/350x350');
-            uploadFile && (uploadFile.value = '');
-            this.getAll();
-          }
+    const previewImage = this.getImagePreview('imageUrl');
+    const previewImageEdit = this.getImagePreview('imageUrlEdit');
+    if (!isEdit) {
+      if (input.files && input.files[0] !== null) {
+        const file = input.files[0];
+        this.formProduct.patchValue({
+          thumb: file,
         });
+        if (previewImage) {
+          previewImage.src = URL.createObjectURL(file);
+        }
+      }
+    } else {
+      if (input.files && input.files[0] !== null) {
+        const file = input.files[0];
+        this.formProductEdit.patchValue({
+          thumb: file,
+        });
+        if (previewImageEdit) {
+          previewImageEdit.src = URL.createObjectURL(file);
+        }
+      }
     }
   }
   createProduct() {
     this.catalogs$ = this.store.select((state) => state.catalogs.catalog);
   }
   editProduct(id: string) {
+    this.editProductId = id;
     this.store.dispatch(ProductActions.loadProductDetail({ productId: id }));
+    this.catalogs$ = this.store.select((state) => state.catalogs.catalog);
     this.store
       .pipe(
         takeUntil(this.unsubscribe$),
@@ -168,15 +161,75 @@ export class AdminProductComponent implements OnInit, OnDestroy {
           quantity: data?.quantity as unknown as string,
           discount: data?.discount as unknown as string,
           code: data?.code as unknown as string,
+          categoryID: data?.categoryID,
           name: data?.name,
         });
+        const previewImage = this.getImagePreview('imageUrlEdit');
+        previewImage && (previewImage.src = data?.thumb.fileName as string);
       });
-    //   this.product$?.pipe(
-    //     takeUntil(this.unsubscribe$),
-    // ).subscribe((item) => {
-    //     // this.formProductEdit.patchValue({ title: item?.title });
-    //     console.log(item);
-    //   });
+  }
+  submitForm() {
+    const values = this.formProduct.getRawValue() as unknown as IProducts;
+    const previewImage = this.getImagePreview('imageUrl');
+    const uploadFile = document.getElementById('file') as HTMLInputElement;
+    if (values) {
+      this.store.dispatch(ProductActions.addProduct({ product: values }));
+      this.sideActions(previewImage, uploadFile, this.formProduct);
+    }
+  }
+  submitFormEdit() {
+    const values = this.formProductEdit.getRawValue() as unknown as IProducts;
+    values._id = this.editProductId;
+    this.store
+      .pipe(
+        select((state) => state.products.product),
+        take(1)
+      )
+      .subscribe((data) => {
+        if (!values.thumb && data) {
+          values.thumb = data?.thumb;
+        }
+      });
+    const previewImage = this.getImagePreview('imageUrlEdit');
+    const uploadFile = document.getElementById('fileEdit') as HTMLInputElement;
+    if (values) {
+      this.store.dispatch(ProductActions.updateProduct({ product: values }));
+      this.sideActions(previewImage, uploadFile, this.formProductEdit);
+    }
+  }
+  sideActions(
+    previewImage: HTMLImageElement,
+    uploadFile: HTMLInputElement,
+    form: FormGroup
+  ) {
+    this.store
+      .pipe(
+        select((state) => state.products.loading),
+        distinctUntilChanged(),
+        tap(() => this.spinner.show()),
+        filter((loading) => !loading),
+        tap(() => this.spinner.hide()),
+        switchMap(() => {
+          return this.store.pipe(select((state) => state.products.product));
+        }),
+        take(1)
+      )
+      .subscribe((data) => {
+        if (data) {
+          this.toast.success('Action success!', undefined, {
+            timeOut: 2000,
+            progressBar: true,
+          });
+          form.reset();
+          previewImage && (previewImage.src = 'https://placehold.co/350x350');
+          uploadFile && (uploadFile.value = '');
+          this.getAll();
+        }
+      });
+  }
+  getImagePreview(selector: string) {
+    const previewImage = document.getElementById(selector) as HTMLImageElement;
+    return previewImage;
   }
   getAll() {
     this.store.dispatch(ProductActions.loadProduct());

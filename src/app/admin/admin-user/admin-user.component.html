@@ -4,7 +4,14 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <div class="d-inline-flex">
         <h1 class="h3 mb-0 text-gray-800 mr-3">Trang tài khoản</h1>
-        <a href="/admin/add-edit-product.html" class="btn btn-info">Tạo mới</a>
+        <button
+          class="btn btn-info"
+          type="button"
+          data-bs-toggle="modal"
+          data-bs-target="#createUserModal"
+        >
+          Tạo mới
+        </button>
       </div>
       <form
         class="d-none d-sm-inline-block form-inline ml-md-3 my-2 my-md-0 mw-100 navbar-search"
@@ -52,7 +59,15 @@
             <td>{{ item.createdAt | date : "dd/MM/yyyy" }}</td>
             <td>{{ item.updatedAt | date : "dd/MM/yyyy" }}</td>
             <td>
-              <button class="btn btn-primary btn-sm">Chỉnh sửa</button>
+              <button
+                class="btn btn-primary btn-sm"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#editUserModal"
+                (click)="handleEditUser(item._id)"
+              >
+                Chỉnh sửa
+              </button>
             </td>
           </tr>
         </tbody>
@@ -60,3 +75,231 @@
     </div>
   </div>
 </app-admin-common>
+
+<app-modal
+  [modalId]="'createUserModal'"
+  [showButton]="false"
+  [large]="true"
+  [title]="'Add user'"
+>
+  <form
+    class="row"
+    enctype="multipart/form-data"
+    novalidate
+    [formGroup]="formUser"
+    (ngSubmit)="formUserSubject.next(true)"
+  >
+    <div class="col col-lg-4">
+      <div class="mb-3">
+        <label for="image" class="form-label">Hình ảnh</label>
+        <div class="input-group mb-3 w-100">
+          <input
+            class="form-control w-100"
+            type="file"
+            id="image"
+            accept="image/*"
+            (change)="onUploadImage($event)"
+          />
+          <span class="invalid-feedback"></span>
+        </div>
+        <img
+          src="https://placehold.co/300x300"
+          class="img-thumbnail w-100 rounded-left rounded-right d-block object-fit-cover"
+          style="height: 250px"
+          id="imageUrl"
+          alt="Avatar"
+        />
+      </div>
+    </div>
+    <main class="col col-lg-8">
+      <div class="d-flex" style="gap: 0 10px">
+        <div class="w-50">
+          <app-input
+            label="Fullname"
+            placeholder="VD: Hoang Nguyen Thai Bao"
+            type="text"
+            htmlFor="fullname"
+            [control]="formUser.controls.fullname"
+            style="width: 49%"
+          ></app-input>
+        </div>
+        <div class="w-50">
+          <app-input
+            label="Email"
+            placeholder="VD: emailtest@gmail.com"
+            type="text"
+            htmlFor="email"
+            [control]="formUser.controls.email"
+            style="width: 49%"
+          ></app-input>
+        </div>
+      </div>
+      <div class="d-flex" style="gap: 0 10px">
+        <div class="w-50">
+          <app-input
+            label="Phone"
+            placeholder="VD: +84 89xx 98xx"
+            type="tel"
+            htmlFor="phone"
+            [control]="formUser.controls.phone"
+            style="width: 49%"
+          ></app-input>
+        </div>
+        <div class="w-50">
+          <app-input
+            label="Username"
+            placeholder="VD: baohnt"
+            type="text"
+            htmlFor="username"
+            [control]="formUser.controls.username"
+            style="width: 49%"
+          ></app-input>
+        </div>
+      </div>
+      <div class="d-flex">
+        <div class="w-100 mb-3">
+          <label for="role" class="form-label">Vai trò</label>
+          <select class="form-control" id="role" formControlName="role">
+            <option value="">--Select one--</option>
+            <option value="Admin">Admin</option>
+            <option value="User">User</option>
+          </select>
+          <ng-container
+            *ngIf="
+              formUser.get('role')?.errors && formUser.get('role')?.touched
+            "
+          >
+            <span
+              class="text-danger"
+              *ngIf="formUser.hasError('required', 'role')"
+            >
+              Please select one role for account
+            </span>
+          </ng-container>
+        </div>
+      </div>
+      <button
+        [disabled]="formUser.invalid || formUser.status === 'PENDING'"
+        type="submit"
+        class="btn btn-primary"
+      >
+        Cập nhật
+      </button>
+    </main>
+  </form>
+</app-modal>
+
+<app-modal
+  [modalId]="'editUserModal'"
+  [showButton]="false"
+  [isEdit]="true"
+  [large]="true"
+  [title]="'Edit user'"
+>
+  <form
+    class="row"
+    enctype="multipart/form-data"
+    novalidate
+    [formGroup]="formUserEdit"
+    (ngSubmit)="formUserSubjectEdit.next(true)"
+  >
+    <div class="col col-lg-4">
+      <div class="mb-3">
+        <label for="image" class="form-label">Hình ảnh</label>
+        <div class="input-group mb-3 w-100">
+          <input
+            class="form-control w-100"
+            type="file"
+            id="image"
+            accept="image/*"
+            (change)="onUploadImage($event, true)"
+          />
+          <span class="invalid-feedback"></span>
+        </div>
+        <img
+          src="https://placehold.co/300x300"
+          class="img-thumbnail w-100 rounded-left rounded-right d-block object-fit-cover"
+          style="height: 250px"
+          id="imageUrlEdit"
+          alt="Avatar"
+        />
+      </div>
+    </div>
+    <main class="col col-lg-8">
+      <div class="d-flex" style="gap: 0 10px">
+        <div class="w-50">
+          <app-input
+            label="Fullname"
+            placeholder="VD: Hoang Nguyen Thai Bao"
+            type="text"
+            htmlFor="fullname"
+            [control]="formUserEdit.controls.fullname"
+            style="width: 49%"
+          ></app-input>
+        </div>
+        <div class="w-50">
+          <app-input
+            label="Email"
+            placeholder="VD: emailtest@gmail.com"
+            type="text"
+            htmlFor="email"
+            [control]="formUserEdit.controls.email"
+            style="width: 49%"
+          ></app-input>
+        </div>
+      </div>
+      <div class="d-flex" style="gap: 0 10px">
+        <div class="w-50">
+          <app-input
+            label="Phone"
+            placeholder="VD: +84 89xx 98xx"
+            type="tel"
+            htmlFor="phone"
+            [control]="formUserEdit.controls.phone"
+            style="width: 49%"
+          ></app-input>
+        </div>
+        <div class="w-50">
+          <app-input
+            label="Username"
+            placeholder="VD: baohnt"
+            type="text"
+            htmlFor="username"
+            [control]="formUserEdit.controls.username"
+            style="width: 49%"
+          ></app-input>
+        </div>
+      </div>
+      <div class="d-flex">
+        <div class="w-100 mb-3">
+          <label for="role" class="form-label">Vai trò</label>
+          <select class="form-control" id="role" formControlName="role">
+            <option value="">--Select one--</option>
+            <option value="Admin">Admin</option>
+            <option value="User">User</option>
+          </select>
+          <ng-container
+            *ngIf="
+              formUserEdit.get('role')?.errors &&
+              formUserEdit.get('role')?.touched
+            "
+          >
+            <span
+              class="text-danger"
+              *ngIf="formUserEdit.hasError('required', 'role')"
+            >
+              Please select one role for account
+            </span>
+          </ng-container>
+        </div>
+      </div>
+      <button
+        [disabled]="formUserEdit.invalid || formUserEdit.status === 'PENDING'"
+        type="submit"
+        class="btn btn-primary"
+      >
+        Cập nhật
+      </button>
+    </main>
+  </form>
+</app-modal>

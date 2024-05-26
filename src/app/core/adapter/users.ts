@@ -26,7 +26,6 @@ export interface UsersState {
   loading: boolean;
   auth: ApiResponse | null;
   user: IUsers | null;
-  admin: IUsers | null;
   users: IUsers[];
   error?: string;
 }
