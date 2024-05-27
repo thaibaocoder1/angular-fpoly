@@ -12,7 +12,18 @@ import { CartService } from '../../core/services/cart/cart.service';
 import { CartItem } from '../../core/models/cart';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../app.state';
-import { Observable, Subscription, combineLatest, map } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  Subscription,
+  combineLatest,
+  filter,
+  map,
+  startWith,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import { IProducts } from '../../core/models/products';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { ToastrService } from 'ngx-toastr';
@@ -22,6 +33,11 @@ import {
   IEmit,
   ModalDynamicComponent,
 } from '../../shared/components/modal-dynamic/modal-dynamic.component';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UniqueCoupon } from './cart.validator';
+import { ApiResCoupon, ICoupons } from '../../core/models/coupon';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-cart',
@@ -30,20 +46,32 @@ import {
   providers: [CurrencyPipe],
 })
 export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
+  private API_URL = environment.API_URL + 'coupons';
   cart$: Observable<CartItem[]> | undefined;
   products$: Observable<IProducts[]> | undefined;
   productsList$: IProducts[] | undefined;
+  couponList: ICoupons[] | undefined;
   private subscription: Subscription | undefined;
   @ViewChildren('subTotal') subTotalItems: QueryList<ElementRef> | undefined;
   @ViewChild('modal', { static: true }) modal: ModalComponent | undefined;
   @ViewChild(ModalDynamicComponent) modalDynamic:
     | ModalDynamicComponent
     | undefined;
-
+  formCoupon = this.fb.group({
+    coupon: [
+      '',
+      [Validators.required],
+      [this.unique.validate.bind(this.unique)],
+    ],
+  });
+  formCouponSubject = new Subject<boolean>();
   constructor(
     private cartService: CartService,
     private store: Store<AppState>,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private fb: FormBuilder,
+    private unique: UniqueCoupon,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -72,6 +100,20 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((filteredProducts) => {
         this.productsList$ = filteredProducts;
       });
+
+    this.formCouponSubject
+      .pipe(
+        tap(() => this.formCoupon.markAsDirty()),
+        switchMap(() =>
+          this.formCoupon.statusChanges.pipe(
+            startWith(this.formCoupon.status),
+            filter((status) => status !== 'PENDING'),
+            take(1)
+          )
+        ),
+        filter((status) => status === 'VALID')
+      )
+      .subscribe((validationSuccessful) => this.submitForm());
   }
   get subTotal() {
     if (this.productsList$) {
@@ -90,6 +132,34 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   get total() {
     return this.subTotal - this.shipCost;
+  }
+  submitForm() {
+    const value = this.formCoupon.value;
+    if (value.coupon) {
+      this.http
+        .post<ApiResCoupon>(this.API_URL + '/check', {
+          name: value.coupon,
+        })
+        .pipe(take(1))
+        .subscribe((data) => {
+          if (data && data.success) {
+            console.log(456);
+            if (this.couponList && this.couponList.length <= 0) {
+              console.log('empty');
+              this.couponList = [data.data];
+            } else {
+              console.log('push');
+              this.couponList?.push(data.data);
+            }
+          }
+          console.log(this.couponList);
+        });
+    }
+    // if (this.couponList?.length === 0) {
+    //   this.couponList = [value.coupon];
+    // } else {
+    // }
+    // this.formCoupon.reset();
   }
   changeSubtotal(item: IProducts, type: string) {
     switch (type) {
@@ -146,12 +216,8 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.removeItem(value.id);
     }
-    // if (id === '') {
-    //   this.cartService.incrementQuantity(id);
-    // } else {
-    //   this.removeItem(id);
-    // }
   }
+
   ngAfterViewInit(): void {
     this.modal?.confirm.subscribe((productId: string) => {
       this.removeItem(productId);

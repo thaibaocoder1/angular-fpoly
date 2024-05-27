@@ -94,24 +94,46 @@
       </table>
     </div>
     <div class="col-lg-4">
-      <form class="mb-3">
+      <form [formGroup]="formCoupon" (ngSubmit)="formCouponSubject.next(true)">
         <div class="input-group">
           <input
             type="text"
             class="form-control p-4"
             placeholder="Coupon Code"
+            formControlName="coupon"
           />
           <div class="input-group-append">
             <button
-              [disabled]="productsList$?.length === 0"
+              [disabled]="
+                productsList$?.length === 0 ||
+                formCoupon.invalid ||
+                formCoupon.status === 'PENDING'
+              "
               class="btn btn-primary"
             >
               Apply Coupon
             </button>
           </div>
         </div>
+        <ng-container
+          *ngIf="
+            formCoupon.get('coupon')?.errors &&
+            formCoupon.get('coupon')?.touched
+          "
+        >
+          <span
+            class="text-danger d-inline-block mt-1"
+            *ngIf="formCoupon.getError('required', 'coupon')"
+            >Value is required</span
+          >
+          <span
+            class="text-danger d-inline-block mt-1"
+            *ngIf="formCoupon.hasError('expireCoupon', 'coupon')"
+            >Coupon is expire</span
+          >
+        </ng-container>
       </form>
-      <div id="coupon-list" class="d-flex mb-3"></div>
+      <div class="d-flex mb-3"></div>
       <div class="card border-secondary mb-5">
         <div class="card-header bg-secondary border-0">
           <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>

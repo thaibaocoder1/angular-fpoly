@@ -20,96 +20,63 @@
     <div class="col-lg-8">
       <div class="mb-4">
         <h4 class="font-weight-semi-bold mb-4">Billing Address</h4>
-        <form class="row" *ngIf="user$ | async as user">
-          <div class="col-md-6 form-group">
-            <label>Full Name</label>
-            <input
-              class="form-control"
+        <form class="row">
+          <div class="col-md-6">
+            <app-input
+              label="Fullname"
+              placeholder="VD: Hoang Nguyen Thai Bao"
               type="text"
-              placeholder="Hoang Nguyen Thai Bao"
-              name="fullname"
-              value="{{ user.fullname }}"
-            />
-            <span class="invalid-feedback"></span>
+              htmlFor="fullname"
+              [control]="formCheckout.controls.fullname"
+              style="width: 49%"
+            ></app-input>
           </div>
-          <div class="col-md-6 form-group">
-            <label>E-mail</label>
-            <input
-              class="form-control"
+          <div class="col-md-6">
+            <app-input
+              label="Email"
+              placeholder="VD: emailtest@gmail.com"
               type="text"
-              placeholder="example@email.com"
-              name="email"
-              value="{{ user.email }}"
-            />
-            <span class="invalid-feedback"></span>
+              htmlFor="email"
+              [control]="formCheckout.controls.email"
+              style="width: 49%"
+            ></app-input>
           </div>
-          <div class="col-md-4 form-group">
-            <label>Province</label>
-            <select
-              class="form-control"
-              aria-label="Default select example"
-              name="province"
-              id="province"
-            >
-              <option value="">Select one province</option>
-            </select>
-            <span class="invalid-feedback"></span>
+          <div class="col-md-4">
+            <app-select-normal
+              [htmlFor]="'province'"
+              [label]="'Province'"
+              [state]="province$"
+              [control]="formCheckout.controls.province"
+            ></app-select-normal>
           </div>
-          <div class="col-md-4 form-group">
-            <label>District</label>
-            <select
-              class="form-control"
-              aria-label="Default select example"
-              name="district"
-              id="district"
-            >
-              <option value="">Select one district</option>
-            </select>
-            <span class="invalid-feedback"></span>
-          </div>
-          <div class="col-md-4 form-group">
-            <label>Ward</label>
-            <select
-              class="form-control"
-              aria-label="Default select example"
-              name="ward"
-              id="ward"
-            >
-              <option value="">Select one ward</option>
-            </select>
-            <span class="invalid-feedback"></span>
-          </div>
-          <div class="col-md-6 form-group">
-            <label>Address</label>
-            <input
-              class="form-control"
+          <div class="col-md-4">
+            <app-input
+              label="Address"
+              placeholder="VD: District 12, Ho Chi Minh City"
               type="text"
-              placeholder="123 Street"
-              name="address"
-            />
-            <span class="invalid-feedback"></span>
+              htmlFor="address"
+              [control]="formCheckout.controls.address"
+              style="width: 49%"
+            ></app-input>
           </div>
-          <div class="col-md-6 form-group">
-            <label>Phone</label>
-            <input
-              class="form-control"
+          <div class="col-md-4">
+            <app-input
+              label="Phone"
+              placeholder="VD: +84 89xx 98xx"
               type="tel"
-              placeholder="+84 89 456 789"
-              name="phone"
-              value="{{ user.phone }}"
-            />
-            <span class="invalid-feedback"></span>
+              htmlFor="phone"
+              [control]="formCheckout.controls.phone"
+              style="width: 49%"
+            ></app-input>
           </div>
-          <div class="col-md-12 form-group">
-            <label for="note">Note</label>
-            <textarea
-              class="form-control w-100"
-              placeholder="Leave a note here"
-              id="note"
-              name="note"
-            ></textarea>
+          <div class="col-md-12">
+            <app-textarea
+              [control]="formCheckout.controls.note"
+              [htmlFor]="'note'"
+              [label]="'Note'"
+            ></app-textarea>
           </div>
-          <div class="col-md-12 form-group">
+          <div class="col-md-12">
             <label for="" class="form-label">Payment method</label>
             <div class="form-check">
               <input
@@ -137,8 +104,10 @@
               </label>
             </div>
           </div>
-          <div class="col-md-6 form-group">
-            <button class="btn btn-primary">Submit</button>
+          <div class="col-md-6 mt-3">
+            <button [disabled]="formCheckout.invalid" class="btn btn-primary">
+              Submit
+            </button>
           </div>
         </form>
       </div>
@@ -150,23 +119,33 @@
         </div>
         <div class="card-body">
           <h5 class="font-weight-medium mb-3">Products</h5>
-          <div id="card-info">
-            <div class="d-flex justify-content-between"></div>
+          <div id="card-info" *ngIf="productList$?.length">
+            <div
+              class="d-flex justify-content-between"
+              *ngFor="let item of productList$"
+            >
+              <p>{{ item.name }} x {{ item.quantityBuy }}</p>
+              <p [appFormat]="item"></p>
+            </div>
           </div>
           <hr class="mt-0" />
           <div class="d-flex justify-content-between mb-3 pt-1">
             <h6 class="font-weight-medium">Subtotal</h6>
-            <h6 class="font-weight-medium" id="subtotal">$0</h6>
+            <h6 class="font-weight-medium">
+              {{ subTotal | currency : "VND" }}
+            </h6>
           </div>
           <div class="d-flex justify-content-between">
             <h6 class="font-weight-medium">Shipping</h6>
-            <h6 class="font-weight-medium" id="shipping">$0</h6>
+            <h6 class="font-weight-medium">
+              {{ shipCost | currency : "VND" }}
+            </h6>
           </div>
         </div>
         <div class="card-footer border-secondary bg-transparent">
           <div class="d-flex justify-content-between mt-2">
             <h5 class="font-weight-bold">Total</h5>
-            <h5 class="font-weight-bold" id="total">$0</h5>
+            <h5 class="font-weight-bold">{{ total | currency : "VND" }}</h5>
           </div>
         </div>
       </div>

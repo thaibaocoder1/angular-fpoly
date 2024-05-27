@@ -31,6 +31,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./admin-auth/admin-auth.module').then((m) => m.AdminAuthModule),
   },
+  {
+    path: 'coupons',
+    loadChildren: () =>
+      import('./admin-coupon/admin-coupon.module').then(
+        (m) => m.AdminCouponModule
+      ),
+  },
 ];
 
 @NgModule({

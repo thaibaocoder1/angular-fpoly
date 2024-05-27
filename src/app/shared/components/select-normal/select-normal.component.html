@@ -1,0 +1,9 @@
+<div class="form-group" *ngIf="state">
+  <label for="{{ htmlFor }}" class="form-label">{{ label }}</label>
+  <select class="form-control" id="{{ htmlFor }}" [formControl]="control">
+    <option value="">--Select one--</option>
+    <ng-container *ngFor="let data of state">
+      <option value="{{ data.province_id }}">{{ data.province_name }}</option>
+    </ng-container>
+  </select>
+</div>

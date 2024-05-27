@@ -61,7 +61,8 @@ export class AdminUserComponent implements OnInit, OnDestroy {
   formUserSubjectEdit = new Subject<boolean>();
   private unsubscribe = new Subject<void>();
   users$: Observable<IUsers[] | null> | undefined;
-  user$: Observable<IUsers> | undefined;
+  user$: Observable<IUsers | null> | undefined;
+
   constructor(
     private store: Store<AppState>,
     private fb: FormBuilder,
@@ -127,29 +128,22 @@ export class AdminUserComponent implements OnInit, OnDestroy {
   }
   handleEditUser(id: string) {
     this.store.dispatch(UserActions.GetUser({ userId: id }));
-    this.unsubscribe.next();
-    this.unsubscribe = new Subject<void>();
-    this.store
-      .pipe(
-        takeUntil(this.unsubscribe),
-        select((state) => state.users.user),
-        take(1)
-      )
-      .subscribe((user) => {
-        console.log(user);
+    this.user$ = this.store.select((state) => state.users.user);
+    this.user$.pipe(take(1)).subscribe((data) => {
+      if (data) {
         this.formUserEdit.patchValue({
-          email: user?.email,
-          username: user?.username,
-          phone: user?.phone,
-          fullname: user?.fullname,
-          role: user?.role,
+          email: data?.email,
+          username: data?.username,
+          phone: data?.phone,
+          fullname: data?.fullname,
+          role: data?.role,
         });
-
         const previewImage = this.getPreviewImageItem('imageUrlEdit');
         if (previewImage) {
-          previewImage.src = user?.imageUrl?.fileName as string;
+          previewImage.src = data?.imageUrl?.fileName as string;
         }
-      });
+      }
+    });
   }
   getPreviewImageItem(selector: string) {
     return document.getElementById(selector) as HTMLImageElement;

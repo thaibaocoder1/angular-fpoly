@@ -3,15 +3,16 @@ import { CommonModule } from '@angular/common';
 
 import { CheckoutRoutingModule } from './checkout-routing.module';
 import { CheckoutComponent } from './checkout.component';
-
+import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
-  declarations: [
-    CheckoutComponent
-  ],
+  declarations: [CheckoutComponent],
   imports: [
     CommonModule,
-    CheckoutRoutingModule
-  ]
+    CheckoutRoutingModule,
+    ReactiveFormsModule,
+    SharedModule,
+  ],
 })
-export class CheckoutModule { }
+export class CheckoutModule {}

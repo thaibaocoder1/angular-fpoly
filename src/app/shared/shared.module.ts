@@ -21,6 +21,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { ModalDynamicComponent } from './components/modal-dynamic/modal-dynamic.component';
 import { TextareaComponent } from './components/textarea/textarea.component';
 import { SelectComponent } from './components/select/select.component';
+import { SelectNormalComponent } from './components/select-normal/select-normal.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { SelectComponent } from './components/select/select.component';
     ModalDynamicComponent,
     TextareaComponent,
     SelectComponent,
+    SelectNormalComponent,
   ],
   imports: [
     CommonModule,
@@ -70,6 +72,7 @@ import { SelectComponent } from './components/select/select.component';
     ModalDynamicComponent,
     TextareaComponent,
     SelectComponent,
+    SelectNormalComponent,
   ],
 })
 export class SharedModule {}
