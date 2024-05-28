@@ -25,6 +25,9 @@ import { reducers } from './core/state/rehydrate/reducers';
 import { AdminModule } from './admin/admin.module';
 import { UserEffects } from './core/state/users/users.effects';
 import { authInterceptor } from './core/migration/auth.interceptor';
+import { OrderEffects } from './core/state/order/order.effects';
+import { CouponEffects } from './core/state/coupon/coupon.effects';
+import { OrderdetailEffects } from './core/state/details/details.effects';
 
 export function localStorageSyncReducer(reducer: any): any {
   return localStorageSync({
@@ -50,7 +53,14 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
     NgxPaginationModule,
     StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot([ProductEffects, CategoryEffects, UserEffects]),
+    EffectsModule.forRoot([
+      ProductEffects,
+      CategoryEffects,
+      UserEffects,
+      OrderEffects,
+      OrderdetailEffects,
+      CouponEffects,
+    ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
   providers: [provideHttpClient(withInterceptors([authInterceptor]))],

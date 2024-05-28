@@ -66,4 +66,33 @@ export class UsersService {
       })
     );
   }
+  // Patch
+  updateUser(values: IUsers): Observable<IUsers> {
+    const formData = new FormData();
+    for (const key in values) {
+      if (key === 'imageUrl' && typeof values[key] === 'object') {
+        const file = values[key] as File;
+        if (file.hasOwnProperty('fileName')) {
+          continue;
+        } else {
+          formData.append(key, file);
+        }
+      } else {
+        const keyRest = key as keyof IUsers;
+        formData.append(key, String(values[keyRest]));
+      }
+    }
+    return this.http
+      .patch<ApiResponse>(`${this.apiURL}/update/${values._id}`, formData)
+      .pipe(
+        map((res: ApiResponse) => {
+          if (res && res.success) {
+            const data = res.data as IUsers;
+            return data;
+          } else {
+            throw new Error('API response is not successful.');
+          }
+        })
+      );
+  }
 }

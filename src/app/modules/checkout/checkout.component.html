@@ -20,7 +20,11 @@
     <div class="col-lg-8">
       <div class="mb-4">
         <h4 class="font-weight-semi-bold mb-4">Billing Address</h4>
-        <form class="row">
+        <form
+          class="row"
+          [formGroup]="formCheckout"
+          (ngSubmit)="handleSubmitOrder()"
+        >
           <div class="col-md-6">
             <app-input
               label="Fullname"
@@ -86,6 +90,7 @@
                 id="payment-method"
                 value="cod"
                 checked
+                formControlName="payment"
               />
               <label class="form-check-label" for="payment-method">
                 Ship COD
@@ -98,6 +103,7 @@
                 name="payment"
                 id="payment-method-online"
                 value="online"
+                formControlName="payment"
               />
               <label class="form-check-label" for="payment-method-online">
                 Online
@@ -113,7 +119,56 @@
       </div>
     </div>
     <div class="col-lg-4">
-      <div class="card border-secondary mb-5">
+      <form [formGroup]="formCoupon" (ngSubmit)="formCouponSubject.next(true)">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control p-4"
+            placeholder="Coupon Code"
+            formControlName="coupon"
+          />
+          <div class="input-group-append">
+            <button
+              [disabled]="formCoupon.invalid || formCoupon.status === 'PENDING'"
+              class="btn btn-primary"
+            >
+              Apply Coupon
+            </button>
+          </div>
+        </div>
+        <ng-container
+          *ngIf="
+            formCoupon.get('coupon')?.errors &&
+            formCoupon.get('coupon')?.touched
+          "
+        >
+          <span
+            class="text-danger d-inline-block mt-1"
+            *ngIf="formCoupon.getError('required', 'coupon')"
+            >Value is required</span
+          >
+          <span
+            class="text-danger d-inline-block mt-1"
+            *ngIf="formCoupon.hasError('expireCoupon', 'coupon')"
+            >Coupon is expire</span
+          >
+        </ng-container>
+      </form>
+      <div class="d-flex flex-column" *ngIf="couponList?.length">
+        <div
+          class="coupon-item border-bottom mt-1 py-2"
+          *ngFor="let item of couponList"
+        >
+          <h6 class="coupon-name">{{ item.name }}</h6>
+          <div class="coupon-content">
+            <span class="coupon-value">{{ item.value }}%</span>
+            <button class="coupon-remove" (click)="removeCoupon(item._id)">
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card border-secondary mt-4">
         <div class="card-header bg-secondary border-0">
           <h4 class="font-weight-semi-bold m-0">Order Total</h4>
         </div>
@@ -138,14 +193,16 @@
           <div class="d-flex justify-content-between">
             <h6 class="font-weight-medium">Shipping</h6>
             <h6 class="font-weight-medium">
-              {{ shipCost | currency : "VND" }}
+              {{ shipCostPrice | currency : "VND" }}
             </h6>
           </div>
         </div>
         <div class="card-footer border-secondary bg-transparent">
           <div class="d-flex justify-content-between mt-2">
             <h5 class="font-weight-bold">Total</h5>
-            <h5 class="font-weight-bold">{{ total | currency : "VND" }}</h5>
+            <h5 class="font-weight-bold">
+              {{ totalPrice | currency : "VND" }}
+            </h5>
           </div>
         </div>
       </div>
@@ -153,3 +210,12 @@
   </div>
 </div>
 <!-- Checkout End -->
+
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+  [fullScreen]="true"
+  ><p style="color: white">Loading...</p></ngx-spinner
+>

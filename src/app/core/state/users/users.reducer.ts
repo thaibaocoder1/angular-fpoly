@@ -42,17 +42,6 @@ export const UserReducer = createReducer(
     console.error(error);
     return { ...state, loading: false, error: error };
   }),
-  on(UserActions.GetUser, (state, { userId }) => {
-    return { ...state, loading: true };
-  }),
-  on(UserActions.GetUserSuccess, (state, { user }) => {
-    const { data } = user;
-    return { ...state, loading: false, user: data as IUsers, error: '' };
-  }),
-  on(UserActions.GetUserFailure, (state, { error }) => {
-    console.error(error);
-    return { ...state, loading: false, error };
-  }),
   on(UserActions.GetAllUser, (state) => {
     return { ...state, loading: true };
   }),
@@ -66,6 +55,17 @@ export const UserReducer = createReducer(
   on(UserActions.GetAllUserFailure, (state, { error }) => {
     console.error(error);
     return { ...state, loading: false };
+  }),
+  on(UserActions.GetUser, (state, { userId }) => {
+    return { ...state, loading: true };
+  }),
+  on(UserActions.GetUserSuccess, (state, { user }) => {
+    const { data } = user;
+    return { ...state, loading: false, user: data as IUsers, error: '' };
+  }),
+  on(UserActions.GetUserFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
   }),
   on(UserActions.LogoutUser, (state) => {
     return { ...state, loading: true };
@@ -84,6 +84,16 @@ export const UserReducer = createReducer(
     return { ...state, loading: false, user, error: '' };
   }),
   on(UserActions.AddUserFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
+  }),
+  on(UserActions.UpdateUser, (state, { user }) => {
+    return { ...state, loading: true };
+  }),
+  on(UserActions.UpdateUserSuccess, (state, { user }) => {
+    return { ...state, loading: false, user, error: '' };
+  }),
+  on(UserActions.UpdateUserFailure, (state, { error }) => {
     console.error(error);
     return { ...state, loading: false, error };
   }),

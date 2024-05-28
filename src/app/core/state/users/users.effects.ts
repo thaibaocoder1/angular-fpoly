@@ -73,6 +73,17 @@ export class UserEffects {
       )
     )
   );
+  updateUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.UpdateUser),
+      mergeMap((payload) =>
+        this.userService.updateUser(payload.user).pipe(
+          map((user) => UserActions.UpdateUserSuccess({ user })),
+          catchError((error) => of(UserActions.UpdateUserFailure({ error })))
+        )
+      )
+    )
+  );
 
   constructor(private actions$: Actions, private userService: UsersService) {}
 }

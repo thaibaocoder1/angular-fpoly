@@ -74,5 +74,18 @@ export const AddUserFailure = createAction(
   '[User] Add User Failure',
   props<{ error: string }>()
 );
+// [UPDATE]
+export const UpdateUser = createAction(
+  '[User] Update User',
+  props<{ user: IUsers }>()
+);
+export const UpdateUserSuccess = createAction(
+  '[User] Update User Success',
+  props<{ user: IUsers }>()
+);
+export const UpdateUserFailure = createAction(
+  '[User] Update User Failure',
+  props<{ error: string }>()
+);
 // RESET
 export const ResetState = createAction('[User] Reset All');

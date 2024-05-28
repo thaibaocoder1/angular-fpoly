@@ -6,4 +6,9 @@
       <option value="{{ data.province_id }}">{{ data.province_name }}</option>
     </ng-container>
   </select>
+  <ng-container *ngIf="control.errors && control.touched && control.invalid">
+    <span class="form-message" *ngIf="control.errors['required']">
+      {{ label }} is required.
+    </span>
+  </ng-container>
 </div>

@@ -27,7 +27,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class AdminUserComponent implements OnInit, OnDestroy {
   formUser = this.fb.group({
     fullname: ['', [Validators.required]],
-    username: ['', [Validators.required, Validators.pattern(/^[a-z]{6,32}$/i)]],
+    username: [
+      '',
+      [Validators.required, Validators.pattern(/^[a-z0-9]{6,32}$/i)],
+    ],
     email: [
       '',
       [Validators.required, Validators.email],
@@ -45,7 +48,10 @@ export class AdminUserComponent implements OnInit, OnDestroy {
   });
   formUserEdit = this.fb.group({
     fullname: ['', [Validators.required]],
-    username: ['', [Validators.required, Validators.pattern(/^[a-z]{6,32}$/i)]],
+    username: [
+      '',
+      [Validators.required, Validators.pattern(/^[a-z0-9]{6,32}$/i)],
+    ],
     email: ['', [Validators.required, Validators.email]],
     phone: [
       '',
@@ -57,9 +63,12 @@ export class AdminUserComponent implements OnInit, OnDestroy {
     role: ['', [Validators.required]],
     imageUrl: [null as any],
   });
+
   formUserSubject = new Subject<boolean>();
   formUserSubjectEdit = new Subject<boolean>();
+
   private unsubscribe = new Subject<void>();
+
   users$: Observable<IUsers[] | null> | undefined;
   user$: Observable<IUsers | null> | undefined;
 
@@ -128,22 +137,34 @@ export class AdminUserComponent implements OnInit, OnDestroy {
   }
   handleEditUser(id: string) {
     this.store.dispatch(UserActions.GetUser({ userId: id }));
-    this.user$ = this.store.select((state) => state.users.user);
-    this.user$.pipe(take(1)).subscribe((data) => {
-      if (data) {
+    this.store
+      .pipe(
+        select((state) => state.users.loading),
+        distinctUntilChanged(),
+        tap(() => {
+          this.spinner.show();
+        }),
+        filter((loading) => !loading),
+        tap(() => {
+          this.spinner.hide();
+        }),
+        switchMap(() => {
+          return this.store.pipe(select((state) => state.users.user));
+        }),
+        take(1)
+      )
+      .subscribe((data) => {
         this.formUserEdit.patchValue({
           email: data?.email,
+          fullname: data?.fullname,
           username: data?.username,
           phone: data?.phone,
-          fullname: data?.fullname,
           role: data?.role,
         });
-        const previewImage = this.getPreviewImageItem('imageUrlEdit');
-        if (previewImage) {
-          previewImage.src = data?.imageUrl?.fileName as string;
-        }
-      }
-    });
+        const previewImageEdit = this.getPreviewImageItem('imageUrlEdit');
+        previewImageEdit &&
+          (previewImageEdit.src = data?.imageUrl.fileName as string);
+      });
   }
   getPreviewImageItem(selector: string) {
     return document.getElementById(selector) as HTMLImageElement;
@@ -159,11 +180,22 @@ export class AdminUserComponent implements OnInit, OnDestroy {
   }
   submitFormEdit() {
     const values = this.formUserEdit.getRawValue() as IUsers;
-    const previewImage = this.getPreviewImageItem('imageUrl');
-    const uploadFile = document.getElementById('image') as HTMLInputElement;
+    this.store
+      .pipe(
+        select((state) => state.users.user),
+        take(1)
+      )
+      .subscribe((data) => {
+        if (!values.imageUrl && data) {
+          values.imageUrl = data?.imageUrl;
+          values._id = data._id;
+        }
+      });
+    const previewImage = this.getPreviewImageItem('imageUrlEdit');
+    const uploadFile = document.getElementById('imageEdit') as HTMLInputElement;
     if (values) {
-      this.store.dispatch(UserActions.AddUser({ user: values }));
-      this.sideActions(previewImage, uploadFile, this.formUser);
+      this.store.dispatch(UserActions.UpdateUser({ user: values }));
+      this.sideActions(previewImage, uploadFile, this.formUserEdit);
     }
   }
   sideActions(
@@ -175,25 +207,23 @@ export class AdminUserComponent implements OnInit, OnDestroy {
       .pipe(
         select((state) => state.users.loading),
         distinctUntilChanged(),
-        tap(() => this.spinner.show()),
-        filter((loading) => !loading),
-        tap(() => this.spinner.hide()),
+        tap((loading) => loading && this.spinner.show()),
         switchMap(() => {
           return this.store.pipe(select((state) => state.users.user));
         }),
+        filter((user) => !!user),
+        tap(() => this.spinner.hide()),
         take(1)
       )
-      .subscribe((data) => {
-        if (data) {
-          this.toast.success('Action success!', undefined, {
-            timeOut: 2000,
-            progressBar: true,
-          });
-          form.reset();
-          previewImage && (previewImage.src = 'https://placehold.co/350x350');
-          uploadFile && (uploadFile.value = '');
-          this.getAllUsers();
-        }
+      .subscribe(() => {
+        this.toast.success('Action success!', undefined, {
+          timeOut: 2000,
+          progressBar: true,
+        });
+        form.reset();
+        previewImage && (previewImage.src = 'https://placehold.co/350x350');
+        uploadFile && (uploadFile.value = '');
+        this.getAllUsers();
       });
   }
   getAllUsers() {

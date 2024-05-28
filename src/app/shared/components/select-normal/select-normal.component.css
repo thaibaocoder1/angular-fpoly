@@ -1,0 +1,39 @@
+.form-group {
+  display: flex;
+  margin-bottom: 24px;
+  flex-direction: column;
+  position: relative;
+}
+
+.form-label {
+  text-align: left;
+  font-weight: 600;
+  line-height: 1.8rem;
+  font-size: 1rem;
+}
+
+.form-control {
+  height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #b3b3b3;
+  border-radius: 3px;
+  outline: none;
+  font-size: 16px;
+}
+
+.form-control:hover {
+  border-color: #f33a58;
+}
+
+.form-message {
+  line-height: 1.4;
+  padding: 4px 0 4px 0;
+  position: absolute;
+  bottom: -26px;
+  left: 0;
+  font-size: 14px;
+  color: #f33a58;
+}
+.invalid {
+  border-color: #f33a40;
+}
