@@ -10,8 +10,12 @@ import { Province } from '../../../core/services/province/province.service';
 export class SelectNormalComponent implements OnInit {
   @Input() htmlFor: string = '';
   @Input() label: string = '';
+  @Input() name: string = '';
   @Input() control: FormControl = new FormControl();
-  @Input() state: Province[] | undefined;
+  @Input() state: Province[] | any[] | undefined;
   constructor() {}
   ngOnInit(): void {}
+  checkDisabled(i: number) {
+    return i === 4 || i === 2 ? true : false;
+  }
 }

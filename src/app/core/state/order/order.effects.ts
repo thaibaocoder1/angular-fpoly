@@ -18,6 +18,39 @@ export class OrderEffects {
       )
     )
   );
+  getOrder$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrderActions.GetOrder),
+      mergeMap(() =>
+        this.orderService.getOrders().pipe(
+          map((orders) => OrderActions.GetOrderSuccess({ orders })),
+          catchError((error) => of(OrderActions.GetOrderFailure({ error })))
+        )
+      )
+    )
+  );
+  getOrderWithId$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrderActions.GetAllWithId),
+      mergeMap((payload) =>
+        this.orderService.getOrderWithId(payload.userId).pipe(
+          map((orders) => OrderActions.GetAllWithIdSuccess({ orders })),
+          catchError((error) => of(OrderActions.GetAllWithIdFailure({ error })))
+        )
+      )
+    )
+  );
+  getOneOrder$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrderActions.GetOneOrder),
+      mergeMap((payload) =>
+        this.orderService.getOneOrder(payload.orderId).pipe(
+          map((order) => OrderActions.GetOneOrderSuccess({ order })),
+          catchError((error) => of(OrderActions.GetOneOrderFailure({ error })))
+        )
+      )
+    )
+  );
 
   constructor(private actions$: Actions, private orderService: OrderService) {}
 }

@@ -1,9 +1,17 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   Observable,
+  Subscription,
   debounceTime,
-  filter,
+  distinctUntilChanged,
   map,
   of,
   switchMap,
@@ -22,7 +30,7 @@ import { FormControl } from '@angular/forms';
   templateUrl: './products-list.component.html',
   styleUrl: './products-list.component.css',
 })
-export class ProductsListComponent implements OnInit, AfterViewInit {
+export class ProductsListComponent implements OnInit, OnDestroy, AfterViewInit {
   page: number = 1;
   itemsPerPage: number = 6;
   searchTerm: string = '';
@@ -30,9 +38,12 @@ export class ProductsListComponent implements OnInit, AfterViewInit {
   @ViewChild(ModalComponent, { static: true }) modalElement:
     | ModalComponent
     | undefined;
+  @ViewChild('actionSort', { static: true }) actionSort:
+    | ElementRef<any>
+    | undefined;
   productSelected$: IProducts | undefined;
-  // searchControl: Partial<IProducts> = { name: '' };
   searchControl: FormControl = new FormControl();
+  private subscription: Subscription | undefined;
 
   constructor(
     private store: Store<AppState>,
@@ -42,25 +53,17 @@ export class ProductsListComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.getAll();
     this.products$ = this.store.select((state) => state.products.products);
-    this.searchControl.valueChanges
+    this.subscription = this.searchControl.valueChanges
       .pipe(
         debounceTime(500),
-        switchMap((value) => {
-          this.searchTerm = value || '';
-          if (!this.products$) {
-            return of([]);
-          }
-          return this.products$.pipe(
-            map((data) => {
-              return data.filter((x) =>
-                x.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-              );
-            })
-          );
-        })
+        distinctUntilChanged(),
+        map((query) => query.toLowerCase())
       )
-      .subscribe((data) => {
-        this.products$ = of(data);
+      .subscribe((query) => {
+        this.store.dispatch(ProductActions.filterProduct({ query }));
+        this.products$ = this.store.select(
+          (state) => state.products.filter as IProducts[]
+        );
       });
   }
   getAll() {
@@ -79,6 +82,25 @@ export class ProductsListComponent implements OnInit, AfterViewInit {
         this.productSelected$ = product;
       });
   }
+  handleFilterPrice(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const price = target.value as unknown as number;
+    this.store.dispatch(ProductActions.filterProduct({ query: '', price }));
+  }
+  handleSortData() {
+    if (this.actionSort) {
+      const dropdownEl = this.actionSort.nativeElement;
+      const tagLinkEl = dropdownEl.querySelectorAll(
+        '.dropdown-item'
+      ) as NodeListOf<HTMLButtonElement>;
+      tagLinkEl.forEach((item) => {
+        item.addEventListener('click', (e: Event) => {
+          e.preventDefault();
+          console.log(item.name);
+        });
+      });
+    }
+  }
   ngAfterViewInit(): void {
     this.modalElement?.confirm.subscribe((productId: string) => {
       this.addToCart(productId);
@@ -91,5 +113,8 @@ export class ProductsListComponent implements OnInit, AfterViewInit {
       timeOut: 2000,
     });
     this.cartService.addToCart(id);
+  }
+  ngOnDestroy(): void {
+    this.subscription && this.subscription.unsubscribe();
   }
 }

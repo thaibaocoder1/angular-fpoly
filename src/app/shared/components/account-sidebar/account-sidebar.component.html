@@ -3,8 +3,18 @@
   id="navbar-vertical"
 >
   <div class="navbar-nav w-100" style="height: max-content">
-    <a href="#!" class="nav-item nav-link">Update</a>
-    <a href="#!" class="nav-item nav-link">Orders</a>
+    <a
+      routerLink="/account/update"
+      routerLinkActive="active"
+      class="nav-item nav-link"
+      >Update</a
+    >
+    <a
+      routerLink="/account/orders"
+      routerLinkActive="active"
+      class="nav-item nav-link"
+      >Orders</a
+    >
     <div
       style="cursor: pointer"
       (click)="handleLogout()"

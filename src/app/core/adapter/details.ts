@@ -10,5 +10,5 @@ export interface OrderDetailState {
 export interface ApiResponseOrderDetails {
   success: boolean;
   message: string;
-  data: IOrderDetails;
+  data: IOrderDetails | IOrderDetails[];
 }

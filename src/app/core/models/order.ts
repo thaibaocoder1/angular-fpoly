@@ -1,5 +1,8 @@
+import { IUsers } from './users';
+
 export interface IOrders {
   _id: string;
+  userId: string | IUsers;
   fullname: string;
   email: string;
   address: string;

@@ -56,19 +56,14 @@ export const updateProductFailure = createAction(
   '[Product] Update Product Failure',
   props<{ error: string }>()
 );
-
-export const deleteProduct = createAction(
-  '[Product] Delete Product',
-  props<{ productId: number }>()
+// [FILTER]
+export const filterProduct = createAction(
+  '[Product] Filter',
+  props<{ query?: string; price?: number }>()
 );
-export const deleteProductSuccess = createAction(
-  '[Product] Delete Product Success',
-  props<{ productId: number }>()
-);
-export const deleteProductFailure = createAction(
-  '[Product] Delete Product Failure',
+export const filterProductFailure = createAction(
+  '[Product] Filter Failure',
   props<{ error: any }>()
 );
-
 // [RESET]
 export const resetProductState = createAction('[Product] Reset Product State');

@@ -44,6 +44,7 @@ import * as OrderDetailActions from '../../core/state/details/details.actions';
 
 import { NgxSpinnerService } from 'ngx-spinner';
 import { IOrderDetails } from '../../core/models/detail';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -57,6 +58,7 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterContentInit {
   productList$: IProducts[] | undefined;
   province$: Province[] | undefined;
   couponList: ICoupons[] | undefined = [];
+  private userId: string = '';
   shipCostPrice: number = 0;
   totalPrice: number = 0;
 
@@ -97,7 +99,8 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterContentInit {
     private unique: UniqueCoupon,
     private http: HttpClient,
     private toast: ToastrService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.addressService
@@ -180,37 +183,37 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterContentInit {
       values.status = 1;
       values.cancelCount = 0;
       values.total = this.totalPrice;
+      values.userId = this.userId;
       this.store.dispatch(OrderActions.AddOrder({ values }));
       this.cart$ = this.cartService.getCart();
       combineLatest([
         this.store.pipe(select((state) => state.orders.order)),
-        this.store.pipe(select((state) => state.users.user)),
         this.cart$,
         this.store.pipe(select((state) => state.products.products)),
       ])
         .pipe(
           tap(() => this.spinner.show()),
           filter(
-            ([order, user, cart, products]) =>
-              order !== null &&
-              order !== undefined &&
-              user !== null &&
-              user !== undefined
+            ([order, cart, products]) => order !== null && order !== undefined
           ),
-          switchMap(([order, user, cart, products]) => {
+          switchMap(([order, cart, products]) => {
             return of(cart).pipe(
               map((cartItems) => {
-                cartItems.forEach((item) => {
+                const filteredCartItems = cartItems.filter((item) => {
+                  return products.some(
+                    (product) => product._id === item.productId && item.isBuyNow
+                  );
+                });
+                filteredCartItems.forEach((item) => {
                   const product = products.find(
                     (p) => p._id === item.productId
                   );
                   const orderDetail: Partial<IOrderDetails> = {
                     orderID: order?._id,
                     productID: item.productId,
-                    userID: user?._id,
                     price:
-                      (<number>product?.price -
-                        (100 - (product?.discount as number))) /
+                      (<number>product?.price *
+                        (100 - <number>product?.discount)) /
                       100,
                     quantity: item.quantity,
                   };
@@ -230,10 +233,16 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterContentInit {
         )
         .subscribe((cartItems) => {
           if (cartItems) {
+            for (let item of cartItems) {
+              if (item.isBuyNow) {
+                this.cartService.removeToCart(item.productId);
+              }
+            }
             this.toast.success('Order success', undefined, {
               progressBar: true,
               timeOut: 2000,
             });
+            this.router.navigateByUrl('/account/orders');
           }
         });
     }
@@ -306,6 +315,7 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterContentInit {
         if (auth?.success) {
           const { data } = auth;
           if ('accessToken' in data) {
+            this.userId = data.id;
             this.store.dispatch(
               UserActions.GetUser({ userId: data?.id as string })
             );

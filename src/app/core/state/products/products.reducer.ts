@@ -6,6 +6,7 @@ export const initialState: ProductsState = {
   loading: false,
   product: null,
   products: [],
+  filter: [],
   error: '',
 };
 
@@ -63,6 +64,23 @@ export const ProductReducer = createReducer(
     return { ...state, loading: false, product, error: '' };
   }),
   on(ProductActions.updateProductFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
+  }),
+  on(ProductActions.filterProduct, (state, { query, price }) => {
+    const priceOriginal: number = price ? price : 0;
+    console.log('🚀 ~ on ~ priceOriginal:', priceOriginal);
+    const filterProduct = [...state.products].filter((item) => {
+      console.log(item.price.toString());
+      return (
+        item.name.toLowerCase().includes(query!) &&
+        item.price.toString() <= priceOriginal.toString()
+      );
+    });
+    console.log(filterProduct);
+    return { ...state, loading: false, filter: filterProduct };
+  }),
+  on(ProductActions.filterProductFailure, (state, { error }) => {
     console.error(error);
     return { ...state, loading: false, error };
   })

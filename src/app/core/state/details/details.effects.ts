@@ -20,6 +20,32 @@ export class OrderdetailEffects {
       )
     )
   );
+  getOrderDetail$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrderDetailActions.GetAllDetail),
+      mergeMap(() =>
+        this.orderDetailService.getOrderDetail().pipe(
+          map((orders) => OrderDetailActions.GetAllDetailSuccess({ orders })),
+          catchError((error) =>
+            of(OrderDetailActions.GetAllDetailFailure({ error }))
+          )
+        )
+      )
+    )
+  );
+  getOneOrderDetail$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrderDetailActions.GetOneDetail),
+      mergeMap((payload) =>
+        this.orderDetailService.getOneOrderDetail(payload.orderId).pipe(
+          map((details) => OrderDetailActions.GetOneDetailSuccess({ details })),
+          catchError((error) =>
+            of(OrderDetailActions.GetOneDetailFailure({ error }))
+          )
+        )
+      )
+    )
+  );
 
   constructor(
     private actions$: Actions,

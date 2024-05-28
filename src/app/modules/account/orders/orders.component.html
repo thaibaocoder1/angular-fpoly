@@ -1,0 +1,43 @@
+<div class="container-fluid mb-5">
+  <div class="row border-top px-xl-5">
+    <div class="col-lg-3 d-none d-lg-block">
+      <h3 class="py-2">Info Account</h3>
+      <app-account-sidebar></app-account-sidebar>
+    </div>
+    <div class="col-lg-9">
+      <div class="mt-2">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Fullname</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Email</th>
+              <th scope="col">Address</th>
+              <th scope="col" colspan="2">Action</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="orders$ | async as orders">
+            <ng-container *ngIf="orders.length > 0; else noOrder">
+              <tr *ngFor="let item of orders">
+                <td>{{ item.fullname }}</td>
+                <td>{{ item.phone }}</td>
+                <td>{{ item.email }}</td>
+                <td>{{ item.address }}</td>
+                <td>
+                  <button class="btn btn-info btn-sm">View</button>
+                  <button class="btn btn-danger btn-sm ml-1">Cancel</button>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #noOrder>
+  <tr>
+    <td colspan="6">No order!</td>
+  </tr>
+</ng-template>

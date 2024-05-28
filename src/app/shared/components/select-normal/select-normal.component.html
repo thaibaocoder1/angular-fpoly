@@ -1,9 +1,27 @@
 <div class="form-group" *ngIf="state">
   <label for="{{ htmlFor }}" class="form-label">{{ label }}</label>
-  <select class="form-control" id="{{ htmlFor }}" [formControl]="control">
+  <select
+    class="form-control"
+    id="{{ htmlFor }}"
+    [formControl]="control"
+    *ngIf="name === 'province'"
+  >
     <option value="">--Select one--</option>
     <ng-container *ngFor="let data of state">
       <option value="{{ data.province_id }}">{{ data.province_name }}</option>
+    </ng-container>
+  </select>
+  <select
+    class="form-control"
+    id="{{ htmlFor }}"
+    [formControl]="control"
+    *ngIf="name === 'order'"
+  >
+    <option value="">--Select one--</option>
+    <ng-container *ngFor="let data of state; index as i">
+      <option value="{{ i + 1 }}" [disabled]="checkDisabled(i)">
+        {{ data }}
+      </option>
     </ng-container>
   </select>
   <ng-container *ngIf="control.errors && control.touched && control.invalid">

@@ -18,7 +18,43 @@ export class OrderService {
       map((res: ApiResponseOrder) => {
         if (res && res.success) {
           const { data } = res;
-          return data;
+          return data as IOrders;
+        } else {
+          throw new Error('Can not get data from CALL API!');
+        }
+      })
+    );
+  }
+  getOrders(): Observable<IOrders[]> {
+    return this.http.get<ApiResponseOrder>(`${this.apiURL}`).pipe(
+      map((res: ApiResponseOrder) => {
+        if (res && res.success) {
+          const { data } = res;
+          return data as IOrders[];
+        } else {
+          throw new Error('Can not get data from CALL API!');
+        }
+      })
+    );
+  }
+  getOrderWithId(id: string): Observable<IOrders[]> {
+    return this.http.get<ApiResponseOrder>(`${this.apiURL}/order/${id}`).pipe(
+      map((res: ApiResponseOrder) => {
+        if (res && res.success) {
+          const { data } = res;
+          return data as IOrders[];
+        } else {
+          throw new Error('Can not get data from CALL API!');
+        }
+      })
+    );
+  }
+  getOneOrder(orderId: string): Observable<IOrders> {
+    return this.http.get<ApiResponseOrder>(`${this.apiURL}/${orderId}`).pipe(
+      map((res: ApiResponseOrder) => {
+        if (res && res.success) {
+          const { data } = res;
+          return data as IOrders;
         } else {
           throw new Error('Can not get data from CALL API!');
         }

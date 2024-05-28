@@ -1,0 +1,153 @@
+<app-admin-common>
+  <div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <div class="d-inline-flex">
+        <h1 class="h3 mb-0 text-gray-800 mr-3">Trang đơn hàng</h1>
+      </div>
+
+      <form
+        class="d-none d-sm-inline-block form-inline ml-md-3 my-2 my-md-0 mw-100 navbar-search"
+      >
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control bg-gradient-light text-dark border-0 small"
+            placeholder="Search for..."
+            aria-label="Search"
+            aria-describedby="basic-addon2"
+            id="searchInput"
+          />
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="button">
+              <i class="fas fa-search fa-sm"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row pl-3">
+      <table class="table table-striped" id="table-product">
+        <thead>
+          <tr>
+            <th scope="col">Tên đầy đủ</th>
+            <th scope="col">Email</th>
+            <th scope="col">Số điện thoại</th>
+            <th scope="col">Trạng thái</th>
+            <th scope="col">Ngày đặt</th>
+            <th scope="col" colspan="2">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="orders$ | async as orders">
+          <tr *ngFor="let item of orders; index as i">
+            <td>{{ item.fullname }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.phone }}</td>
+            <td>{{ getStatusOrder(item.status) }}</td>
+            <td>{{ item.createdAt | date : "dd/MM/yyyy" }}</td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-info btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#viewDetailOrder"
+                (click)="handleViewOrder(item._id)"
+              >
+                Chi tiết
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#changeDetailOrder"
+                (click)="handleUpdateOrder(item.status)"
+              >
+                Chỉnh sửa
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-admin-common>
+
+<app-modal
+  [modalId]="'viewDetailOrder'"
+  [large]="true"
+  [showButton]="false"
+  [title]="'Chi tiết đơn hàng'"
+>
+  <ng-container *ngIf="order$ | async as order">
+    <div class="modal-info">
+      <ul class="row">
+        <li class="col col-lg-6 col-md-4 col-sm-1">
+          Họ và tên: {{ order.fullname }}
+        </li>
+        <li class="col col-lg-6 col-md-4 col-sm-1">Email: {{ order.email }}</li>
+        <li class="col col-lg-6 col-md-4 col-sm-1">
+          Số điện thoại: {{ order.phone }}
+        </li>
+        <li class="col col-lg-6 col-md-4 col-sm-1">
+          Trạng thái: {{ getStatusOrder(order.status) }}
+        </li>
+        <li class="col col-lg-6 col-md-4 col-sm-1">
+          Địa chỉ: {{ order.address }}
+        </li>
+      </ul>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Tên sản phẩm</th>
+          <th scope="col">Hình ảnh</th>
+          <th scope="col">Số lượng</th>
+          <th scope="col">Đơn giá</th>
+          <th scope="col">Thành tiền</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="orderDetail$ as details">
+        <tr *ngFor="let item of details; index as i">
+          <td>{{ i + 1 }}</td>
+          <td>{{ product?.name }}</td>
+          <td>
+            <img
+              src="{{ product?.thumb?.fileName }}"
+              alt="{{ product?.name }}"
+              height="80"
+            />
+          </td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.price | currency : "VND" }}</td>
+          <td>{{ item.quantity * item.price | currency : "VND" }}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3">Tổng giá trị: {{ total | currency : "VND" }}</td>
+          <td colspan="3">
+            Ngày đặt hàng: {{ order.createdAt | date : "dd/MM/yyyy" }}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </ng-container>
+</app-modal>
+
+<app-modal [modalId]="'changeDetailOrder'" [showButton]="false">
+  <form [formGroup]="formChangeStatus">
+    <app-select-normal
+      [htmlFor]="'status'"
+      [label]="'Status'"
+      [state]="statusList"
+      [name]="'order'"
+      [control]="formChangeStatus.controls.status"
+    ></app-select-normal>
+    <button [disabled]="formChangeStatus.invalid" class="btn btn-primary">
+      Submit
+    </button>
+  </form>
+</app-modal>

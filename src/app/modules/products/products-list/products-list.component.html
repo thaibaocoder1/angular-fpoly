@@ -22,14 +22,18 @@
       <!-- Price Start -->
       <div class="border-bottom mb-4 pb-4">
         <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
-        <input
-          type="range"
-          id="price-input"
-          min="0"
-          max="1000"
-          step="50"
-          value="500"
-        />
+        <div class="range-slider">
+          <span class="range-slider__value-min">0</span>
+          <input
+            type="range"
+            min="0"
+            max="10000000"
+            step="500"
+            value="0"
+            (change)="handleFilterPrice($event)"
+          />
+          <span class="range-slider__value-max">10000000</span>
+        </div>
       </div>
       <!-- Price End -->
 
@@ -143,7 +147,7 @@
                 class="btn border dropdown-toggle"
                 type="button"
                 id="triggerId"
-                data-toggle="dropdown"
+                data-bs-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
               >
@@ -152,8 +156,11 @@
               <div
                 class="dropdown-menu dropdown-menu-right"
                 aria-labelledby="triggerId"
+                #actionSort
               >
-                <a class="dropdown-item" href="#increase">Increase price</a>
+                <a class="dropdown-item" name="ddd" href="#increase"
+                  >Increase price</a
+                >
                 <a class="dropdown-item" href="#decrease">Decrease price</a>
                 <a class="dropdown-item" href="#discount">Discount</a>
               </div>

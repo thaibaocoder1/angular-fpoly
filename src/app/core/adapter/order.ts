@@ -10,5 +10,5 @@ export interface OrderState {
 export interface ApiResponseOrder {
   success: boolean;
   message: string;
-  data: IOrders;
+  data: IOrders | IOrders[];
 }

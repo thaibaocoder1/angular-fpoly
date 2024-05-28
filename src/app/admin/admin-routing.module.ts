@@ -38,6 +38,13 @@ const routes: Routes = [
         (m) => m.AdminCouponModule
       ),
   },
+  {
+    path: 'orders',
+    loadChildren: () =>
+      import('./admin-order/admin-order.module').then(
+        (m) => m.AdminOrderModule
+      ),
+  },
 ];
 
 @NgModule({
