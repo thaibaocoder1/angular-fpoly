@@ -6,6 +6,7 @@ import { AdminOrderComponent } from './admin-order.component';
 import { AdminCommonModule } from '../admin-common/admin-common.module';
 import { SharedModule } from '../../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [AdminOrderComponent],
@@ -15,6 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     AdminCommonModule,
     SharedModule,
     ReactiveFormsModule,
+    NgxSpinnerModule,
   ],
 })
 export class AdminOrderModule {}

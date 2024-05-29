@@ -55,6 +55,7 @@ export class ProductsDetailComponent implements OnInit {
       timeOut: 2000,
     });
     this.cartService.addToCart(id, qty);
+    this.valueInput = 1;
   }
   handleBuyNow(productId: string, qty: number = 1) {
     this.toast.success('Wait to redirect checkout!', 'Thank you', {
@@ -63,6 +64,7 @@ export class ProductsDetailComponent implements OnInit {
       timeOut: 2000,
     });
     this.cartService.addToCart(productId, qty, true);
+    this.valueInput = 1;
     setTimeout(() => {
       this.router.navigateByUrl('/checkout');
     }, 2000);

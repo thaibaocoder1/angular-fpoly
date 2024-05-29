@@ -50,5 +50,15 @@ export const OrderReducer = createReducer(
   on(OrderActions.AddOrderFailure, (state, { error }) => {
     console.error(error);
     return { ...state, loading: false, error };
+  }),
+  on(OrderActions.UpdateOrder, (state, { orderId, status }) => {
+    return { ...state, loading: true };
+  }),
+  on(OrderActions.UpdateOrderSuccess, (state, { order }) => {
+    return { ...state, loading: false, error: '', order };
+  }),
+  on(OrderActions.UpdateOrderFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
   })
 );

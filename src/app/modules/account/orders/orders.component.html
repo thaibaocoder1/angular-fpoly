@@ -24,8 +24,24 @@
                 <td>{{ item.email }}</td>
                 <td>{{ item.address }}</td>
                 <td>
-                  <button class="btn btn-info btn-sm">View</button>
-                  <button class="btn btn-danger btn-sm ml-1">Cancel</button>
+                  <button
+                    type="button"
+                    class="btn btn-info btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#viewDetailOrder"
+                    (click)="handleViewOrder(item._id)"
+                  >
+                    View
+                  </button>
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#cancelOrderModal"
+                    (click)="handleCancelOrder(item._id)"
+                    class="btn btn-danger btn-sm ml-1"
+                  >
+                    Cancel
+                  </button>
                 </td>
               </tr>
             </ng-container>
@@ -41,3 +57,78 @@
     <td colspan="6">No order!</td>
   </tr>
 </ng-template>
+
+<app-modal
+  [modalId]="'viewDetailOrder'"
+  [large]="true"
+  [showButton]="false"
+  [title]="'Chi tiết đơn hàng'"
+>
+  <ng-container *ngIf="order$ | async as order">
+    <div class="modal-info">
+      <ul class="row">
+        <li class="col col-lg-6 col-md-4 col-sm-1">
+          Họ và tên: {{ order.fullname }}
+        </li>
+        <li class="col col-lg-6 col-md-4 col-sm-1">Email: {{ order.email }}</li>
+        <li class="col col-lg-6 col-md-4 col-sm-1">
+          Số điện thoại: {{ order.phone }}
+        </li>
+        <li class="col col-lg-6 col-md-4 col-sm-1">
+          Trạng thái: {{ getStatusOrder(order.status) }}
+        </li>
+        <li class="col col-lg-6 col-md-4 col-sm-1">
+          Địa chỉ: {{ order.address }}
+        </li>
+      </ul>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Tên sản phẩm</th>
+          <th scope="col">Hình ảnh</th>
+          <th scope="col">Số lượng</th>
+          <th scope="col">Đơn giá</th>
+          <th scope="col">Thành tiền</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="orderDetail$ as details">
+        <tr *ngFor="let item of details; index as i">
+          <td>{{ i + 1 }}</td>
+          <td *ngIf="isProduct(item.productID)">{{ item.productID.name }}</td>
+          <td *ngIf="isProduct(item.productID)">
+            <img
+              src="{{ item.productID.thumb.fileName }}"
+              alt="{{ item.name }}"
+              height="80"
+            />
+          </td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.price | currency : "VND" }}</td>
+          <td>{{ item.quantity * item.price | currency : "VND" }}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3">
+            Tổng giá trị: {{ order.total | currency : "VND" }}
+          </td>
+          <td colspan="3">
+            Ngày đặt hàng: {{ order.createdAt | date : "dd/MM/yyyy" }}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </ng-container>
+</app-modal>
+
+<app-modal
+  #cancelOrderModal
+  [modalId]="'cancelOrderModal'"
+  [title]="'Xác nhận huỷ đơn hàng'"
+>
+  <p>
+    Bạn muốn huỷ đơn hàng này? Huỷ quá 3 lần sẽ bị khoá tài khoản. Vẫn tiếp tục?
+  </p>
+</app-modal>

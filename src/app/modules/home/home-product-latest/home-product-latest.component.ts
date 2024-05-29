@@ -32,7 +32,7 @@ export class HomeProductLatestComponent implements OnInit, AfterViewInit {
   }
   handleQuickViewProduct(productId: string) {
     if (this.modalElement) {
-      this.modalElement.productId = productId;
+      this.modalElement.refID = productId;
     }
     this.product$
       ?.pipe(

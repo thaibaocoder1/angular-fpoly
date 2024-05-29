@@ -13,7 +13,7 @@
           <input
             type="text"
             class="form-control bg-gradient-light text-dark border-0 small"
-            placeholder="Search for..."
+            placeholder="Tìm kiếm..."
             aria-label="Search"
             aria-describedby="basic-addon2"
             id="searchInput"
@@ -62,7 +62,7 @@
                 class="btn btn-primary btn-sm"
                 data-bs-toggle="modal"
                 data-bs-target="#changeDetailOrder"
-                (click)="handleUpdateOrder(item.status)"
+                (click)="handleUpdateOrder(item.status, item._id)"
               >
                 Chỉnh sửa
               </button>
@@ -112,11 +112,11 @@
       <tbody *ngIf="orderDetail$ as details">
         <tr *ngFor="let item of details; index as i">
           <td>{{ i + 1 }}</td>
-          <td>{{ product?.name }}</td>
-          <td>
+          <td *ngIf="isProduct(item.productID)">{{ item.productID.name }}</td>
+          <td *ngIf="isProduct(item.productID)">
             <img
-              src="{{ product?.thumb?.fileName }}"
-              alt="{{ product?.name }}"
+              src="{{ item.productID.thumb.fileName }}"
+              alt="{{ item.name }}"
               height="80"
             />
           </td>
@@ -127,7 +127,9 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="3">Tổng giá trị: {{ total | currency : "VND" }}</td>
+          <td colspan="3">
+            Tổng giá trị: {{ order.total | currency : "VND" }}
+          </td>
           <td colspan="3">
             Ngày đặt hàng: {{ order.createdAt | date : "dd/MM/yyyy" }}
           </td>
@@ -138,16 +140,19 @@
 </app-modal>
 
 <app-modal [modalId]="'changeDetailOrder'" [showButton]="false">
-  <form [formGroup]="formChangeStatus">
+  <form [formGroup]="formChangeStatus" (ngSubmit)="handleSubmitForm()">
     <app-select-normal
       [htmlFor]="'status'"
       [label]="'Status'"
       [state]="statusList"
       [name]="'order'"
       [control]="formChangeStatus.controls.status"
+      [status]="statusOrder"
     ></app-select-normal>
     <button [disabled]="formChangeStatus.invalid" class="btn btn-primary">
       Submit
     </button>
   </form>
 </app-modal>
+
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>

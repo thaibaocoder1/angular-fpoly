@@ -7,6 +7,8 @@ export interface IOrderDetails {
   orderID: string | IOrders;
   quantity: number;
   price: number;
+  name?: string;
+  imageUrl?: string;
   createdAt?: string;
   updatedAt?: string;
 }

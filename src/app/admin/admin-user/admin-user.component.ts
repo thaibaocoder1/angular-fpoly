@@ -186,9 +186,11 @@ export class AdminUserComponent implements OnInit, OnDestroy {
         take(1)
       )
       .subscribe((data) => {
-        if (!values.imageUrl && data) {
-          values.imageUrl = data?.imageUrl;
+        if (data) {
           values._id = data._id;
+          if (!values.imageUrl) {
+            values.imageUrl = data?.imageUrl;
+          }
         }
       });
     const previewImage = this.getPreviewImageItem('imageUrlEdit');

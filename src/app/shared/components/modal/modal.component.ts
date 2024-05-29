@@ -17,7 +17,7 @@ export class ModalComponent implements OnInit, OnDestroy {
   @Input() title: string = 'Modal title';
   @Input() large: boolean = false;
   @Input() modalId: string = 'removeItem';
-  @Input() productId: string = '';
+  @Input() refID: string = '';
   @Input() isEdit: boolean = false;
   @Input() showButton: boolean = true;
   @Input() textButton: string = 'Save changes';
@@ -29,8 +29,8 @@ export class ModalComponent implements OnInit, OnDestroy {
     document.body.appendChild(this.el.nativeElement);
   }
   onClick() {
-    if (this.productId !== '') {
-      this.confirm.emit(this.productId);
+    if (this.refID !== '') {
+      this.confirm.emit(this.refID);
     }
   }
   ngOnDestroy(): void {

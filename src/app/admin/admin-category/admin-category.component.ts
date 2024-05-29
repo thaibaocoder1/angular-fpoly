@@ -49,7 +49,7 @@ export class AdminCategoryComponent implements OnInit, OnDestroy {
   }
   getDetail(id: string) {
     this.store.dispatch(CategoryActions.loadCatalogDetail({ productId: id }));
-    this.editModal && (this.editModal.productId = id);
+    this.editModal && (this.editModal.refID = id);
     this.cataglog$?.pipe(takeUntil(this.unsubscribe$)).subscribe((item) => {
       this.formCatalogV2.patchValue({ title: item?.title });
     });
@@ -66,7 +66,7 @@ export class AdminCategoryComponent implements OnInit, OnDestroy {
   handleSubmitEdit() {
     let values: Partial<ICategory> =
       this.formCatalogV2.getRawValue() as ICategory;
-    values._id = this.editModal?.productId;
+    values._id = this.editModal?.refID;
     values.slug = this.slug.transform(values.title as string);
     if (values) {
       this.store.dispatch(CategoryActions.updateCatalog({ value: values }));

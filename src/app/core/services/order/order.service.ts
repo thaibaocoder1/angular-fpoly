@@ -61,4 +61,20 @@ export class OrderService {
       })
     );
   }
+  updateOrder(status: number, orderId: string): Observable<IOrders> {
+    return this.http
+      .patch<ApiResponseOrder>(`${this.apiURL}/update-fields/${orderId}`, {
+        status,
+      })
+      .pipe(
+        map((res: ApiResponseOrder) => {
+          if (res && res.success) {
+            const { data } = res;
+            return data as IOrders;
+          } else {
+            throw new Error('Can not get data from CALL API!');
+          }
+        })
+      );
+  }
 }

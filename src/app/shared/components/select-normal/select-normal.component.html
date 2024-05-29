@@ -8,7 +8,7 @@
   >
     <option value="">--Select one--</option>
     <ng-container *ngFor="let data of state">
-      <option value="{{ data.province_id }}">{{ data.province_name }}</option>
+      <option value="{{ data.province_name }}">{{ data.province_name }}</option>
     </ng-container>
   </select>
   <select
@@ -18,7 +18,7 @@
     *ngIf="name === 'order'"
   >
     <option value="">--Select one--</option>
-    <ng-container *ngFor="let data of state; index as i">
+    <ng-container *ngFor="let data of state; index as i; trackBy: trackByFn">
       <option value="{{ i + 1 }}" [disabled]="checkDisabled(i)">
         {{ data }}
       </option>

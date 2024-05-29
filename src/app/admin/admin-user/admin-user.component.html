@@ -20,7 +20,7 @@
           <input
             type="text"
             class="form-control bg-gradient-light text-dark border-0 small"
-            placeholder="Search for..."
+            placeholder="Tìm kiếm..."
             aria-label="Search"
             aria-describedby="basic-addon2"
             id="searchInput"
@@ -80,7 +80,7 @@
   [modalId]="'createUserModal'"
   [showButton]="false"
   [large]="true"
-  [title]="'Add user'"
+  [title]="'Thêm tài khoản'"
 >
   <form
     class="row"
@@ -99,6 +99,7 @@
             id="image"
             accept="image/*"
             (change)="onUploadImage($event)"
+            accept="image/*"
           />
           <span class="invalid-feedback"></span>
         </div>
@@ -194,7 +195,7 @@
   [showButton]="false"
   [isEdit]="true"
   [large]="true"
-  [title]="'Edit user'"
+  [title]="'Sửa tài khoản'"
 >
   <form
     class="row"
@@ -221,6 +222,7 @@
           style="height: 250px"
           id="imageUrlEdit"
           alt="Avatar"
+          accept="image/*"
         />
       </div>
     </div>

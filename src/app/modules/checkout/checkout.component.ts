@@ -12,9 +12,9 @@ import {
   Subject,
   Subscription,
   combineLatest,
-  distinctUntilChanged,
   filter,
   map,
+  mergeMap,
   of,
   startWith,
   switchMap,
@@ -41,7 +41,6 @@ import * as UserActions from '../../core/state/users/users.actions';
 import * as ProductActions from '../../core/state/products/products.actions';
 import * as OrderActions from '../../core/state/order/order.actions';
 import * as OrderDetailActions from '../../core/state/details/details.actions';
-
 import { NgxSpinnerService } from 'ngx-spinner';
 import { IOrderDetails } from '../../core/models/detail';
 import { Router } from '@angular/router';
@@ -65,6 +64,7 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterContentInit {
   sub: Subscription | undefined;
   subscription: Subscription | undefined;
   private destroy$ = new Subject<void>();
+  private destroyOrder$ = new Subject<void>();
 
   formCheckout = this.fb.group({
     fullname: ['', [Validators.required, Validators.minLength(6)]],
@@ -184,6 +184,7 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterContentInit {
       values.cancelCount = 0;
       values.total = this.totalPrice;
       values.userId = this.userId;
+      values.address = `${values.address}, ${values.province} `;
       this.store.dispatch(OrderActions.AddOrder({ values }));
       this.cart$ = this.cartService.getCart();
       combineLatest([
@@ -196,48 +197,51 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterContentInit {
           filter(
             ([order, cart, products]) => order !== null && order !== undefined
           ),
-          switchMap(([order, cart, products]) => {
-            return of(cart).pipe(
-              map((cartItems) => {
-                const filteredCartItems = cartItems.filter((item) => {
-                  return products.some(
-                    (product) => product._id === item.productId && item.isBuyNow
-                  );
-                });
-                filteredCartItems.forEach((item) => {
-                  const product = products.find(
-                    (p) => p._id === item.productId
-                  );
-                  const orderDetail: Partial<IOrderDetails> = {
-                    orderID: order?._id,
-                    productID: item.productId,
-                    price:
-                      (<number>product?.price *
-                        (100 - <number>product?.discount)) /
-                      100,
-                    quantity: item.quantity,
-                  };
-                  this.store.dispatch(
-                    OrderDetailActions.AddOrderDetail({
-                      values: orderDetail,
-                    })
-                  );
-                });
-
-                return cartItems;
-              }),
-              tap(() => this.spinner.hide())
+          mergeMap(([order, cart, products]) => {
+            const filteredCartItems = cart.filter((item) =>
+              products.some(
+                (product) => product._id === item.productId && item.isBuyNow
+              )
             );
+
+            const actions = filteredCartItems.map((item) => {
+              const product = products.find((p) => p._id === item.productId);
+              const orderDetail: Partial<IOrderDetails> = {
+                orderID: order?._id,
+                productID: item.productId,
+                price:
+                  (<number>product?.price * (100 - <number>product?.discount)) /
+                  100,
+                quantity: item.quantity,
+              };
+              const productChange: Partial<IProducts> = {
+                _id: item.productId,
+                quantity: <number>product?.quantity - item.quantity,
+              };
+              return [
+                OrderDetailActions.AddOrderDetail({
+                  values: orderDetail,
+                }),
+                ProductActions.updateProduct({
+                  product: productChange as IProducts,
+                }),
+              ];
+            });
+
+            actions.flat().forEach((action) => this.store.dispatch(action));
+
+            return of(cart);
           }),
+          tap(() => this.spinner.hide()),
           take(1)
         )
         .subscribe((cartItems) => {
           if (cartItems) {
-            for (let item of cartItems) {
-              if (item.isBuyNow) {
-                this.cartService.removeToCart(item.productId);
-              }
-            }
+            // for (let item of cartItems) {
+            //   if (item.isBuyNow) {
+            //     this.cartService.removeToCart(item.productId);
+            //   }
+            // }
             this.toast.success('Order success', undefined, {
               progressBar: true,
               timeOut: 2000,
@@ -301,7 +305,7 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterContentInit {
     this.shipCost = 1;
   }
   get total() {
-    return this.subTotal - this.shipCost;
+    return this.subTotal + this.shipCost;
   }
   set total(ship: number) {
     if (ship > 0) {
@@ -330,5 +334,7 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterContentInit {
     this.sub && this.sub.unsubscribe();
     this.destroy$.next();
     this.destroy$.complete();
+    this.destroyOrder$.next();
+    this.destroyOrder$.complete();
   }
 }

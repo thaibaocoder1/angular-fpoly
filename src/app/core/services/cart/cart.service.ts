@@ -30,6 +30,7 @@ export class CartService {
     if (index === -1) {
       cart.push({ productId, quantity: qty, isBuyNow: flag });
     } else {
+      if (flag) cart[index].isBuyNow = true;
       cart[index].quantity += qty;
     }
 

@@ -91,7 +91,7 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
     return 0;
   }
   get total() {
-    return this.subTotal - this.shipCost;
+    return this.subTotal + this.shipCost;
   }
   changeSubtotal(item: IProducts, type: string) {
     switch (type) {
@@ -122,7 +122,7 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   setProductID(productId: string) {
     if (this.modal) {
-      this.modal.productId = productId;
+      this.modal.refID = productId;
     }
   }
   setDynamicProductId(productId: string) {

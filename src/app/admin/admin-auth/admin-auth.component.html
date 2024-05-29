@@ -3,7 +3,16 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <div class="d-inline-flex">
-        <h1 class="h3 mb-0 text-gray-800 mr-3">Account info</h1>
+        <h1 class="h3 mb-0 text-gray-800 mr-3">Thông tin tài khoản</h1>
+        <button
+          type="button"
+          class="btn btn-info"
+          data-bs-toggle="modal"
+          data-bs-target="#editAccountModal"
+          (click)="getInfoUser()"
+        >
+          Chỉnh sửa
+        </button>
       </div>
     </div>
 
@@ -71,3 +80,102 @@
     </div>
   </div>
 </app-admin-common>
+
+<app-modal
+  [modalId]="'editAccountModal'"
+  [showButton]="false"
+  [large]="true"
+  [title]="'Sửa tài khoản'"
+>
+  <form
+    class="row"
+    enctype="multipart/form-data"
+    novalidate
+    [formGroup]="formUserEdit"
+    (ngSubmit)="formUserSubjectEdit.next(true)"
+  >
+    <div class="col col-lg-4">
+      <div class="mb-3">
+        <label for="image" class="form-label">Hình ảnh</label>
+        <div class="input-group mb-3 w-100">
+          <input
+            class="form-control w-100"
+            type="file"
+            id="imageEdit"
+            accept="image/*"
+            (change)="onUploadImage($event, true)"
+          />
+        </div>
+        <img
+          src="https://placehold.co/300x300"
+          class="img-thumbnail w-100 rounded-left rounded-right d-block object-fit-cover"
+          style="height: 250px"
+          id="imageUrlEdit"
+          alt="Avatar"
+        />
+      </div>
+    </div>
+    <main class="col col-lg-8">
+      <div class="d-flex" style="gap: 0 10px">
+        <div class="w-50">
+          <app-input
+            label="Fullname"
+            placeholder="VD: Hoang Nguyen Thai Bao"
+            type="text"
+            htmlFor="fullname"
+            [control]="formUserEdit.controls.fullname"
+            style="width: 49%"
+          ></app-input>
+        </div>
+        <div class="w-50">
+          <app-input
+            label="Email"
+            placeholder="VD: emailtest@gmail.com"
+            type="text"
+            htmlFor="email"
+            [control]="formUserEdit.controls.email"
+            style="width: 49%"
+          ></app-input>
+        </div>
+      </div>
+      <div class="d-flex" style="gap: 0 10px">
+        <div class="w-50">
+          <app-input
+            label="Phone"
+            placeholder="VD: +84 89xx 98xx"
+            type="tel"
+            htmlFor="phone"
+            [control]="formUserEdit.controls.phone"
+            style="width: 49%"
+          ></app-input>
+        </div>
+        <div class="w-50">
+          <app-input
+            label="Username"
+            placeholder="VD: baohnt"
+            type="text"
+            htmlFor="username"
+            [control]="formUserEdit.controls.username"
+            style="width: 49%"
+          ></app-input>
+        </div>
+      </div>
+      <button
+        [disabled]="formUserEdit.invalid"
+        type="submit"
+        class="btn btn-primary"
+      >
+        Cập nhật
+      </button>
+    </main>
+  </form>
+</app-modal>
+
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+  [fullScreen]="true"
+  ><p style="color: white">Loading...</p></ngx-spinner
+>

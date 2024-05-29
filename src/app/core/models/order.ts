@@ -10,8 +10,9 @@ export interface IOrders {
   phone: string;
   payment: string;
   status: number;
-  cancelCount?: number;
   total: number;
+  province?: string;
+  cancelCount?: number;
   createdAt: string;
   updatedAt: string;
 }

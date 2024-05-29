@@ -1,13 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../app.state';
-import { Observable, Subject, filter, take, takeUntil } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  distinctUntilChanged,
+  filter,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { IOrders } from '../../core/models/order';
 import * as OrderActions from '../../core/state/order/order.actions';
 import * as OrderDetailActions from '../../core/state/details/details.actions';
 import { IOrderDetails } from '../../core/models/detail';
 import { IProducts } from '../../core/models/products';
 import { FormBuilder, Validators } from '@angular/forms';
+import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+import { resetProductState } from '../../core/state/products/products.actions';
 
 @Component({
   selector: 'app-admin-order',
@@ -19,6 +31,7 @@ export class AdminOrderComponent implements OnInit, OnDestroy {
   order$: Observable<IOrders | null> | undefined;
   orderDetail$: IOrderDetails[] | undefined;
   product: IProducts | undefined;
+  products: IProducts[] | undefined;
   total: number = 0;
   statusList: Array<string> = [
     'Chờ xác nhận',
@@ -28,11 +41,19 @@ export class AdminOrderComponent implements OnInit, OnDestroy {
     'Từ chối nhận hàng',
   ];
   private destroy$ = new Subject<void>();
+  private orderID: string = '';
+  statusOrder: number = 1;
+
   formChangeStatus = this.fb.group({
     status: [1, [Validators.required]],
   });
 
-  constructor(private store: Store<AppState>, private fb: FormBuilder) {}
+  constructor(
+    private store: Store<AppState>,
+    private fb: FormBuilder,
+    private spinner: NgxSpinnerService,
+    private toast: ToastrService
+  ) {}
   ngOnInit(): void {
     this.getAllOrder();
     this.orders$ = this.store.select((state) => state.orders.orders);
@@ -60,6 +81,7 @@ export class AdminOrderComponent implements OnInit, OnDestroy {
   }
   handleViewOrder(id: string) {
     if (id) {
+      this.orderID = id;
       this.store.dispatch(OrderActions.GetOneOrder({ orderId: id }));
       this.store.dispatch(OrderDetailActions.GetOneDetail({ orderId: id }));
       this.order$ = this.store.select((state) => state.orders.order);
@@ -73,19 +95,57 @@ export class AdminOrderComponent implements OnInit, OnDestroy {
           if (data) {
             this.orderDetail$ = data;
             for (const item of data) {
-              if (item.productID && typeof item.productID === 'object') {
-                this.product = item.productID as IProducts;
-              }
               this.total += item.quantity * item.price;
             }
           }
         });
     }
   }
-  handleUpdateOrder(status: number) {
+  isProduct(productID: string | IProducts): productID is IProducts {
+    return typeof productID === 'object' && 'name' in productID;
+  }
+  handleUpdateOrder(status: number, orderId: string) {
+    this.orderID = orderId;
+    this.statusOrder = status;
     this.formChangeStatus.patchValue({
-      status: status,
+      status,
     });
+  }
+  handleSubmitForm() {
+    const values = this.formChangeStatus.getRawValue();
+    if (values) {
+      this.store.dispatch(
+        OrderActions.UpdateOrder({
+          status: values.status as number,
+          orderId: this.orderID,
+        })
+      );
+      this.store
+        .pipe(
+          select((state) => state.orders.loading),
+          distinctUntilChanged(),
+          tap(() => {
+            this.spinner.show();
+          }),
+          filter((loading) => !loading),
+          tap(() => {
+            this.spinner.hide();
+          }),
+          switchMap(() => {
+            return this.store.pipe(select((state) => state.orders.order));
+          }),
+          take(1)
+        )
+        .subscribe((order) => {
+          if (order) {
+            this.toast.success('Action success', undefined, {
+              timeOut: 1000,
+              progressBar: true,
+            });
+            this.getAllOrder();
+          }
+        });
+    }
   }
   ngOnDestroy(): void {
     this.destroy$.next();
