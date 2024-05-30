@@ -72,6 +72,10 @@
 .form-submit:hover {
   background-color: #f33a58;
 }
+.form-submit:disabled {
+  background-color: #636d77;
+  cursor: not-allowed;
+}
 .spacer {
   margin-top: 24px;
 }

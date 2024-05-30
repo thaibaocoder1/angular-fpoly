@@ -27,6 +27,57 @@ export class UsersService {
       value,
     });
   }
+  // Active
+  active(id: string): Observable<IUsers> {
+    return this.http
+      .post<ApiResponse>(`${this.apiURL}/active`, {
+        id,
+      })
+      .pipe(
+        map((res: ApiResponse) => {
+          if (res && res.success) {
+            const data = res.data as IUsers;
+            return data;
+          } else {
+            throw new Error('API response is not successful.');
+          }
+        })
+      );
+  }
+  // Active
+  resetPassword(email: string): Observable<IUsers> {
+    return this.http
+      .post<ApiResponse>(`${this.apiURL}/forgot`, {
+        email,
+      })
+      .pipe(
+        map((res: ApiResponse) => {
+          if (res && res.success) {
+            const data = res.data as IUsers;
+            return data;
+          } else {
+            throw new Error('API response is not successful.');
+          }
+        })
+      );
+  }
+  // Update password
+  updatePassword(values: IUsers): Observable<IUsers> {
+    return this.http
+      .post<ApiResponse>(`${this.apiURL}/change`, {
+        values,
+      })
+      .pipe(
+        map((res: ApiResponse) => {
+          if (res && res.success) {
+            const data = res.data as IUsers;
+            return data;
+          } else {
+            throw new Error('API response is not successful.');
+          }
+        })
+      );
+  }
   // Refresh token
   refresh(): Observable<void> {
     return this.http.get<void>(`${environment.API_URL}refresh`);

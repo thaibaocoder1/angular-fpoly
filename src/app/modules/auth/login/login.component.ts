@@ -17,6 +17,7 @@ import { AppState } from '../../../app.state';
 import * as UserAction from '../../../core/state/users/users.actions';
 import { IUser } from '../../../core/adapter/users';
 import { UsersService } from '../../../core/services/users/users.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -42,7 +43,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private store: Store<AppState>,
     private fb: FormBuilder,
-    private userService: UsersService
+    private userService: UsersService,
+    private toast: ToastrService
   ) {}
   ngOnInit(): void {
     this.formSubmit$

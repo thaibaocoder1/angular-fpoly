@@ -20,20 +20,21 @@
     <!-- Shop Sidebar Start -->
     <div class="col-lg-3 col-md-12">
       <!-- Price Start -->
-      <div class="border-bottom mb-4 pb-4">
+      <div class="border-bottom mb-4">
         <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
         <div class="range-slider">
           <span class="range-slider__value-min">0</span>
           <input
             type="range"
             min="0"
-            max="10000000"
+            max="100000000"
             step="500"
             value="0"
             (change)="handleFilterPrice($event)"
           />
-          <span class="range-slider__value-max">10000000</span>
+          <span class="range-slider__value-max">100000000</span>
         </div>
+        <p class="mt-2">Giá: {{ filterPrice | currency : "VND" }}</p>
       </div>
       <!-- Price End -->
 

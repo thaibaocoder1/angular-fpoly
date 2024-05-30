@@ -70,16 +70,16 @@ export class AdminCategoryComponent implements OnInit, OnDestroy {
     values.slug = this.slug.transform(values.title as string);
     if (values) {
       this.store.dispatch(CategoryActions.updateCatalog({ value: values }));
-      this.formCatalogV2.reset();
     }
+    this.formCatalogV2.reset();
     this.fetch();
   }
   fetch() {
-    this.getAll();
     this.toast.success('Action success!', undefined, {
       timeOut: 2000,
       progressBar: true,
     });
+    this.getAll();
   }
   getAll() {
     this.store.dispatch(CategoryActions.loadCatalog());

@@ -11,12 +11,11 @@ import * as CatalogActions from '../../../core/state/category/category.actions';
   styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent implements OnInit {
-  catalogs$: Observable<ICategory[] | undefined>;
-  constructor(private store: Store<AppState>) {
-    this.catalogs$ = this.store.pipe(select((state) => state.catalogs.catalog));
-  }
+  catalogs$: Observable<ICategory[]> | undefined;
+  constructor(private store: Store<AppState>) {}
   ngOnInit(): void {
     this.getAll();
+    this.catalogs$ = this.store.pipe(select((state) => state.catalogs.catalog));
   }
   getAll() {
     this.store.dispatch(CatalogActions.loadCatalog());

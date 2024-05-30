@@ -9,5 +9,5 @@ export interface ICoupons {
 export interface ApiResCoupon {
   success: boolean;
   message: string;
-  data: any;
+  data: ICoupons | ICoupons[];
 }

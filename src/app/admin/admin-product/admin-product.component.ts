@@ -19,6 +19,7 @@ import { ICategory } from '../../core/models/category';
 import { UniqueCodeValidator } from '../validators/check-code';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { SlugifyPipe } from '../../shared/pipes/slugify.pipe';
 
 @Component({
   selector: 'app-admin-product',
@@ -82,7 +83,8 @@ export class AdminProductComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private uniqueCode: UniqueCodeValidator,
     private spinner: NgxSpinnerService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private slug: SlugifyPipe
   ) {}
   ngOnInit() {
     this.getAll();
@@ -180,6 +182,7 @@ export class AdminProductComponent implements OnInit, OnDestroy {
   submitFormEdit() {
     const values = this.formProductEdit.getRawValue() as unknown as IProducts;
     values._id = this.editProductId;
+    values.slug = this.slug.transform(values.name as string);
     this.store
       .pipe(
         select((state) => state.products.product),

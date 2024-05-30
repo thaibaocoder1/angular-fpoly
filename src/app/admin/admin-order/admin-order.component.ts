@@ -4,23 +4,25 @@ import { AppState } from '../../app.state';
 import {
   Observable,
   Subject,
+  combineLatest,
   distinctUntilChanged,
   filter,
+  mergeMap,
+  of,
   switchMap,
   take,
   takeUntil,
   tap,
 } from 'rxjs';
 import { IOrders } from '../../core/models/order';
-import * as OrderActions from '../../core/state/order/order.actions';
-import * as OrderDetailActions from '../../core/state/details/details.actions';
 import { IOrderDetails } from '../../core/models/detail';
 import { IProducts } from '../../core/models/products';
 import { FormBuilder, Validators } from '@angular/forms';
-import { NgxSpinner, NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { resetProductState } from '../../core/state/products/products.actions';
-
+import * as OrderActions from '../../core/state/order/order.actions';
+import * as OrderDetailActions from '../../core/state/details/details.actions';
+import * as ProductActions from '../../core/state/products/products.actions';
 @Component({
   selector: 'app-admin-order',
   templateUrl: './admin-order.component.html',
@@ -29,6 +31,7 @@ import { resetProductState } from '../../core/state/products/products.actions';
 export class AdminOrderComponent implements OnInit, OnDestroy {
   orders$: Observable<IOrders[]> | undefined;
   order$: Observable<IOrders | null> | undefined;
+  details$: Observable<IOrderDetails[] | null> | undefined;
   orderDetail$: IOrderDetails[] | undefined;
   product: IProducts | undefined;
   products: IProducts[] | undefined;
@@ -41,6 +44,8 @@ export class AdminOrderComponent implements OnInit, OnDestroy {
     'Từ chối nhận hàng',
   ];
   private destroy$ = new Subject<void>();
+  private onDestroy$ = new Subject<void>();
+
   private orderID: string = '';
   statusOrder: number = 1;
 
@@ -113,7 +118,51 @@ export class AdminOrderComponent implements OnInit, OnDestroy {
   }
   handleSubmitForm() {
     const values = this.formChangeStatus.getRawValue();
+    const unsubscribe$ = new Subject<void>();
     if (values) {
+      if (values.status == 4) {
+        this.store.dispatch(
+          OrderDetailActions.GetOneDetail({ orderId: this.orderID })
+        );
+        combineLatest([
+          this.store.pipe(select((state) => state.details.details)),
+          this.store.select((state) => state.products.products),
+        ])
+          .pipe(
+            filter(
+              ([details, products]) => details !== null && details !== undefined
+            ),
+            mergeMap(([orders, products]) => {
+              if (orders && orders.length > 0) {
+                const actions = orders.map((item) => {
+                  const product = products.find((p) => {
+                    if (this.isProduct(item.productID)) {
+                      return p._id === item.productID._id;
+                    }
+                    return null;
+                  });
+                  const productChange: Partial<IProducts> = {
+                    _id: product?._id,
+                    quantity: <number>product?.quantity + item.quantity,
+                  };
+                  return [
+                    ProductActions.updateProduct({
+                      product: productChange as IProducts,
+                    }),
+                  ];
+                });
+
+                actions.flat().forEach((action) => this.store.dispatch(action));
+              }
+
+              return of(orders);
+            }),
+            takeUntil(unsubscribe$)
+          )
+          .subscribe((res) => {
+            console.log(res);
+          });
+      }
       this.store.dispatch(
         OrderActions.UpdateOrder({
           status: values.status as number,
@@ -145,6 +194,7 @@ export class AdminOrderComponent implements OnInit, OnDestroy {
             this.getAllOrder();
           }
         });
+      this.onDestroy$.pipe(take(1)).subscribe(() => unsubscribe$.next());
     }
   }
   ngOnDestroy(): void {

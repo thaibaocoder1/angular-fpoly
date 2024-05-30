@@ -35,12 +35,13 @@
                   </button>
                   <button
                     type="button"
+                    [disabled]="item.status !== 1"
                     data-bs-toggle="modal"
                     data-bs-target="#cancelOrderModal"
                     (click)="handleCancelOrder(item._id)"
                     class="btn btn-danger btn-sm ml-1"
                   >
-                    Cancel
+                    {{ showTextButton(item.status) }}
                   </button>
                 </td>
               </tr>

@@ -1,0 +1,45 @@
+<div class="main">
+  <form
+    [formGroup]="formReset"
+    class="form"
+    autocomplete="off"
+    (ngSubmit)="handleSubmitForm()"
+  >
+    <h3 class="heading">Thay đổi mật khẩu</h3>
+    <p class="desc">
+      Cùng nhau trở thành thành viên của BSmart ngay hôm nay ❤️
+    </p>
+
+    <div class="spacer"></div>
+
+    <app-input
+      [control]="formReset.controls.password"
+      type="password"
+      htmlFor="password"
+      placeholder="Enter password here"
+      label="Password"
+    ></app-input>
+
+    <app-input
+      [control]="formReset.controls.password_confirmation"
+      type="password"
+      htmlFor="password"
+      placeholder="Enter password confirm here"
+      label="Password confirmation"
+    ></app-input>
+
+    <button type="submit" [disabled]="formReset.invalid" class="form-submit">
+      Xác nhận
+    </button>
+    <div class="spacer actions actions--custom">
+      <a routerLink="../register">Đăng ký ngay</a>
+      <a routerLink="../recovery">Khôi phục tài khoản</a>
+      <a routerLink="../forgot">Quên mật khẩu?</a>
+    </div>
+    <a routerLink="/">
+      <div class="back-to-home">
+        <i class="fa fa-home"></i>
+      </div>
+    </a>
+  </form>
+</div>

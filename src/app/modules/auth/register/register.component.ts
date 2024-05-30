@@ -17,6 +17,7 @@ import {
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CheckEmail } from '../validators/check-email';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -58,7 +59,8 @@ export class RegisterComponent implements OnInit {
     private store: Store<AppState>,
     private unique: CheckEmail,
     private spinner: NgxSpinnerService,
-    private router: Router
+    private router: Router,
+    private toast: ToastrService
   ) {}
   ngOnInit(): void {
     this.formSubmit$
@@ -97,7 +99,13 @@ export class RegisterComponent implements OnInit {
       )
       .subscribe((res) => {
         if (res) {
-          this.router.navigateByUrl('/auth/login');
+          this.toast.success('Register success!', 'Wait to redirect login', {
+            progressBar: true,
+            timeOut: 2000,
+          });
+          setTimeout(() => {
+            this.router.navigateByUrl('/auth/login');
+          }, 2000);
         }
       });
   }

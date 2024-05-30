@@ -139,7 +139,11 @@
   </ng-container>
 </app-modal>
 
-<app-modal [modalId]="'changeDetailOrder'" [showButton]="false">
+<app-modal
+  [modalId]="'changeDetailOrder'"
+  [showButton]="false"
+  [title]="'Update order'"
+>
   <form [formGroup]="formChangeStatus" (ngSubmit)="handleSubmitForm()">
     <app-select-normal
       [htmlFor]="'status'"
@@ -149,7 +153,12 @@
       [control]="formChangeStatus.controls.status"
       [status]="statusOrder"
     ></app-select-normal>
-    <button [disabled]="formChangeStatus.invalid" class="btn btn-primary">
+    <button
+      [disabled]="
+        formChangeStatus.invalid || formChangeStatus.value.status === 4
+      "
+      class="btn btn-primary"
+    >
       Submit
     </button>
   </form>

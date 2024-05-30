@@ -60,9 +60,19 @@
                 type="button"
                 class="btn btn-primary btn-sm"
                 data-bs-toggle="modal"
-                data-bs-target="#editCategoryModal"
+                data-bs-target="#editCouponModal"
+                (click)="handleEditCoupon(item._id)"
               >
                 Chỉnh sửa
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#removeCouponModal"
+                (click)="handleRemoveCoupon(item._id)"
+              >
+                Xoá
               </button>
             </td>
           </tr>
@@ -71,3 +81,83 @@
     </div>
   </div>
 </app-admin-common>
+
+<app-modal
+  [modalId]="'createCouponModal'"
+  [showButton]="false"
+  [title]="'Add coupon'"
+>
+  <form [formGroup]="formCoupon" (ngSubmit)="formSubmitSubject$.next(true)">
+    <app-input
+      [htmlFor]="'name'"
+      [label]="'Name'"
+      [control]="formCoupon.controls.name"
+    ></app-input>
+    <app-input
+      [htmlFor]="'value'"
+      [label]="'Value (%)'"
+      [control]="formCoupon.controls.value"
+    ></app-input>
+    <app-input
+      [htmlFor]="'expire'"
+      [label]="'Time expire'"
+      [control]="formCoupon.controls.expireIns"
+      [type]="'date'"
+    ></app-input>
+    <button
+      [disabled]="formCoupon.invalid || formCoupon.status === 'PENDING'"
+      class="btn btn-primary"
+    >
+      Submit
+    </button>
+  </form>
+</app-modal>
+
+<app-modal
+  [modalId]="'editCouponModal'"
+  [showButton]="false"
+  [title]="'Edit coupon'"
+  [isEdit]="true"
+>
+  <form [formGroup]="formCouponEdit" (ngSubmit)="submitFormEdit()">
+    <app-input
+      [htmlFor]="'name'"
+      [label]="'Name'"
+      [control]="formCouponEdit.controls.name"
+    ></app-input>
+    <app-input
+      [htmlFor]="'value'"
+      [label]="'Value (%)'"
+      [control]="formCouponEdit.controls.value"
+    ></app-input>
+    <app-input
+      [htmlFor]="'expire'"
+      [label]="'Time expire'"
+      [control]="formCouponEdit.controls.expireIns"
+      [type]="'date'"
+    ></app-input>
+    <button
+      [disabled]="formCouponEdit.invalid || formCouponEdit.status === 'PENDING'"
+      class="btn btn-primary"
+    >
+      Submit
+    </button>
+  </form>
+</app-modal>
+
+<app-modal
+  #removeCoupon
+  [modalId]="'removeCouponModal'"
+  [title]="'Remove coupon'"
+>
+  <p>Bạn muốn xoá mã giảm giá này?</p>
+</app-modal>
+
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

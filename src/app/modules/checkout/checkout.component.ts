@@ -160,16 +160,17 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterContentInit {
           name: value.coupon,
         })
         .pipe(take(1))
-        .subscribe((data) => {
-          if (data && data.success) {
+        .subscribe((res) => {
+          if (res && res.success) {
+            const data = res.data as ICoupons;
             this.toast.success('Apply coupon success', undefined, {
               progressBar: true,
               timeOut: 1000,
             });
             if (this.couponList && this.couponList.length <= 0) {
-              this.couponList = [data.data];
+              this.couponList = [data];
             } else {
-              this.couponList?.push(data.data);
+              this.couponList?.push(data);
             }
             this.shipCost = 1;
           }
@@ -237,11 +238,8 @@ export class CheckoutComponent implements OnInit, OnDestroy, AfterContentInit {
         )
         .subscribe((cartItems) => {
           if (cartItems) {
-            // for (let item of cartItems) {
-            //   if (item.isBuyNow) {
-            //     this.cartService.removeToCart(item.productId);
-            //   }
-            // }
+            const newCart = cartItems.filter((item) => !item.isBuyNow);
+            this.cartService.saveToCart(newCart);
             this.toast.success('Order success', undefined, {
               progressBar: true,
               timeOut: 2000,

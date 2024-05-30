@@ -76,6 +76,11 @@ export class CartService {
     }
     return false;
   }
+  saveToCart(cart: CartItem[]) {
+    this.saveCart(cart);
+    this.cartSubject.next(cart);
+    this.updateCartItemCount();
+  }
 
   private saveCart(cart: CartItem[]): void {
     localStorage.setItem('carts', JSON.stringify(cart));

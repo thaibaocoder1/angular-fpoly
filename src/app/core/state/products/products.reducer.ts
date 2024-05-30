@@ -42,7 +42,7 @@ export const ProductReducer = createReducer(
     return { ...state, loading: false, products: related, error: '' };
   }),
   on(ProductActions.loadProductWithSlug, (state, { slug }) => {
-    return state;
+    return { ...state };
   }),
   on(ProductActions.loadProductWithSlugSuccess, (state, { products }) => {
     return { ...state, products: products, error: '' };
@@ -68,17 +68,23 @@ export const ProductReducer = createReducer(
     return { ...state, loading: false, error };
   }),
   on(ProductActions.filterProduct, (state, { query, price }) => {
-    const priceOriginal: number = price ? price : 0;
+    const priceOriginal: number = price && <number>price ? price : 0;
     console.log('🚀 ~ on ~ priceOriginal:', priceOriginal);
-    const filterProduct = [...state.products].filter((item) => {
-      console.log(item.price.toString());
-      return (
-        item.name.toLowerCase().includes(query!) &&
-        item.price.toString() <= priceOriginal.toString()
-      );
+    const deepProductsClone = [...state.products];
+    const filterProduct = deepProductsClone.filter((item) => {
+      if (priceOriginal === 0) {
+        return item.name.toLowerCase().includes(query as string);
+      } else
+        return (
+          item.name.toLowerCase().includes(query as string) &&
+          item.price <= priceOriginal
+        );
     });
-    console.log(filterProduct);
-    return { ...state, loading: false, filter: filterProduct };
+    return {
+      ...state,
+      loading: false,
+      filter: filterProduct.length > 0 ? filterProduct : deepProductsClone,
+    };
   }),
   on(ProductActions.filterProductFailure, (state, { error }) => {
     console.error(error);

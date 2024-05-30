@@ -27,7 +27,11 @@
       label="Password"
     ></app-input>
 
-    <button type="submit" [disabled]="formLogin.invalid" class="form-submit">
+    <button
+      type="submit"
+      [disabled]="formLogin.invalid || formLogin.status === 'PENDING'"
+      class="form-submit"
+    >
       Đăng nhập
     </button>
     <div class="spacer actions actions--custom">

@@ -3,24 +3,132 @@
   id="navbar-vertical"
 >
   <div class="navbar-nav w-100" style="height: max-content">
-    <a
-      routerLink="/account/update"
-      routerLinkActive="active"
+    <div
+      style="cursor: pointer"
+      data-bs-toggle="modal"
+      data-bs-target="#updateModal"
       class="nav-item nav-link"
-      >Update</a
+      (click)="handleEditUser()"
     >
+      Update
+    </div>
     <a
       routerLink="/account/orders"
       routerLinkActive="active"
       class="nav-item nav-link"
       >Orders</a
     >
+    <a
+      routerLink="/admin"
+      [hidden]="checkRole(role)"
+      routerLinkActive="active"
+      class="nav-item nav-link"
+      >Dashboard</a
+    >
     <div
       style="cursor: pointer"
-      (click)="handleLogout()"
       class="nav-item nav-link"
+      data-bs-toggle="modal"
+      data-bs-target="#logoutModal"
+      (click)="logout()"
     >
       Logout
     </div>
   </div>
 </nav>
+
+<app-modal #logoutModal [modalId]="'logoutModal'" [title]="'Logout modal'">
+  <p>Bạn muốn đăng xuất khỏi hệ thống?</p>
+</app-modal>
+
+<app-modal
+  [modalId]="'updateModal'"
+  [title]="'Update info modal'"
+  [isEdit]="true"
+  [showButton]="false"
+  [large]="true"
+>
+  <form
+    class="row"
+    enctype="multipart/form-data"
+    novalidate
+    [formGroup]="formUserEdit"
+    (ngSubmit)="formUserSubjectEdit.next(true)"
+  >
+    <div class="col col-lg-4">
+      <div class="mb-3">
+        <label for="image" class="form-label">Hình ảnh</label>
+        <div class="input-group mb-3 w-100">
+          <input
+            class="form-control w-100"
+            type="file"
+            id="imageEdit"
+            accept="image/*"
+            (change)="onUploadImage($event, true)"
+          />
+        </div>
+        <img
+          src="https://placehold.co/300x300"
+          class="img-thumbnail w-100 rounded-left rounded-right d-block object-fit-cover"
+          style="height: 250px"
+          id="imageUrlEdit"
+          alt="Avatar"
+          accept="image/*"
+        />
+      </div>
+    </div>
+    <main class="col col-lg-8">
+      <div class="d-flex" style="gap: 0 10px">
+        <div class="w-50">
+          <app-input
+            label="Fullname"
+            placeholder="VD: Hoang Nguyen Thai Bao"
+            type="text"
+            htmlFor="fullname"
+            [control]="formUserEdit.controls.fullname"
+            style="width: 49%"
+          ></app-input>
+        </div>
+        <div class="w-50">
+          <app-input
+            label="Email"
+            placeholder="VD: emailtest@gmail.com"
+            type="text"
+            htmlFor="email"
+            [control]="formUserEdit.controls.email"
+            style="width: 49%"
+          ></app-input>
+        </div>
+      </div>
+      <div class="d-flex" style="gap: 0 10px">
+        <div class="w-50">
+          <app-input
+            label="Phone"
+            placeholder="VD: +84 89xx 98xx"
+            type="tel"
+            htmlFor="phone"
+            [control]="formUserEdit.controls.phone"
+            style="width: 49%"
+          ></app-input>
+        </div>
+        <div class="w-50">
+          <app-input
+            label="Username"
+            placeholder="VD: baohnt"
+            type="text"
+            htmlFor="username"
+            [control]="formUserEdit.controls.username"
+            style="width: 49%"
+          ></app-input>
+        </div>
+      </div>
+      <button
+        [disabled]="formUserEdit.invalid"
+        type="submit"
+        class="btn btn-primary"
+      >
+        Cập nhật
+      </button>
+    </main>
+  </form>
+</app-modal>

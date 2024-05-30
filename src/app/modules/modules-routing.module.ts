@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { checkoutGuard } from '../core/guards/checkout.guard';
+import { accountGuard } from '../core/guards/account.guard';
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
   },
   {
     path: 'account',
+    canActivate: [accountGuard],
     loadChildren: () =>
       import('./account/account.module').then((m) => m.AccountModule),
   },

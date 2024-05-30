@@ -42,6 +42,49 @@ export const UserReducer = createReducer(
     console.error(error);
     return { ...state, loading: false, error: error };
   }),
+  on(UserActions.ActiveAccount, (state) => {
+    return { ...state, loading: true };
+  }),
+  on(UserActions.ActiveAccountSuccess, (state, { user }) => {
+    return {
+      ...state,
+      loading: false,
+      user,
+      error: '',
+    };
+  }),
+  on(UserActions.ActiveAccountFailure, (state, { error }) => {
+    return { ...state, loading: false, error };
+  }),
+  on(UserActions.ResetPassword, (state) => {
+    return { ...state, loading: true };
+  }),
+  on(UserActions.ResetPasswordSuccess, (state, { user }) => {
+    return {
+      ...state,
+      loading: false,
+      user,
+      error: '',
+    };
+  }),
+  on(UserActions.ResetPasswordFailure, (state, { error }) => {
+    return { ...state, loading: false, error };
+  }),
+  on(UserActions.UpdatePassword, (state) => {
+    return { ...state, loading: true };
+  }),
+  on(UserActions.UpdatePasswordSuccess, (state, { user }) => {
+    return {
+      ...state,
+      loading: false,
+      user,
+      error: '',
+    };
+  }),
+  on(UserActions.UpdatePasswordFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
+  }),
   on(UserActions.GetAllUser, (state) => {
     return { ...state, loading: true };
   }),
@@ -50,6 +93,7 @@ export const UserReducer = createReducer(
       ...state,
       loading: false,
       users: users.data as unknown as IUsers[],
+      error: '',
     };
   }),
   on(UserActions.GetAllUserFailure, (state, { error }) => {
@@ -71,7 +115,14 @@ export const UserReducer = createReducer(
     return { ...state, loading: true };
   }),
   on(UserActions.LogoutUserSuccess, (state) => {
-    return { ...state, loading: false, auth: null, user: null, users: [] };
+    return {
+      ...state,
+      loading: false,
+      auth: null,
+      user: null,
+      users: [],
+      error: '',
+    };
   }),
   on(UserActions.LogoutUserFailure, (state, { error }) => {
     console.error(error);

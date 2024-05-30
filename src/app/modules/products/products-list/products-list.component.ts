@@ -13,8 +13,6 @@ import {
   debounceTime,
   distinctUntilChanged,
   map,
-  of,
-  switchMap,
   take,
 } from 'rxjs';
 import { AppState } from '../../../app.state';
@@ -43,6 +41,8 @@ export class ProductsListComponent implements OnInit, OnDestroy, AfterViewInit {
     | undefined;
   productSelected$: IProducts | undefined;
   searchControl: FormControl = new FormControl();
+  queryString: string = '';
+  filterPrice: number = 0;
   private subscription: Subscription | undefined;
 
   constructor(
@@ -57,7 +57,10 @@ export class ProductsListComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        map((query) => query.toLowerCase())
+        map((query) => {
+          this.queryString = query;
+          return query.toLowerCase();
+        })
       )
       .subscribe((query) => {
         this.store.dispatch(ProductActions.filterProduct({ query }));
@@ -85,7 +88,13 @@ export class ProductsListComponent implements OnInit, OnDestroy, AfterViewInit {
   handleFilterPrice(event: Event) {
     const target = event.target as HTMLInputElement;
     const price = target.value as unknown as number;
-    this.store.dispatch(ProductActions.filterProduct({ query: '', price }));
+    this.filterPrice = price;
+    this.store.dispatch(
+      ProductActions.filterProduct({ query: this.queryString, price })
+    );
+    this.products$ = this.store.select(
+      (state) => state.products.filter as IProducts[]
+    );
   }
   handleSortData() {
     if (this.actionSort) {

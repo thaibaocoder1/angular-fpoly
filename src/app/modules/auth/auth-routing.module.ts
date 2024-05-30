@@ -4,6 +4,9 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { PermissionComponent } from './permission/permission.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { ActiveComponent } from './active/active.component';
+import { ForgotComponent } from './forgot/forgot.component';
+import { ResetComponent } from './reset/reset.component';
 
 const routes: Routes = [
   {
@@ -15,12 +18,24 @@ const routes: Routes = [
     component: RegisterComponent,
   },
   {
+    path: 'active/:id',
+    component: ActiveComponent,
+  },
+  {
     path: 'permission',
     component: PermissionComponent,
   },
   {
     path: 'forbidden',
     component: ForbiddenComponent,
+  },
+  {
+    path: 'forgot',
+    component: ForgotComponent,
+  },
+  {
+    path: 'reset/:id',
+    component: ResetComponent,
   },
 ];
 

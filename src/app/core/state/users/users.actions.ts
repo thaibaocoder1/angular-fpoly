@@ -28,6 +28,45 @@ export const RegUserFailure = createAction(
   '[User] Register User Failure',
   props<{ error: string }>()
 );
+// [ACTIVE]
+export const ActiveAccount = createAction(
+  '[User] Active Account',
+  props<{ id: string }>()
+);
+export const ActiveAccountSuccess = createAction(
+  '[User] Active Account Success',
+  props<{ user: IUsers }>()
+);
+export const ActiveAccountFailure = createAction(
+  '[User] Active Account Failure',
+  props<{ error: string }>()
+);
+// [RESET PASSWORD]
+export const ResetPassword = createAction(
+  '[User] Reset Password Account',
+  props<{ email: string }>()
+);
+export const ResetPasswordSuccess = createAction(
+  '[User] Reset Password Account Success',
+  props<{ user: IUsers }>()
+);
+export const ResetPasswordFailure = createAction(
+  '[User] Reset Password Account Failure',
+  props<{ error: string }>()
+);
+// [UPDATE PASSWORD]
+export const UpdatePassword = createAction(
+  '[User] Update Password Account',
+  props<{ values: IUsers }>()
+);
+export const UpdatePasswordSuccess = createAction(
+  '[User] Update Password Account Success',
+  props<{ user: IUsers }>()
+);
+export const UpdatePasswordFailure = createAction(
+  '[User] Update Password Account Failure',
+  props<{ error: string }>()
+);
 // [GET ONE]
 export const GetUser = createAction(
   '[User] Get User',

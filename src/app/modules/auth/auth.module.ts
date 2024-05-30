@@ -8,9 +8,12 @@ import { SharedModule } from '../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { PermissionComponent } from './permission/permission.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { ActiveComponent } from './active/active.component';
+import { ForgotComponent } from './forgot/forgot.component';
+import { ResetComponent } from './reset/reset.component';
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent, PermissionComponent, ForbiddenComponent],
+  declarations: [LoginComponent, RegisterComponent, PermissionComponent, ForbiddenComponent, ActiveComponent, ForgotComponent, ResetComponent],
   imports: [
     CommonModule,
     AuthRoutingModule,

@@ -8,6 +8,7 @@ import {
   Observable,
   catchError,
   debounceTime,
+  distinctUntilChanged,
   map,
   of,
   switchMap,
@@ -21,6 +22,7 @@ export class UniqueCodeValidator implements AsyncValidator {
   validate(control: AbstractControl): Observable<ValidationErrors | null> {
     return control.valueChanges.pipe(
       debounceTime(1000),
+      distinctUntilChanged(),
       take(1),
       switchMap((value: string) => {
         return this.productService.checkCode(value);

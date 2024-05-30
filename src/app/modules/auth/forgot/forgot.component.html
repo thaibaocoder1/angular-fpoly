@@ -1,0 +1,41 @@
+<div class="main">
+  <form
+    [formGroup]="formRestore"
+    class="form"
+    autocomplete="off"
+    (ngSubmit)="formSubmit$.next(true)"
+  >
+    <h3 class="heading">Quên mật khẩu</h3>
+    <p class="desc">
+      Cùng nhau trở thành thành viên của BSmart ngay hôm nay ❤️
+    </p>
+
+    <div class="spacer"></div>
+
+    <app-input
+      [control]="formRestore.controls.email"
+      placeholder="VD: emailtest@gmail.com"
+      type="text"
+      htmlFor="email"
+      label="Email"
+    ></app-input>
+
+    <button
+      type="submit"
+      [disabled]="formRestore.invalid || formRestore.status === 'PENDING'"
+      class="form-submit"
+    >
+      Gửi yêu cầu
+    </button>
+    <div class="spacer actions actions--custom">
+      <a routerLink="../register">Đăng ký ngay</a>
+      <a routerLink="../recovery">Khôi phục tài khoản</a>
+      <a routerLink="../forgot">Quên mật khẩu?</a>
+    </div>
+    <a routerLink="/">
+      <div class="back-to-home">
+        <i class="fa fa-home"></i>
+      </div>
+    </a>
+  </form>
+</div>

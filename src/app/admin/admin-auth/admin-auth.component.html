@@ -53,16 +53,29 @@
               value="{{ user.username }}"
             />
           </div>
-          <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input
-              type="text"
-              class="form-control"
-              id="email"
-              name="email"
-              readonly
-              value="{{ user.email }}"
-            />
+          <div class="d-flex" style="gap: 0 1rem">
+            <div class="mb-3 w-50">
+              <label for="email" class="form-label">Email</label>
+              <input
+                type="text"
+                class="form-control"
+                id="email"
+                name="email"
+                readonly
+                value="{{ user.email }}"
+              />
+            </div>
+            <div class="mb-3 w-50">
+              <label for="phone" class="form-label">Phone</label>
+              <input
+                type="tel"
+                class="form-control"
+                id="phone"
+                name="phone"
+                readonly
+                value="{{ user.phone }}"
+              />
+            </div>
           </div>
           <div class="mb-3">
             <label for="role" class="form-label">Role</label>
