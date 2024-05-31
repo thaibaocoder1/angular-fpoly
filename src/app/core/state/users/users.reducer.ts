@@ -14,7 +14,7 @@ export const initialState: UsersState = {
 export const UserReducer = createReducer(
   initialState,
   on(UserActions.LoginUser, (state, { user }) => {
-    return { ...state, loading: true };
+    return { ...state, loading: true, error: '' };
   }),
   on(UserActions.LoginUserSuccess, (state, { auth }) => {
     return { ...state, loading: false, auth, error: '' };
@@ -24,7 +24,7 @@ export const UserReducer = createReducer(
     return { ...state, loading: false, error };
   }),
   on(UserActions.RegUser, (state, { user }) => {
-    return { ...state, loading: true };
+    return { ...state, loading: true, error: '' };
   }),
   on(UserActions.RegUserSuccess, (state, { user }) => {
     let values: IUsers;
@@ -43,7 +43,7 @@ export const UserReducer = createReducer(
     return { ...state, loading: false, error: error };
   }),
   on(UserActions.ActiveAccount, (state) => {
-    return { ...state, loading: true };
+    return { ...state, loading: true, error: '' };
   }),
   on(UserActions.ActiveAccountSuccess, (state, { user }) => {
     return {
@@ -57,7 +57,7 @@ export const UserReducer = createReducer(
     return { ...state, loading: false, error };
   }),
   on(UserActions.ResetPassword, (state) => {
-    return { ...state, loading: true };
+    return { ...state, loading: true, error: '' };
   }),
   on(UserActions.ResetPasswordSuccess, (state, { user }) => {
     return {
@@ -70,8 +70,38 @@ export const UserReducer = createReducer(
   on(UserActions.ResetPasswordFailure, (state, { error }) => {
     return { ...state, loading: false, error };
   }),
+  on(UserActions.RestoreAccouunt, (state) => {
+    return { ...state, loading: true, error: '' };
+  }),
+  on(UserActions.RestoreAccouuntSuccess, (state, { user }) => {
+    return {
+      ...state,
+      loading: false,
+      user,
+      error: '',
+    };
+  }),
+  on(UserActions.RestoreAccouuntFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
+  }),
+  on(UserActions.RecoverAccount, (state) => {
+    return { ...state, loading: true, error: '' };
+  }),
+  on(UserActions.RecoverAccountSuccess, (state, { user }) => {
+    return {
+      ...state,
+      loading: false,
+      user,
+      error: '',
+    };
+  }),
+  on(UserActions.RecoverAccountFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
+  }),
   on(UserActions.UpdatePassword, (state) => {
-    return { ...state, loading: true };
+    return { ...state, loading: true, error: '' };
   }),
   on(UserActions.UpdatePasswordSuccess, (state, { user }) => {
     return {
@@ -86,7 +116,7 @@ export const UserReducer = createReducer(
     return { ...state, loading: false, error };
   }),
   on(UserActions.GetAllUser, (state) => {
-    return { ...state, loading: true };
+    return { ...state, loading: true, error: '' };
   }),
   on(UserActions.GetAllUserSuccess, (state, { users }) => {
     return {
@@ -98,10 +128,25 @@ export const UserReducer = createReducer(
   }),
   on(UserActions.GetAllUserFailure, (state, { error }) => {
     console.error(error);
-    return { ...state, loading: false };
+    return { ...state, loading: false, error };
+  }),
+  on(UserActions.GetAllUserTrash, (state) => {
+    return { ...state, loading: true, error: '' };
+  }),
+  on(UserActions.GetAllUserTrashSuccess, (state, { users }) => {
+    return {
+      ...state,
+      loading: false,
+      users,
+      error: '',
+    };
+  }),
+  on(UserActions.GetAllUserTrashFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
   }),
   on(UserActions.GetUser, (state, { userId }) => {
-    return { ...state, loading: true };
+    return { ...state, loading: true, error: '' };
   }),
   on(UserActions.GetUserSuccess, (state, { user }) => {
     const { data } = user;
@@ -112,7 +157,7 @@ export const UserReducer = createReducer(
     return { ...state, loading: false, error };
   }),
   on(UserActions.LogoutUser, (state) => {
-    return { ...state, loading: true };
+    return { ...state, loading: true, error: '' };
   }),
   on(UserActions.LogoutUserSuccess, (state) => {
     return {
@@ -129,7 +174,7 @@ export const UserReducer = createReducer(
     return { ...state, loading: false, error };
   }),
   on(UserActions.AddUser, (state, { user }) => {
-    return { ...state, loading: true };
+    return { ...state, loading: true, error: '' };
   }),
   on(UserActions.AddUserSuccess, (state, { user }) => {
     return { ...state, loading: false, user, error: '' };
@@ -139,7 +184,7 @@ export const UserReducer = createReducer(
     return { ...state, loading: false, error };
   }),
   on(UserActions.UpdateUser, (state, { user }) => {
-    return { ...state, loading: true };
+    return { ...state, loading: true, error: '' };
   }),
   on(UserActions.UpdateUserSuccess, (state, { user }) => {
     return { ...state, loading: false, user, error: '' };

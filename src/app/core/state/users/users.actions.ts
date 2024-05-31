@@ -67,6 +67,45 @@ export const UpdatePasswordFailure = createAction(
   '[User] Update Password Account Failure',
   props<{ error: string }>()
 );
+// [DISABLE]
+export const DisabledUser = createAction(
+  '[User] Disabled User',
+  props<{ id: string }>()
+);
+export const DisabledUserSuccess = createAction(
+  '[User] Disabled User Success',
+  props<{ user: IUsers }>()
+);
+export const DisabledUserFailure = createAction(
+  '[User] Disabled User Failure',
+  props<{ error: string }>()
+);
+// [RESTORE]
+export const RestoreAccouunt = createAction(
+  '[User] Restore User',
+  props<{ id: string }>()
+);
+export const RestoreAccouuntSuccess = createAction(
+  '[User] Restore User Success',
+  props<{ user: IUsers }>()
+);
+export const RestoreAccouuntFailure = createAction(
+  '[User] Restore User Failure',
+  props<{ error: string }>()
+);
+// [RECOVER ACCOUNT - CLIENT]
+export const RecoverAccount = createAction(
+  '[User] Recover Account',
+  props<{ email: string }>()
+);
+export const RecoverAccountSuccess = createAction(
+  '[User] Recover Account Success',
+  props<{ user: IUsers }>()
+);
+export const RecoverAccountFailure = createAction(
+  '[User] Recover Account Failure',
+  props<{ error: string }>()
+);
 // [GET ONE]
 export const GetUser = createAction(
   '[User] Get User',
@@ -88,6 +127,16 @@ export const GetAllUserSuccess = createAction(
 );
 export const GetAllUserFailure = createAction(
   '[User] Get All User Failure',
+  props<{ error: string }>()
+);
+// [GET ALL TRASH]
+export const GetAllUserTrash = createAction('[User] Get All User Trash');
+export const GetAllUserTrashSuccess = createAction(
+  '[User] Get All User Trash Success',
+  props<{ users: IUsers[] }>()
+);
+export const GetAllUserTrashFailure = createAction(
+  '[User] Get All User Trash Failure',
   props<{ error: string }>()
 );
 // [LOGOUT]

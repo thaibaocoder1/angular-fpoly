@@ -59,11 +59,12 @@ export const updateProductFailure = createAction(
 // [FILTER]
 export const filterProduct = createAction(
   '[Product] Filter',
-  props<{ query?: string; price?: number }>()
+  props<{ query?: string; price?: number; brands?: string[] }>()
 );
-export const filterProductFailure = createAction(
-  '[Product] Filter Failure',
-  props<{ error: any }>()
+// [SORT]
+export const SortProducts = createAction(
+  '[Product] Filter',
+  props<{ sortBy: string }>()
 );
 // [RESET]
 export const resetProductState = createAction('[Product] Reset Product State');

@@ -11,6 +11,7 @@ import {
   Observable,
   Subject,
   combineLatest,
+  concatMap,
   filter,
   mergeMap,
   of,
@@ -114,12 +115,9 @@ export class OrdersComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   ngAfterViewInit(): void {
     const unsubscribe$ = new Subject<void>();
+    this.store.dispatch(ProductActions.loadProduct());
     this.cancelOrderModal?.confirm.subscribe((id: string) => {
       if (id) {
-        this.store.dispatch(
-          OrderActions.UpdateOrder({ orderId: id, status: 4 })
-        );
-        this.store.dispatch(ProductActions.loadProduct());
         this.store.dispatch(OrderDetailActions.GetOneDetail({ orderId: id }));
         combineLatest([
           this.store.pipe(select((state) => state.details.details)),
@@ -131,6 +129,7 @@ export class OrdersComponent implements OnInit, OnDestroy, AfterViewInit {
                 details !== null && details !== undefined && details.length > 0
             ),
             mergeMap(([orders, products]) => {
+              console.log('🚀 ~ OrdersComponent ~ mergeMap ~ orders:', orders);
               if (orders && orders.length > 0) {
                 const actions = orders.map((item) => {
                   const product = products.find((p) => {
@@ -143,13 +142,16 @@ export class OrdersComponent implements OnInit, OnDestroy, AfterViewInit {
                     _id: product?._id,
                     quantity: <number>product?.quantity + item.quantity,
                   };
+                  console.log(productChange);
                   return [
                     ProductActions.updateProduct({
                       product: productChange as IProducts,
                     }),
                   ];
                 });
-                actions.flat().forEach((action) => this.store.dispatch(action));
+                actions.flatMap((action) => {
+                  action.forEach((item) => this.store.dispatch(item));
+                });
               }
               return of(orders);
             }),
@@ -165,9 +167,12 @@ export class OrdersComponent implements OnInit, OnDestroy, AfterViewInit {
               this.getOrderDetails();
             }
           });
+        this.store.dispatch(
+          OrderActions.UpdateOrder({ orderId: id, status: 4 })
+        );
+        this.onDestroy$.pipe(take(1)).subscribe(() => unsubscribe$.next());
       }
     });
-    this.onDestroy$.pipe(take(1)).subscribe(() => unsubscribe$.next());
   }
   showTextButton(status: number) {
     let str = '';

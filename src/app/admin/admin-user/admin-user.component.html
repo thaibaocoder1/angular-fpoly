@@ -34,12 +34,17 @@
       </form>
     </div>
 
+    <p>
+      <a routerLink="/admin/user/trash" routerLinkActive="active"
+        >Tài khoản bị khoá
+      </a>
+    </p>
+
     <!-- Content Row -->
     <div class="row pl-3">
       <table class="table table-striped" id="table-product">
         <thead>
           <tr>
-            <th scope="col">#</th>
             <th scope="col">Tên tài khoản</th>
             <th scope="col">Email</th>
             <th scope="col">Số điện thoại</th>
@@ -51,7 +56,6 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of users$ | async">
-            <td>{{ item._id }}</td>
             <td>{{ item.username }}</td>
             <td>{{ item.email }}</td>
             <td>{{ item.phone }}</td>
@@ -67,6 +71,16 @@
                 (click)="handleEditUser(item._id)"
               >
                 Chỉnh sửa
+              </button>
+              <button
+                class="btn btn-danger btn-sm"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#removeUserModal"
+                (click)="handleSoftDeleteUser(item._id)"
+                [hidden]="item.role === 'Admin'"
+              >
+                Xoá
               </button>
             </td>
           </tr>
@@ -303,6 +317,14 @@
       </button>
     </main>
   </form>
+</app-modal>
+
+<app-modal
+  #unactiveModal
+  [modalId]="'removeUserModal'"
+  [title]="'Unactive modal'"
+>
+  <p>Bạn muốn ngừng hoạt động tài khoản này?</p>
 </app-modal>
 
 <ngx-spinner

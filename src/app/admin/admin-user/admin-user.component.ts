@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { AppState } from '../../app.state';
 import { Store, select } from '@ngrx/store';
 import {
@@ -6,10 +12,12 @@ import {
   Subject,
   distinctUntilChanged,
   filter,
+  pairwise,
   startWith,
   switchMap,
   take,
   takeUntil,
+  takeWhile,
   tap,
 } from 'rxjs';
 import { IUsers } from '../../core/models/users';
@@ -18,13 +26,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CheckEmail } from '../../modules/auth/validators/check-email';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ModalComponent } from '../../shared/components/modal/modal.component';
 
 @Component({
   selector: 'app-admin-user',
   templateUrl: './admin-user.component.html',
   styleUrl: './admin-user.component.css',
 })
-export class AdminUserComponent implements OnInit, OnDestroy {
+export class AdminUserComponent implements OnInit, OnDestroy, AfterViewInit {
+  private alive = true;
   formUser = this.fb.group({
     fullname: ['', [Validators.required]],
     username: [
@@ -71,6 +81,10 @@ export class AdminUserComponent implements OnInit, OnDestroy {
 
   users$: Observable<IUsers[] | null> | undefined;
   user$: Observable<IUsers | null> | undefined;
+
+  @ViewChild('unactiveModal', { static: true }) unactiveModal:
+    | ModalComponent
+    | undefined;
 
   constructor(
     private store: Store<AppState>,
@@ -200,6 +214,11 @@ export class AdminUserComponent implements OnInit, OnDestroy {
       this.sideActions(previewImage, uploadFile, this.formUserEdit);
     }
   }
+  handleSoftDeleteUser(id: string) {
+    if (id && this.unactiveModal) {
+      this.unactiveModal.refID = id;
+    }
+  }
   sideActions(
     previewImage: HTMLImageElement,
     uploadFile: HTMLInputElement,
@@ -231,8 +250,42 @@ export class AdminUserComponent implements OnInit, OnDestroy {
   getAllUsers() {
     this.store.dispatch(UserActions.GetAllUser());
   }
+  ngAfterViewInit(): void {
+    if (this.unactiveModal) {
+      this.unactiveModal.confirm.subscribe((id: string) => {
+        if (id) {
+          this.store.dispatch(UserActions.DisabledUser({ id }));
+          this.store
+            .pipe(
+              select((state) => state.users.loading),
+              distinctUntilChanged(),
+              pairwise(),
+              tap(([prevLoading, currLoading]) => {
+                if (currLoading) {
+                  this.spinner.show();
+                } else {
+                  this.spinner.hide();
+                }
+              }),
+              filter(
+                ([prevLoading, currLoading]) => prevLoading && !currLoading
+              ),
+              takeWhile(() => this.alive)
+            )
+            .subscribe(() => {
+              this.toast.success('Action success!', undefined, {
+                progressBar: true,
+                timeOut: 1000,
+              });
+            });
+        }
+        this.getAllUsers();
+      });
+    }
+  }
   ngOnDestroy(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+    this.alive = false;
   }
 }

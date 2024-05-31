@@ -27,7 +27,7 @@ import { AppState } from '../../../app.state';
 import * as ProductActions from '../../../core/state/products/products.actions';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
-import { FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-products-type',
@@ -41,9 +41,14 @@ export class ProductsTypeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(ModalComponent, { static: true }) modalElement:
     | ModalComponent
     | undefined;
+  filterForm = this.fb.group({
+    brands: this.fb.array([]),
+  });
   productSelected$: IProducts | undefined;
   searchControl: FormControl = new FormControl();
-
+  filterPrice: number = 0;
+  queryString: string = '';
+  brands: Array<string> = ['Samsung', 'Sony', 'Asus', 'Iphone', 'Acer'];
   subscription: Subscription | undefined;
   destroy$ = new Subject<void>();
 
@@ -52,9 +57,18 @@ export class ProductsTypeComponent implements OnInit, OnDestroy, AfterViewInit {
     private store: Store<AppState>,
     private toast: ToastrService,
     private cartService: CartService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private fb: FormBuilder
   ) {}
+  private addCheckboxes() {
+    this.brands.forEach(() => this.brandFormArray.push(this.fb.control(false)));
+  }
+
+  get brandFormArray() {
+    return this.filterForm.controls.brands as FormArray;
+  }
   ngOnInit(): void {
+    this.addCheckboxes();
     this.activated.paramMap
       .pipe(
         map((params) => params.get('slug')),
@@ -84,6 +98,7 @@ export class ProductsTypeComponent implements OnInit, OnDestroy, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         switchMap((query) => {
+          this.queryString = query;
           this.store.dispatch(
             ProductActions.filterProduct({ query: query.toLowerCase() })
           );
@@ -117,6 +132,42 @@ export class ProductsTypeComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((product) => {
         this.productSelected$ = product;
       });
+  }
+  handleFilterPrice(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const price = target.value as unknown as number;
+    this.filterPrice = price;
+    this.store.dispatch(
+      ProductActions.filterProduct({ query: this.queryString, price })
+    );
+    this.products$ = this.store.select(
+      (state) => state.products.filter as IProducts[]
+    );
+  }
+  handleFilter() {
+    if (this.filterForm && this.filterForm.value.brands) {
+      const selectedBrands = this.filterForm.value.brands
+        .map((checked, index) => (checked ? this.brands[index] : null))
+        .filter((value) => value !== null);
+      if (selectedBrands) {
+        this.store.dispatch(
+          ProductActions.filterProduct({
+            price: 0,
+            query: this.queryString,
+            brands: selectedBrands as string[],
+          })
+        );
+        this.products$ = this.store.select(
+          (state) => state.products.filter as IProducts[]
+        );
+      }
+    }
+  }
+  handleSortData(event: Event, sortBy: string) {
+    event.preventDefault();
+    if (sortBy) {
+      this.store.dispatch(ProductActions.SortProducts({ sortBy }));
+    }
   }
   ngAfterViewInit(): void {
     this.modalElement?.confirm.subscribe((productId: string) => {

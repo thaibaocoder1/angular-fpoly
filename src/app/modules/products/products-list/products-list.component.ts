@@ -21,7 +21,7 @@ import { CartService } from '../../../core/services/cart/cart.service';
 import { ToastrService } from 'ngx-toastr';
 import * as ProductActions from '../../../core/state/products/products.actions';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
-import { FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-products-list',
@@ -31,26 +31,39 @@ import { FormControl } from '@angular/forms';
 export class ProductsListComponent implements OnInit, OnDestroy, AfterViewInit {
   page: number = 1;
   itemsPerPage: number = 6;
-  searchTerm: string = '';
+
   products$: Observable<IProducts[]> | undefined;
+  productSelected$: IProducts | undefined;
   @ViewChild(ModalComponent, { static: true }) modalElement:
     | ModalComponent
     | undefined;
-  @ViewChild('actionSort', { static: true }) actionSort:
-    | ElementRef<any>
-    | undefined;
-  productSelected$: IProducts | undefined;
+  filterForm = this.fb.group({
+    brands: this.fb.array([]),
+  });
   searchControl: FormControl = new FormControl();
+
   queryString: string = '';
   filterPrice: number = 0;
+  brands: Array<string> = ['Samsung', 'Sony', 'Asus', 'Iphone', 'Acer'];
+
   private subscription: Subscription | undefined;
 
   constructor(
     private store: Store<AppState>,
     private toast: ToastrService,
-    private cartService: CartService
+    private cartService: CartService,
+    private fb: FormBuilder
   ) {}
+
+  private addCheckboxes() {
+    this.brands.forEach(() => this.brandFormArray.push(this.fb.control(false)));
+  }
+
+  get brandFormArray() {
+    return this.filterForm.controls.brands as FormArray;
+  }
   ngOnInit() {
+    this.addCheckboxes();
     this.getAll();
     this.products$ = this.store.select((state) => state.products.products);
     this.subscription = this.searchControl.valueChanges
@@ -96,18 +109,29 @@ export class ProductsListComponent implements OnInit, OnDestroy, AfterViewInit {
       (state) => state.products.filter as IProducts[]
     );
   }
-  handleSortData() {
-    if (this.actionSort) {
-      const dropdownEl = this.actionSort.nativeElement;
-      const tagLinkEl = dropdownEl.querySelectorAll(
-        '.dropdown-item'
-      ) as NodeListOf<HTMLButtonElement>;
-      tagLinkEl.forEach((item) => {
-        item.addEventListener('click', (e: Event) => {
-          e.preventDefault();
-          console.log(item.name);
-        });
-      });
+  handleFilter() {
+    if (this.filterForm && this.filterForm.value.brands) {
+      const selectedBrands = this.filterForm.value.brands
+        .map((checked, index) => (checked ? this.brands[index] : null))
+        .filter((value) => value !== null);
+      if (selectedBrands) {
+        this.store.dispatch(
+          ProductActions.filterProduct({
+            price: 0,
+            query: this.queryString,
+            brands: selectedBrands as string[],
+          })
+        );
+        this.products$ = this.store.select(
+          (state) => state.products.filter as IProducts[]
+        );
+      }
+    }
+  }
+  handleSortData(event: Event, sortBy: string) {
+    event.preventDefault();
+    if (sortBy) {
+      this.store.dispatch(ProductActions.SortProducts({ sortBy }));
     }
   }
   ngAfterViewInit(): void {

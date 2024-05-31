@@ -80,6 +80,54 @@ export class UserEffects {
       )
     )
   );
+  disableUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.DisabledUser),
+      mergeMap((payload) =>
+        this.userService.disabledUser(payload.id).pipe(
+          map((user) => UserActions.DisabledUserSuccess({ user })),
+          catchError((error: HttpErrorResponse) => {
+            const errorLog = error.error as ErrorResponse;
+            return of(
+              UserActions.DisabledUserFailure({ error: errorLog.message })
+            );
+          })
+        )
+      )
+    )
+  );
+  restoreUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.RestoreAccouunt),
+      mergeMap((payload) =>
+        this.userService.restoreUser(payload.id).pipe(
+          map((user) => UserActions.RestoreAccouuntSuccess({ user })),
+          catchError((error: HttpErrorResponse) => {
+            const errorLog = error.error as ErrorResponse;
+            return of(
+              UserActions.RestoreAccouuntFailure({ error: errorLog.message })
+            );
+          })
+        )
+      )
+    )
+  );
+  recoverUserClient$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.RecoverAccount),
+      mergeMap((payload) =>
+        this.userService.recoverUser(payload.email).pipe(
+          map((user) => UserActions.RecoverAccountSuccess({ user })),
+          catchError((error: HttpErrorResponse) => {
+            const errorLog = error.error as ErrorResponse;
+            return of(
+              UserActions.RecoverAccountFailure({ error: errorLog.message })
+            );
+          })
+        )
+      )
+    )
+  );
   getUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.GetUser),
@@ -98,6 +146,19 @@ export class UserEffects {
         this.userService.getAllUser().pipe(
           map((users) => UserActions.GetAllUserSuccess({ users })),
           catchError((error) => of(UserActions.GetAllUserFailure({ error })))
+        )
+      )
+    )
+  );
+  getAllUserTrash$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.GetAllUserTrash),
+      mergeMap(() =>
+        this.userService.getAllUserTrash().pipe(
+          map((users) => UserActions.GetAllUserTrashSuccess({ users })),
+          catchError((error) =>
+            of(UserActions.GetAllUserTrashFailure({ error }))
+          )
         )
       )
     )

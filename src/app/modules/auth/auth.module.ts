@@ -11,9 +11,10 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { ActiveComponent } from './active/active.component';
 import { ForgotComponent } from './forgot/forgot.component';
 import { ResetComponent } from './reset/reset.component';
+import { RecoveryComponent } from './recovery/recovery.component';
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent, PermissionComponent, ForbiddenComponent, ActiveComponent, ForgotComponent, ResetComponent],
+  declarations: [LoginComponent, RegisterComponent, PermissionComponent, ForbiddenComponent, ActiveComponent, ForgotComponent, ResetComponent, RecoveryComponent],
   imports: [
     CommonModule,
     AuthRoutingModule,

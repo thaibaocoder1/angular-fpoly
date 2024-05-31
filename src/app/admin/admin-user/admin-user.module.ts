@@ -7,9 +7,10 @@ import { AdminCommonModule } from '../admin-common/admin-common.module';
 import { SharedModule } from '../../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { AdminUserTrashComponent } from './admin-user-trash/admin-user-trash.component';
 
 @NgModule({
-  declarations: [AdminUserComponent],
+  declarations: [AdminUserComponent, AdminUserTrashComponent],
   imports: [
     CommonModule,
     AdminUserRoutingModule,

@@ -21,7 +21,6 @@ export interface ApiResponseV2 {
   data: IUsers;
 }
 export type ApiResponse = ApiResponseV1 | ApiResponseV2;
-
 export interface UsersState {
   loading: boolean;
   auth: ApiResponse | null;

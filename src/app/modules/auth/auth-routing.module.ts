@@ -7,6 +7,7 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { ActiveComponent } from './active/active.component';
 import { ForgotComponent } from './forgot/forgot.component';
 import { ResetComponent } from './reset/reset.component';
+import { RecoveryComponent } from './recovery/recovery.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'reset/:id',
     component: ResetComponent,
+  },
+  {
+    path: 'recovery',
+    component: RecoveryComponent,
   },
 ];
 

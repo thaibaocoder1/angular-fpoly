@@ -1,39 +1,37 @@
 <div class="main">
   <form
+    [formGroup]="formRestore"
     class="form"
     autocomplete="off"
-    [formGroup]="formLogin"
     (ngSubmit)="formSubmit$.next(true)"
   >
-    <h3 class="heading">Quản trị viên đăng nhập</h3>
+    <h3 class="heading">Khôi phục tài khoản</h3>
     <p class="desc">
       Cùng nhau trở thành thành viên của BSmart ngay hôm nay ❤️
     </p>
 
     <div class="spacer"></div>
+
     <app-input
-      [control]="formLogin.controls.email"
+      [control]="formRestore.controls.email"
       placeholder="VD: emailtest@gmail.com"
       type="text"
       htmlFor="email"
       label="Email"
     ></app-input>
-    <app-input
-      [control]="formLogin.controls.password"
-      type="password"
-      htmlFor="password"
-      placeholder="Enter password here"
-      label="Password"
-    ></app-input>
 
     <button
       type="submit"
-      [disabled]="formLogin.invalid || formLogin.status === 'PENDING'"
+      [disabled]="formRestore.invalid || formRestore.status === 'PENDING'"
       class="form-submit"
     >
-      Đăng nhập
+      Gửi yêu cầu
     </button>
-
+    <div class="spacer actions actions--custom">
+      <a routerLink="../register">Đăng ký ngay</a>
+      <a routerLink="../recovery">Khôi phục tài khoản</a>
+      <a routerLink="../forgot">Quên mật khẩu?</a>
+    </div>
     <a routerLink="/">
       <div class="back-to-home">
         <i class="fa fa-home"></i>

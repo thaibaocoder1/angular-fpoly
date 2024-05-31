@@ -44,7 +44,7 @@ export class UsersService {
         })
       );
   }
-  // Active
+  // Reset password
   resetPassword(email: string): Observable<IUsers> {
     return this.http
       .post<ApiResponse>(`${this.apiURL}/forgot`, {
@@ -78,6 +78,47 @@ export class UsersService {
         })
       );
   }
+  // Unactive
+  disabledUser(id: string): Observable<IUsers> {
+    return this.http.delete<ApiResponse>(`${this.apiURL}/soft/${id}`).pipe(
+      map((res: ApiResponse) => {
+        if (res && res.success) {
+          const data = res.data as IUsers;
+          return data;
+        } else {
+          throw new Error('API response is not successful.');
+        }
+      })
+    );
+  }
+  // Restore
+  restoreUser(id: string): Observable<IUsers> {
+    return this.http.patch<ApiResponse>(`${this.apiURL}/restore`, { id }).pipe(
+      map((res: ApiResponse) => {
+        if (res && res.success) {
+          const data = res.data as IUsers;
+          return data;
+        } else {
+          throw new Error('API response is not successful.');
+        }
+      })
+    );
+  }
+  // Recover
+  recoverUser(email: string): Observable<IUsers> {
+    return this.http
+      .patch<ApiResponse>(`${this.apiURL}/recover`, { email })
+      .pipe(
+        map((res: ApiResponse) => {
+          if (res && res.success) {
+            const data = res.data as IUsers;
+            return data;
+          } else {
+            throw new Error('API response is not successful.');
+          }
+        })
+      );
+  }
   // Refresh token
   refresh(): Observable<void> {
     return this.http.get<void>(`${environment.API_URL}refresh`);
@@ -93,6 +134,19 @@ export class UsersService {
   // Get all
   getAllUser(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.apiURL}`);
+  }
+  // Get all
+  getAllUserTrash(): Observable<IUsers[]> {
+    return this.http.get<ApiResponse>(`${this.apiURL}/trash-users`).pipe(
+      map((res: ApiResponse) => {
+        if (res && res.success) {
+          const data = res.data as unknown as IUsers[];
+          return data;
+        } else {
+          throw new Error('API response is not successful.');
+        }
+      })
+    );
   }
   // Post
   addUser(values: IUsers): Observable<IUsers> {

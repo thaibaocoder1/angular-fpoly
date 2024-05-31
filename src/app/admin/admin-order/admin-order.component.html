@@ -41,33 +41,36 @@
           </tr>
         </thead>
         <tbody *ngIf="orders$ | async as orders">
-          <tr *ngFor="let item of orders; index as i">
-            <td>{{ item.fullname }}</td>
-            <td>{{ item.email }}</td>
-            <td>{{ item.phone }}</td>
-            <td>{{ getStatusOrder(item.status) }}</td>
-            <td>{{ item.createdAt | date : "dd/MM/yyyy" }}</td>
-            <td>
-              <button
-                type="button"
-                class="btn btn-info btn-sm"
-                data-bs-toggle="modal"
-                data-bs-target="#viewDetailOrder"
-                (click)="handleViewOrder(item._id)"
-              >
-                Chi tiết
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary btn-sm"
-                data-bs-toggle="modal"
-                data-bs-target="#changeDetailOrder"
-                (click)="handleUpdateOrder(item.status, item._id)"
-              >
-                Chỉnh sửa
-              </button>
-            </td>
-          </tr>
+          <ng-container *ngIf="orders.length; else noOrder">
+            <tr *ngFor="let item of orders; index as i">
+              <td>{{ item.fullname }}</td>
+              <td>{{ item.email }}</td>
+              <td>{{ item.phone }}</td>
+              <td>{{ getStatusOrder(item.status) }}</td>
+              <td>{{ item.createdAt | date : "dd/MM/yyyy" }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-info btn-sm"
+                  data-bs-toggle="modal"
+                  data-bs-target="#viewDetailOrder"
+                  (click)="handleViewOrder(item._id)"
+                >
+                  Chi tiết
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
+                  data-bs-toggle="modal"
+                  data-bs-target="#changeDetailOrder"
+                  [hidden]="item.status === 4"
+                  (click)="handleUpdateOrder(item.status, item._id)"
+                >
+                  Chỉnh sửa
+                </button>
+              </td>
+            </tr>
+          </ng-container>
         </tbody>
       </table>
     </div>
@@ -163,5 +166,11 @@
     </button>
   </form>
 </app-modal>
+
+<ng-template #noOrder>
+  <tr>
+    <td colspan="7">No order to display!</td>
+  </tr>
+</ng-template>
 
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>

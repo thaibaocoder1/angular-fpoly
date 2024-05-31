@@ -67,27 +67,44 @@ export const ProductReducer = createReducer(
     console.error(error);
     return { ...state, loading: false, error };
   }),
-  on(ProductActions.filterProduct, (state, { query, price }) => {
+  on(ProductActions.filterProduct, (state, { query, price, brands }) => {
     const priceOriginal: number = price && <number>price ? price : 0;
-    console.log('🚀 ~ on ~ priceOriginal:', priceOriginal);
     const deepProductsClone = [...state.products];
-    const filterProduct = deepProductsClone.filter((item) => {
-      if (priceOriginal === 0) {
-        return item.name.toLowerCase().includes(query as string);
-      } else
-        return (
-          item.name.toLowerCase().includes(query as string) &&
-          item.price <= priceOriginal
-        );
+    const filteredProducts = deepProductsClone.filter((item) => {
+      const matchesQuery = query
+        ? item.name.toLowerCase().includes(query.toLowerCase())
+        : true;
+      const matchesPrice = priceOriginal ? item.price <= priceOriginal : true;
+      const matchesBrand = brands?.length
+        ? brands.some((brand) =>
+            item.name.toLowerCase().includes(brand.toLowerCase())
+          )
+        : true;
+
+      return matchesQuery && matchesPrice && matchesBrand;
     });
     return {
       ...state,
       loading: false,
-      filter: filterProduct.length > 0 ? filterProduct : deepProductsClone,
+      filter: filteredProducts ? filteredProducts : deepProductsClone,
+      error: '',
     };
   }),
-  on(ProductActions.filterProductFailure, (state, { error }) => {
-    console.error(error);
-    return { ...state, loading: false, error };
+  on(ProductActions.SortProducts, (state, { sortBy }) => {
+    const sortedProducts = [...state.products].sort((a, b) => {
+      if (sortBy === 'increase') {
+        return a.price - b.price;
+      } else if (sortBy === 'decrease') {
+        return b.price - a.price;
+      } else if (sortBy === 'discount') {
+        return b.discount - a.discount;
+      } else {
+        return 0;
+      }
+    });
+    return {
+      ...state,
+      products: sortedProducts,
+    };
   })
 );

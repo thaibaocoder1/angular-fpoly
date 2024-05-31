@@ -27,6 +27,7 @@
             name="search"
             class="form-control"
             placeholder="Search for products"
+            [formControl]="searchControl"
           />
           <div class="input-group-append">
             <span class="input-group-text bg-transparent text-primary">
@@ -35,7 +36,38 @@
           </div>
         </div>
       </form>
-      <div class="search-list col-lg-12 col-12 mt-1"></div>
+      <div
+        class="search-list col-lg-12 col-12 mt-1"
+        *ngIf="products$ | async as products"
+        [ngClass]="{ 'is-show': products.length }"
+        #productFilter
+      >
+        <ng-container *ngIf="products.length">
+          <div class="search-item" *ngFor="let item of products">
+            <a routerLink="/products/detail/{{ item._id }}">
+              <img
+                src="{{ item.thumb.fileName }}"
+                class="img-thumbnail search-img d-block object-fit-cover"
+                style="height: 100px; width: 100px"
+                alt="{{ item.name }}"
+              />
+            </a>
+            <div class="search-content">
+              <a routerLink="/products/detail/{{ item._id }}"
+                ><p class="search-name">{{ item.name }}</p></a
+              >
+              <div class="search-price">
+                <span class="search-price-discount" [appFormat]="item"></span>
+                <span
+                  class="search-price-original px-2"
+                  style="text-decoration: line-through"
+                  >{{ item.price | currency : "VND" }}</span
+                >
+              </div>
+            </div>
+          </div></ng-container
+        >
+      </div>
     </div>
     <div class="col-lg-3 col-6 text-right">
       <a href="list.html" class="btn border">

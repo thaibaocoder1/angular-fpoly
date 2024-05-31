@@ -20,94 +20,48 @@
     <!-- Shop Sidebar Start -->
     <div class="col-lg-3 col-md-12">
       <!-- Price Start -->
-      <div class="border-bottom mb-4 pb-4">
+      <div class="border-bottom mb-4">
         <h5 class="font-weight-semi-bold mb-4">Filter by price</h5>
-        <input
-          type="range"
-          id="price-input"
-          min="0"
-          max="1000"
-          step="50"
-          value="500"
-        />
+        <div class="range-slider">
+          <span class="range-slider__value-min">0</span>
+          <input
+            type="range"
+            min="0"
+            max="100000000"
+            step="500"
+            value="0"
+            (change)="handleFilterPrice($event)"
+          />
+          <span class="range-slider__value-max">100000000</span>
+        </div>
+        <p class="mt-2">Giá: {{ filterPrice | currency : "VND" }}</p>
       </div>
       <!-- Price End -->
 
       <!-- Size Start -->
       <div class="mb-5">
         <h5 class="font-weight-semi-bold mb-4">Filter by brand</h5>
-        <form id="filter-form">
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input
-              type="checkbox"
-              class="custom-control-input"
-              checked
-              id="size-all"
-            />
-            <label class="custom-control-label" for="size-all">All Brand</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input
-              type="checkbox"
-              class="custom-control-input"
-              id="size-1"
-              name="brands"
-              value="Samsung"
-            />
-            <label class="custom-control-label" for="size-1">Samsung</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input
-              type="checkbox"
-              class="custom-control-input"
-              id="size-2"
-              name="brands"
-              value="Sony"
-            />
-            <label class="custom-control-label" for="size-2">Sony</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input
-              type="checkbox"
-              class="custom-control-input"
-              id="size-3"
-              name="brands"
-              value="Asus"
-            />
-            <label class="custom-control-label" for="size-3">Asus</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
-          >
-            <input
-              type="checkbox"
-              class="custom-control-input"
-              id="size-4"
-              name="brands"
-              value="Iphone"
-            />
-            <label class="custom-control-label" for="size-4">Iphone</label>
-          </div>
-          <div
-            class="custom-control custom-checkbox d-flex align-items-center justify-content-between"
-          >
-            <input
-              type="checkbox"
-              class="custom-control-input"
-              id="size-5"
-              name="brands"
-              value="Acer"
-            />
-            <label class="custom-control-label" for="size-5">Acer</label>
-          </div>
+        <form
+          id="filter-form"
+          [formGroup]="filterForm"
+          (ngSubmit)="handleFilter()"
+        >
+          <ng-container formArrayName="brands">
+            <div
+              *ngFor="let item of brands; index as i"
+              class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3"
+            >
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="{{ item }}"
+                [formControlName]="i"
+              />
+              <label class="custom-control-label" for="{{ item }}">{{
+                item
+              }}</label>
+            </div>
+          </ng-container>
           <div class="mt-3">
             <button class="btn btn-primary">Confirm</button>
           </div>
@@ -143,7 +97,7 @@
                 class="btn border dropdown-toggle"
                 type="button"
                 id="triggerId"
-                data-toggle="dropdown"
+                data-bs-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
               >
@@ -153,9 +107,25 @@
                 class="dropdown-menu dropdown-menu-right"
                 aria-labelledby="triggerId"
               >
-                <a class="dropdown-item" href="#increase">Increase price</a>
-                <a class="dropdown-item" href="#decrease">Decrease price</a>
-                <a class="dropdown-item" href="#discount">Discount</a>
+                <a
+                  class="dropdown-item"
+                  href=""
+                  (click)="handleSortData($event, 'increase')"
+                >
+                  Increase price</a
+                >
+                <a
+                  class="dropdown-item"
+                  href=""
+                  (click)="handleSortData($event, 'decrease')"
+                  >Decrease price</a
+                >
+                <a
+                  class="dropdown-item"
+                  href=""
+                  (click)="handleSortData($event, 'discount')"
+                  >Discount</a
+                >
               </div>
             </div>
           </div>

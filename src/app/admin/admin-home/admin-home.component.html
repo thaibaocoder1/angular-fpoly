@@ -62,7 +62,7 @@
               <div
                 class="text-xs font-weight-bold text-info text-uppercase mb-1"
               >
-                Tasks
+                Pending Users
               </div>
               <div class="row no-gutters align-items-center">
                 <div class="col-auto">
@@ -101,12 +101,12 @@
               <div
                 class="text-xs font-weight-bold text-warning text-uppercase mb-1"
               >
-                Pending Requests
+                Pending Orders
               </div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
             </div>
             <div class="col-auto">
-              <i class="fas fa-comments fa-2x text-gray-300"></i>
+              <i class="fas fa-money-bill fa-2x text-gray-300"></i>
             </div>
           </div>
         </div>
@@ -131,7 +131,7 @@
               href="#"
               role="button"
               id="dropdownMenuLink"
-              data-toggle="dropdown"
+              data-bs-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
             >
@@ -152,7 +152,7 @@
         <!-- Card Body -->
         <div class="card-body">
           <div class="chart-area">
-            <canvas id="myAreaChart"></canvas>
+            <app-chart-v1></app-chart-v1>
           </div>
         </div>
       </div>
@@ -172,7 +172,7 @@
               href="#"
               role="button"
               id="dropdownMenuLink"
-              data-toggle="dropdown"
+              data-bs-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
             >
@@ -193,7 +193,7 @@
         <!-- Card Body -->
         <div class="card-body">
           <div class="chart-pie pt-4 pb-2">
-            <canvas id="myPieChart"></canvas>
+            <app-chart-v2></app-chart-v2>
           </div>
           <div class="mt-4 text-center small">
             <span class="mr-2">
