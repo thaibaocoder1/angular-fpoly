@@ -8,6 +8,7 @@ import { ActiveComponent } from './active/active.component';
 import { ForgotComponent } from './forgot/forgot.component';
 import { ResetComponent } from './reset/reset.component';
 import { RecoveryComponent } from './recovery/recovery.component';
+import { ConfirmComponent } from './confirm/confirm.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,10 @@ const routes: Routes = [
   {
     path: 'recovery',
     component: RecoveryComponent,
+  },
+  {
+    path: 'confirm',
+    component: ConfirmComponent,
   },
 ];
 

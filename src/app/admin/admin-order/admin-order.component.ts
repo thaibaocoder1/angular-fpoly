@@ -197,11 +197,34 @@ export class AdminOrderComponent implements OnInit, OnDestroy {
       this.onDestroy$.pipe(take(1)).subscribe(() => unsubscribe$.next());
     }
   }
+  getAllOrder() {
+    this.store.dispatch(OrderActions.GetOrder());
+  }
+  handlePrintInvoice(id: string) {
+    if (id) {
+      this.store.dispatch(OrderActions.PrintInvoice({ id }));
+      this.store
+        .pipe(
+          select((state) => state.orders.loading),
+          distinctUntilChanged(),
+          tap(() => this.spinner.show()),
+          filter((loading) => !loading),
+          tap(() => this.spinner.hide()),
+          switchMap(() => this.store.select((state) => state.orders.order)),
+          take(1)
+        )
+        .subscribe((order) => {
+          if (order) {
+            this.toast.success('Send bill successfully', undefined, {
+              timeOut: 1500,
+              progressBar: true,
+            });
+          }
+        });
+    }
+  }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.unsubscribe();
-  }
-  getAllOrder() {
-    this.store.dispatch(OrderActions.GetOrder());
   }
 }

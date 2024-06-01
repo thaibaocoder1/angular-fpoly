@@ -7,17 +7,6 @@ import { OrderService } from '../../services/order/order.service';
 
 @Injectable()
 export class OrderEffects {
-  addOrder$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(OrderActions.AddOrder),
-      mergeMap((payload) =>
-        this.orderService.addOrder(payload.values).pipe(
-          map((order) => OrderActions.AddOrderSuccess({ order })),
-          catchError((error) => of(OrderActions.AddOrderFailure({ error })))
-        )
-      )
-    )
-  );
   getOrder$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderActions.GetOrder),
@@ -51,6 +40,17 @@ export class OrderEffects {
       )
     )
   );
+  addOrder$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrderActions.AddOrder),
+      mergeMap((payload) =>
+        this.orderService.addOrder(payload.values).pipe(
+          map((order) => OrderActions.AddOrderSuccess({ order })),
+          catchError((error) => of(OrderActions.AddOrderFailure({ error })))
+        )
+      )
+    )
+  );
   updateOrder$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderActions.UpdateOrder),
@@ -58,6 +58,17 @@ export class OrderEffects {
         this.orderService.updateOrder(payload.status, payload.orderId).pipe(
           map((order) => OrderActions.UpdateOrderSuccess({ order })),
           catchError((error) => of(OrderActions.UpdateOrderFailure({ error })))
+        )
+      )
+    )
+  );
+  printInvoiceOrder$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrderActions.PrintInvoice),
+      mergeMap((payload) =>
+        this.orderService.printInvoice(payload.id).pipe(
+          map((order) => OrderActions.PrintInvoiceSuccess({ order })),
+          catchError((error) => of(OrderActions.PrintInvoiceFailure({ error })))
         )
       )
     )

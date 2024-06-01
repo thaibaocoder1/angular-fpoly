@@ -50,3 +50,8 @@ export const updateCatalogFailure = createAction(
   '[Catalog] Update Catalog Failure',
   props<{ error: string }>()
 );
+// [FILTER] - Category
+export const FilterData = createAction(
+  '[Catalog] Filter Catalog',
+  props<{ query: string }>()
+);

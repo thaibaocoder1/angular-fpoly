@@ -8,6 +8,7 @@ export const initialState: UsersState = {
   auth: null,
   user: null,
   users: [],
+  filter: [],
   error: '',
 };
 
@@ -100,6 +101,21 @@ export const UserReducer = createReducer(
     console.error(error);
     return { ...state, loading: false, error };
   }),
+  on(UserActions.ConfirmRecover, (state) => {
+    return { ...state, loading: true, error: '' };
+  }),
+  on(UserActions.ConfirmRecoverSuccess, (state, { user }) => {
+    return {
+      ...state,
+      loading: false,
+      user,
+      error: '',
+    };
+  }),
+  on(UserActions.ConfirmRecoverFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
+  }),
   on(UserActions.UpdatePassword, (state) => {
     return { ...state, loading: true, error: '' };
   }),
@@ -129,6 +145,21 @@ export const UserReducer = createReducer(
   on(UserActions.GetAllUserFailure, (state, { error }) => {
     console.error(error);
     return { ...state, loading: false, error };
+  }),
+  on(UserActions.FilterData, (state, { query }) => {
+    const deepClone = [...state.users];
+    const dataFilterd = deepClone.filter(
+      (item) =>
+        item.email.toLowerCase().includes(query.toLowerCase()) ||
+        item.fullname.toLowerCase().includes(query.toLowerCase()) ||
+        item.username.toLowerCase().includes(query.toLowerCase())
+    );
+    return {
+      ...state,
+      loading: true,
+      error: '',
+      filter: dataFilterd.length ? dataFilterd : deepClone,
+    };
   }),
   on(UserActions.GetAllUserTrash, (state) => {
     return { ...state, loading: true, error: '' };
@@ -190,6 +221,16 @@ export const UserReducer = createReducer(
     return { ...state, loading: false, user, error: '' };
   }),
   on(UserActions.UpdateUserFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
+  }),
+  on(UserActions.DestroyAccount, (state, { id }) => {
+    return { ...state, loading: true, error: '' };
+  }),
+  on(UserActions.DestroyAccountSuccess, (state) => {
+    return { ...state, loading: false, error: '' };
+  }),
+  on(UserActions.DestroyAccountFailure, (state, { error }) => {
     console.error(error);
     return { ...state, loading: false, error };
   }),

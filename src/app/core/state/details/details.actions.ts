@@ -11,6 +11,16 @@ export const GetAllDetailFailure = createAction(
   '[DETAILS] Get Order Detail Failure',
   props<{ error: string }>()
 );
+// [GET] Order
+export const GetOrderComplete = createAction('[DETAILS] Get Order Complete');
+export const GetOrderCompleteSuccess = createAction(
+  '[DETAILS] Get Order Complete Success',
+  props<{ orders: IOrderDetails[] }>()
+);
+export const GetOrderCompleteFailure = createAction(
+  '[DETAILS] Get Order Complete Failure',
+  props<{ error: string }>()
+);
 // [GET] One Order Detail
 export const GetOneDetail = createAction(
   '[DETAILS] Get One Order Detail',

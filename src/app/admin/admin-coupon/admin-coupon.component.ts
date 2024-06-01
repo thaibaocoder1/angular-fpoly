@@ -1,11 +1,20 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../app.state';
 import {
   Observable,
   Subject,
+  Subscription,
+  debounceTime,
   distinctUntilChanged,
   filter,
+  map,
   startWith,
   switchMap,
   take,
@@ -13,7 +22,7 @@ import {
 } from 'rxjs';
 import { ICoupons } from '../../core/models/coupon';
 import * as CouponActions from '../../core/state/coupon/coupon.actions';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { CheckCouponUnique } from '../validators/check-coupon';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -25,8 +34,11 @@ import { DateFormatPipe } from '../../shared/pipes/date.pipe';
   templateUrl: './admin-coupon.component.html',
   styleUrl: './admin-coupon.component.css',
 })
-export class AdminCouponComponent implements OnInit, AfterViewInit {
+export class AdminCouponComponent implements OnInit, AfterViewInit, OnDestroy {
   coupons$: Observable<ICoupons[] | null> | undefined;
+  @ViewChild('removeCoupon', { static: true }) removeCoupon:
+    | ModalComponent
+    | undefined;
   formCoupon = this.fb.group({
     name: [
       '',
@@ -41,10 +53,11 @@ export class AdminCouponComponent implements OnInit, AfterViewInit {
     value: ['', [Validators.required]],
     expireIns: ['', [Validators.required]],
   });
-  @ViewChild('removeCoupon', { static: true }) removeCoupon:
-    | ModalComponent
-    | undefined;
+  searchControl = new FormControl();
+
   formSubmitSubject$ = new Subject<boolean>();
+
+  subscription: Subscription | undefined;
   constructor(
     private store: Store<AppState>,
     private fb: FormBuilder,
@@ -56,6 +69,20 @@ export class AdminCouponComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.getAll();
     this.coupons$ = this.store.select((state) => state.coupons.coupons);
+    this.subscription = this.searchControl.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        map((query) => {
+          return query.toLowerCase();
+        })
+      )
+      .subscribe((query) => {
+        this.store.dispatch(CouponActions.FilterData({ query }));
+        this.coupons$ = this.store.select(
+          (state) => state.coupons.filter as ICoupons[]
+        );
+      });
     this.formSubmitSubject$
       .pipe(
         tap(() => this.formCoupon.markAsDirty()),
@@ -206,5 +233,8 @@ export class AdminCouponComponent implements OnInit, AfterViewInit {
         this.remove(id);
       });
     }
+  }
+  ngOnDestroy(): void {
+    this.subscription && this.subscription.unsubscribe();
   }
 }

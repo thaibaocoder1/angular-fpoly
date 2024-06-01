@@ -16,6 +16,7 @@ import {
 import { AppState } from '../../../app.state';
 import { UniqueEmail } from '../validators/unique-email';
 import * as UserActions from '../../../core/state/users/users.actions';
+import { EmailRecover } from '../validators/email-recover';
 
 @Component({
   selector: 'app-recovery',
@@ -28,13 +29,13 @@ export class RecoveryComponent {
     email: [
       '',
       [Validators.required, Validators.email],
-      [this.unique.validate],
+      [this.recover.validate.bind(this.recover)],
     ],
   });
   constructor(
     private store: Store<AppState>,
     private fb: FormBuilder,
-    private unique: UniqueEmail,
+    private recover: EmailRecover,
     private spinner: NgxSpinnerService,
     private toast: ToastrService,
     private router: Router
@@ -71,13 +72,10 @@ export class RecoveryComponent {
           tap(() => {
             this.spinner.hide();
           }),
-          switchMap(() => {
-            return this.store.pipe(select((state) => state.users.user));
-          }),
           take(1)
         )
         .subscribe((res) => {
-          if (res) {
+          if (res === false) {
             this.toast.info('Check email to confirm reset', undefined, {
               progressBar: true,
               timeOut: 1500,
@@ -85,6 +83,7 @@ export class RecoveryComponent {
             setTimeout(() => {
               this.router.navigateByUrl('/auth/login');
             }, 1500);
+            this.formRestore.reset();
           }
         });
     }

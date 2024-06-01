@@ -10,8 +10,11 @@ import { Store, select } from '@ngrx/store';
 import {
   Observable,
   Subject,
+  Subscription,
+  debounceTime,
   distinctUntilChanged,
   filter,
+  map,
   pairwise,
   startWith,
   switchMap,
@@ -22,7 +25,12 @@ import {
 } from 'rxjs';
 import { IUsers } from '../../core/models/users';
 import * as UserActions from '../../core/state/users/users.actions';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { CheckEmail } from '../../modules/auth/validators/check-email';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -73,11 +81,13 @@ export class AdminUserComponent implements OnInit, OnDestroy, AfterViewInit {
     role: ['', [Validators.required]],
     imageUrl: [null as any],
   });
+  searchControl: FormControl = new FormControl();
 
   formUserSubject = new Subject<boolean>();
   formUserSubjectEdit = new Subject<boolean>();
 
   private unsubscribe = new Subject<void>();
+  private subscription: Subscription | undefined;
 
   users$: Observable<IUsers[] | null> | undefined;
   user$: Observable<IUsers | null> | undefined;
@@ -96,6 +106,18 @@ export class AdminUserComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.getAllUsers();
     this.users$ = this.store.select((state) => state.users.users);
+    this.subscription = this.searchControl.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        map((query) => query.toLowerCase())
+      )
+      .subscribe((query) => {
+        this.store.dispatch(UserActions.FilterData({ query }));
+        this.users$ = this.store.select(
+          (state) => state.users.filter as IUsers[]
+        );
+      });
     this.formUserSubject
       .pipe(
         tap(() => this.formUser.markAsDirty()),
@@ -277,9 +299,9 @@ export class AdminUserComponent implements OnInit, OnDestroy, AfterViewInit {
                 progressBar: true,
                 timeOut: 1000,
               });
+              this.getAllUsers();
             });
         }
-        this.getAllUsers();
       });
     }
   }
@@ -287,5 +309,6 @@ export class AdminUserComponent implements OnInit, OnDestroy, AfterViewInit {
     this.unsubscribe.next();
     this.unsubscribe.complete();
     this.alive = false;
+    this.subscription && this.subscription.unsubscribe();
   }
 }

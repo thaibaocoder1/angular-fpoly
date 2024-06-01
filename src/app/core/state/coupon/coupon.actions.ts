@@ -62,3 +62,8 @@ export const RemoveCouponFailure = createAction(
   '[COUPON] Remove Coupon Failure',
   props<{ error: string }>()
 );
+// [FILTER] - Coupon
+export const FilterData = createAction(
+  '[COUPON] Filter Coupon',
+  props<{ query: string }>()
+);

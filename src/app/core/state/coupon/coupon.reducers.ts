@@ -6,6 +6,7 @@ export const initialState: CouponState = {
   loading: false,
   coupon: null,
   coupons: [],
+  filter: [],
   error: '',
 };
 
@@ -60,5 +61,17 @@ export const CouponReducer = createReducer(
   on(CouponActions.RemoveCouponFailure, (state, { error }) => {
     console.error(error);
     return { ...state, loading: false, error };
+  }),
+  on(CouponActions.FilterData, (state, { query }) => {
+    const deepClone = [...state.coupons];
+    const dataFilterd = deepClone.filter((item) =>
+      item.name.toLowerCase().includes(query.toLowerCase())
+    );
+    return {
+      ...state,
+      loading: false,
+      error: '',
+      filter: dataFilterd.length ? dataFilterd : deepClone,
+    };
   })
 );

@@ -16,13 +16,15 @@
       <div class="card border-left-primary shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
+            <div class="col mr-2" *ngIf="products$ | async as products">
               <div
                 class="text-xs font-weight-bold text-primary text-uppercase mb-1"
               >
-                Earnings (Monthly)
+                Total Products
               </div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ products.length || 0 }} products
+              </div>
             </div>
             <div class="col-auto">
               <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -37,13 +39,15 @@
       <div class="card border-left-success shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
+            <div class="col mr-2" *ngIf="coupons$ | async as coupons">
               <div
                 class="text-xs font-weight-bold text-success text-uppercase mb-1"
               >
-                Earnings (Annual)
+                Total Coupons
               </div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ coupons.length || 0 }} coupons
+              </div>
             </div>
             <div class="col-auto">
               <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -58,30 +62,14 @@
       <div class="card border-left-info shadow h-100 py-2">
         <div class="card-body">
           <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
+            <div class="col mr-2" *ngIf="users$ | async as users">
               <div
                 class="text-xs font-weight-bold text-info text-uppercase mb-1"
               >
-                Pending Users
+                Total Users
               </div>
-              <div class="row no-gutters align-items-center">
-                <div class="col-auto">
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                    50%
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="progress progress-sm mr-2">
-                    <div
-                      class="progress-bar bg-info"
-                      role="progressbar"
-                      style="width: 50%"
-                      aria-valuenow="50"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    ></div>
-                  </div>
-                </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ users.length || 0 }} users
               </div>
             </div>
             <div class="col-auto">
@@ -103,7 +91,9 @@
               >
                 Pending Orders
               </div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ pendingOrder }}
+              </div>
             </div>
             <div class="col-auto">
               <i class="fas fa-money-bill fa-2x text-gray-300"></i>
@@ -151,9 +141,7 @@
         </div>
         <!-- Card Body -->
         <div class="card-body">
-          <div class="chart-area">
-            <app-chart-v1></app-chart-v1>
-          </div>
+          <app-chart-v1></app-chart-v1>
         </div>
       </div>
     </div>
@@ -192,18 +180,16 @@
         </div>
         <!-- Card Body -->
         <div class="card-body">
-          <div class="chart-pie pt-4 pb-2">
-            <app-chart-v2></app-chart-v2>
-          </div>
+          <app-chart-v2></app-chart-v2>
           <div class="mt-4 text-center small">
             <span class="mr-2">
-              <i class="fas fa-circle text-primary"></i> Success
+              <i class="fas fa-circle" style="color: #4e73df"></i> Success
             </span>
             <span class="mr-2">
-              <i class="fas fa-circle text-success"></i> Canceled
+              <i class="fas fa-circle" style="color: #dc3545"></i> Canceled
             </span>
             <span class="mr-2">
-              <i class="fas fa-circle text-info"></i> Rejected
+              <i class="fas fa-circle" style="color: #36b9cc"></i> Rejected
             </span>
           </div>
         </div>

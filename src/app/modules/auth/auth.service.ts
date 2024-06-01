@@ -17,6 +17,12 @@ export class AuthService {
       email: value,
     });
   }
+  // Check email recover
+  checkEmailRecover(value: string): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(`${this.apiURL}/check-recover  `, {
+      email: value,
+    });
+  }
   // Check exist email
   checkExistEmail(value: string): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(`${this.apiURL}/check-exist`, {

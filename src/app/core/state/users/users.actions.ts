@@ -106,6 +106,24 @@ export const RecoverAccountFailure = createAction(
   '[User] Recover Account Failure',
   props<{ error: string }>()
 );
+// [CONFIRM RECOVER ACCOUNT - CLIENT]
+export const ConfirmRecover = createAction(
+  '[User] Confirm Recover Account',
+  props<{ id: string; hash: string }>()
+);
+export const ConfirmRecoverSuccess = createAction(
+  '[User] Confirm Recover Account Success',
+  props<{ user: IUsers }>()
+);
+export const ConfirmRecoverFailure = createAction(
+  '[User] Confirm Recover Account Failure',
+  props<{ error: string }>()
+);
+// [FILTER]
+export const FilterData = createAction(
+  '[User] Confirm Recover Account',
+  props<{ query: string }>()
+);
 // [GET ONE]
 export const GetUser = createAction(
   '[User] Get User',
@@ -173,6 +191,16 @@ export const UpdateUserSuccess = createAction(
 );
 export const UpdateUserFailure = createAction(
   '[User] Update User Failure',
+  props<{ error: string }>()
+);
+// [DELETE]
+export const DestroyAccount = createAction(
+  '[User] Delete User',
+  props<{ id: string }>()
+);
+export const DestroyAccountSuccess = createAction('[User] Delete User Success');
+export const DestroyAccountFailure = createAction(
+  '[User] Delete User Failure',
   props<{ error: string }>()
 );
 // RESET

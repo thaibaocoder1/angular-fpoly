@@ -21,6 +21,16 @@ export const OrderDetailReducers = createReducer(
     console.error(error);
     return { ...state, loading: false, error };
   }),
+  on(OrderDetailActions.GetOrderComplete, (state, {}) => {
+    return { ...state, loading: true };
+  }),
+  on(OrderDetailActions.GetOrderCompleteSuccess, (state, { orders }) => {
+    return { ...state, loading: false, error: '', details: orders };
+  }),
+  on(OrderDetailActions.GetOrderCompleteFailure, (state, { error }) => {
+    console.error(error);
+    return { ...state, loading: false, error };
+  }),
   on(OrderDetailActions.GetOneDetail, (state) => {
     return { ...state, loading: true };
   }),

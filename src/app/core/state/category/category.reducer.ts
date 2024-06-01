@@ -1,12 +1,12 @@
 import { createReducer, on } from '@ngrx/store';
 import * as CatalogActions from './category.actions';
 import { CategoryState } from '../../adapter/category';
-import { ICategory } from '../../models/category';
 
 export const initialState: CategoryState = {
   loading: false,
   data: null,
   catalog: [],
+  filter: [],
   detail: null,
   error: '',
 };
@@ -52,5 +52,17 @@ export const CatalogReducer = createReducer(
   on(CatalogActions.updateCatalogFailure, (state, { error }) => {
     console.error(error);
     return { ...state, loading: false, error };
+  }),
+  on(CatalogActions.FilterData, (state, { query }) => {
+    const deepClone = [...state.catalog];
+    const dataFilterd = deepClone.filter((item) =>
+      item.title.toLowerCase().includes(query.toLowerCase())
+    );
+    return {
+      ...state,
+      loading: false,
+      error: '',
+      filter: dataFilterd.length ? dataFilterd : deepClone,
+    };
   })
 );

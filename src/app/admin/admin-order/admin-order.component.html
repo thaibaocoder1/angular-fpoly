@@ -139,6 +139,15 @@
         </tr>
       </tfoot>
     </table>
+    <div class="d-flex justify-content-end">
+      <button
+        class="btn btn-primary"
+        [hidden]="order.status !== 3"
+        (click)="handlePrintInvoice(order._id)"
+      >
+        Print invoice
+      </button>
+    </div>
   </ng-container>
 </app-modal>
 

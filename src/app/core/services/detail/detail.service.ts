@@ -25,6 +25,20 @@ export class DetailService {
       })
     );
   }
+  getOrderComplete(): Observable<IOrderDetails[]> {
+    return this.http
+      .get<ApiResponseOrderDetails>(this.apiURL + '/statistical')
+      .pipe(
+        map((res: ApiResponseOrderDetails) => {
+          if (res && res.success) {
+            const { data } = res;
+            return data as IOrderDetails[];
+          } else {
+            throw new Error('Can not get data from CALL API!');
+          }
+        })
+      );
+  }
   getOneOrderDetail(id: string): Observable<IOrderDetails[]> {
     return this.http.get<ApiResponseOrderDetails>(this.apiURL + '/' + id).pipe(
       map((res: ApiResponseOrderDetails) => {

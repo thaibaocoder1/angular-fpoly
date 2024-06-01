@@ -19,7 +19,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
-export class UniqueEmail implements AsyncValidator {
+export class EmailRecover implements AsyncValidator {
   constructor(private authService: AuthService) {}
   validate = (
     control: AbstractControl
@@ -28,16 +28,16 @@ export class UniqueEmail implements AsyncValidator {
       debounceTime(1000),
       take(1),
       switchMap((value) => {
-        return this.authService.checkUniqueEmail(value);
+        return this.authService.checkEmailRecover(value);
       }),
       map((value) => {
         return value.success ? null : { notExist: true };
       }),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 404) {
-          return of({ deactivated: true });
+          return of({ notFound: true });
         }
-        return of({ nonUniqueEmail: true });
+        return of(null);
       })
     );
   };

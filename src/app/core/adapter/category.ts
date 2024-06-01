@@ -10,5 +10,6 @@ export interface CategoryState {
   data: ApiResponseCategory | null;
   catalog: ICategory[];
   detail: ICategory | null;
+  filter?: ICategory[];
   error: string;
 }

@@ -107,7 +107,22 @@ export class UsersService {
   // Recover
   recoverUser(email: string): Observable<IUsers> {
     return this.http
-      .patch<ApiResponse>(`${this.apiURL}/recover`, { email })
+      .post<ApiResponse>(`${this.apiURL}/recover`, { email })
+      .pipe(
+        map((res: ApiResponse) => {
+          if (res && res.success) {
+            const data = res.data as IUsers;
+            return data;
+          } else {
+            throw new Error('API response is not successful.');
+          }
+        })
+      );
+  }
+  // Confirm recover
+  confirmRecover(id: string, hash: string): Observable<IUsers> {
+    return this.http
+      .post<ApiResponse>(`${this.apiURL}/confirm-recover`, { id, hash })
       .pipe(
         map((res: ApiResponse) => {
           if (res && res.success) {
@@ -199,5 +214,9 @@ export class UsersService {
           }
         })
       );
+  }
+  // Delete
+  deleteAccount(id: string): Observable<boolean> {
+    return this.http.delete<boolean>(`${this.apiURL}/${id}`);
   }
 }

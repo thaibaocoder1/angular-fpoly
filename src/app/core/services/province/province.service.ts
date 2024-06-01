@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
@@ -10,12 +10,14 @@ export interface Province {
 interface ApiRes {
   results: Province[];
 }
+
 @Injectable({
   providedIn: 'root',
 })
 export class ProvinceService {
   url: string = '/assets/province.json';
-
+  private baseUrl = 'https://vapi.vnappmob.com/api/province';
+  private proxyUrl = 'https://cors-anywhere.herokuapp.com/';
   constructor(private http: HttpClient) {}
 
   getAllProvinces(): Observable<Province[]> {

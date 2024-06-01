@@ -23,6 +23,12 @@
     <span class="form-message" *ngIf="control.errors['nonUniqueEmail']">
       Email is not exist in system.
     </span>
+    <span class="form-message" *ngIf="control.errors['deactivated']">
+      The account has been deactivated on the system
+    </span>
+    <span class="form-message" *ngIf="control.errors['notFound']">
+      This account is active
+    </span>
     <span class="form-message" *ngIf="control.errors['nonUniqueCode']">
       Code is exist in system.
     </span>

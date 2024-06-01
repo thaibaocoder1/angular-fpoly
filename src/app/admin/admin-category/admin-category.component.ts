@@ -1,10 +1,18 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  Subscription,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  takeUntil,
+} from 'rxjs';
 import { AppState } from '../../app.state';
 import * as CategoryActions from '../../core/state/category/category.actions';
 import { ICategory } from '../../core/models/category';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ModalComponent } from '../../shared/components/modal/modal.component';
 import { SlugifyPipe } from '../../shared/pipes/slugify.pipe';
@@ -17,10 +25,13 @@ import { SlugifyPipe } from '../../shared/pipes/slugify.pipe';
 export class AdminCategoryComponent implements OnInit, OnDestroy {
   cataglogs$: Observable<ICategory[]> | undefined;
   cataglog$: Observable<ICategory | null> | undefined;
-  private unsubscribe$ = new Subject<void>();
   @ViewChild('editModal', { static: true }) editModal:
     | ModalComponent
     | undefined;
+  searchControl = new FormControl();
+
+  private unsubscribe$ = new Subject<void>();
+  private subscription: Subscription | undefined;
 
   formCatalog = this.fb.group({
     title: [
@@ -43,6 +54,20 @@ export class AdminCategoryComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.cataglogs$ = this.store.select((state) => state.catalogs.catalog);
     this.cataglog$ = this.store.select((state) => state.catalogs.detail);
+    this.subscription = this.searchControl.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        map((query) => {
+          return query.toLowerCase();
+        })
+      )
+      .subscribe((query) => {
+        this.store.dispatch(CategoryActions.FilterData({ query }));
+        this.cataglogs$ = this.store.select(
+          (state) => state.catalogs.filter as ICategory[]
+        );
+      });
   }
   editCategory(id: string) {
     this.getDetail(id);
@@ -87,5 +112,6 @@ export class AdminCategoryComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.subscription && this.subscription.unsubscribe();
   }
 }

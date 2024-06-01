@@ -67,7 +67,8 @@
                   class="btn btn-danger btn-sm"
                   type="button"
                   data-bs-toggle="modal"
-                  data-bs-target="#removeUserModal"
+                  data-bs-target="#deleteUserModal"
+                  (click)="handleDestroyUser(item._id)"
                 >
                   Xoá vĩnh viễn
                 </button>
@@ -88,12 +89,8 @@
   <p>Xác nhận khôi phục tài khoản này</p>
 </app-modal>
 
-<app-modal
-  #unactiveModal
-  [modalId]="'removeUserModal'"
-  [title]="'Unactive modal'"
->
-  <p>Bạn muốn ngừng hoạt động tài khoản này?</p>
+<app-modal #deleteModal [modalId]="'deleteUserModal'" [title]="'Delete modal'">
+  <p>Bạn muốn xoá vĩnh viễn tài khoản này?</p>
 </app-modal>
 
 <ng-template #noUser>

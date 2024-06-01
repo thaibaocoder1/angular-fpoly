@@ -32,9 +32,8 @@ export class ActiveComponent implements OnInit {
   ngOnInit(): void {
     this.error$ = this.store.pipe(select((state) => state.users.error));
     this.error$?.pipe(take(1)).subscribe((err) => {
-      const error = err.error;
-      if (error && error.message === 'Tài khoản đã hết hạn active.') {
-        this.toast.error(error.message, undefined, {
+      if (err && err === 'Tài khoản đã hết hạn active.') {
+        this.toast.error(err, undefined, {
           progressBar: true,
           timeOut: 2000,
         });

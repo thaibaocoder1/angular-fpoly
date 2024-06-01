@@ -1,6 +1,6 @@
 import { HttpInterceptorFn, HttpEventType } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { tap, catchError, switchMap, throwError, of } from 'rxjs';
+import { tap, catchError, switchMap, throwError } from 'rxjs';
 import { UsersService } from '../services/users/users.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
@@ -32,6 +32,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
               setHeaders: {
                 Authorization: `Bearer ${data.accessToken}`,
               },
+              withCredentials: true,
             });
 
             return next(newReq);

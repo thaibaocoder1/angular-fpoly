@@ -4,8 +4,11 @@ import { Store, select } from '@ngrx/store';
 import {
   Observable,
   Subject,
+  Subscription,
+  debounceTime,
   distinctUntilChanged,
   filter,
+  map,
   startWith,
   switchMap,
   take,
@@ -14,7 +17,12 @@ import {
 } from 'rxjs';
 import { AppState } from '../../app.state';
 import { IProducts } from '../../core/models/products';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ICategory } from '../../core/models/category';
 import { UniqueCodeValidator } from '../validators/check-code';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -74,9 +82,11 @@ export class AdminProductComponent implements OnInit, OnDestroy {
     quantity: ['', Validators.compose([Validators.required])],
     thumb: [null as any],
   });
+  searchControl: FormControl = new FormControl();
   formSubmitSubject$ = new Subject<boolean>();
   formSubmitSubjectEdit$ = new Subject<boolean>();
   private unsubscribe$ = new Subject<void>();
+  subscription: Subscription | undefined;
 
   constructor(
     private store: Store<AppState>,
@@ -89,6 +99,20 @@ export class AdminProductComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.getAll();
     this.products$ = this.store.select((state) => state.products.products);
+    this.subscription = this.searchControl.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        map((query) => {
+          return query.toLowerCase();
+        })
+      )
+      .subscribe((query) => {
+        this.store.dispatch(ProductActions.filterProduct({ query }));
+        this.products$ = this.store.select(
+          (state) => state.products.filter as IProducts[]
+        );
+      });
     this.formSubmitSubject$
       .pipe(
         tap(() => this.formProduct.markAsDirty()),
@@ -240,5 +264,6 @@ export class AdminProductComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.subscription && this.subscription.unsubscribe();
   }
 }

@@ -33,6 +33,21 @@ export class OrderdetailEffects {
       )
     )
   );
+  getOrderComplete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(OrderDetailActions.GetOrderComplete),
+      mergeMap(() =>
+        this.orderDetailService.getOrderComplete().pipe(
+          map((orders) =>
+            OrderDetailActions.GetOrderCompleteSuccess({ orders })
+          ),
+          catchError((error) =>
+            of(OrderDetailActions.GetOrderCompleteFailure({ error }))
+          )
+        )
+      )
+    )
+  );
   getOneOrderDetail$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderDetailActions.GetOneDetail),

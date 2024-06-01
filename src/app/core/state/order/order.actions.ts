@@ -63,3 +63,16 @@ export const UpdateOrderFailure = createAction(
   '[ORDER] Update Order Failure',
   props<{ error: string }>()
 );
+// [Invoice] Order
+export const PrintInvoice = createAction(
+  '[ORDER] Print Invoice Order',
+  props<{ id: string }>()
+);
+export const PrintInvoiceSuccess = createAction(
+  '[ORDER] Print Invoice Order Success',
+  props<{ order: IOrders }>()
+);
+export const PrintInvoiceFailure = createAction(
+  '[ORDER] Print Invoice Order Failure',
+  props<{ error: string }>()
+);

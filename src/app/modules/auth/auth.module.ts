@@ -12,9 +12,20 @@ import { ActiveComponent } from './active/active.component';
 import { ForgotComponent } from './forgot/forgot.component';
 import { ResetComponent } from './reset/reset.component';
 import { RecoveryComponent } from './recovery/recovery.component';
+import { ConfirmComponent } from './confirm/confirm.component';
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent, PermissionComponent, ForbiddenComponent, ActiveComponent, ForgotComponent, ResetComponent, RecoveryComponent],
+  declarations: [
+    LoginComponent,
+    RegisterComponent,
+    PermissionComponent,
+    ForbiddenComponent,
+    ActiveComponent,
+    ForgotComponent,
+    ResetComponent,
+    RecoveryComponent,
+    ConfirmComponent,
+  ],
   imports: [
     CommonModule,
     AuthRoutingModule,

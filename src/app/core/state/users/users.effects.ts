@@ -128,6 +128,22 @@ export class UserEffects {
       )
     )
   );
+  cofirmRecoverUserClient$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.ConfirmRecover),
+      mergeMap((payload) =>
+        this.userService.confirmRecover(payload.id, payload.hash).pipe(
+          map((user) => UserActions.ConfirmRecoverSuccess({ user })),
+          catchError((error: HttpErrorResponse) => {
+            const errorLog = error.error as ErrorResponse;
+            return of(
+              UserActions.ConfirmRecoverFailure({ error: errorLog.message })
+            );
+          })
+        )
+      )
+    )
+  );
   getUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.GetUser),
@@ -181,6 +197,19 @@ export class UserEffects {
         this.userService.updateUser(payload.user).pipe(
           map((user) => UserActions.UpdateUserSuccess({ user })),
           catchError((error) => of(UserActions.UpdateUserFailure({ error })))
+        )
+      )
+    )
+  );
+  deleteUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserActions.DestroyAccount),
+      mergeMap((payload) =>
+        this.userService.deleteAccount(payload.id).pipe(
+          map(() => UserActions.DestroyAccountSuccess()),
+          catchError((error) =>
+            of(UserActions.DestroyAccountFailure({ error }))
+          )
         )
       )
     )

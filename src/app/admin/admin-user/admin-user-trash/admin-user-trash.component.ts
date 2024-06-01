@@ -35,6 +35,9 @@ export class AdminUserTrashComponent
   @ViewChild('restoreModal', { static: true }) restoreModal:
     | ModalComponent
     | undefined;
+  @ViewChild('deleteModal', { static: true }) deleteModal:
+    | ModalComponent
+    | undefined;
   constructor(
     private store: Store<AppState>,
     private spinner: NgxSpinnerService,
@@ -50,6 +53,11 @@ export class AdminUserTrashComponent
       this.restoreModal.refID = id;
     }
   }
+  handleDestroyUser(id: string) {
+    if (id && this.deleteModal) {
+      this.deleteModal.refID = id;
+    }
+  }
   ngAfterViewInit(): void {
     if (this.restoreModal) {
       this.restoreModal.confirm
@@ -60,6 +68,19 @@ export class AdminUserTrashComponent
         .subscribe((id: string) => {
           if (id) {
             this.store.dispatch(UserActions.RestoreAccouunt({ id }));
+            this.sideAction();
+          }
+        });
+    }
+    if (this.deleteModal) {
+      this.deleteModal.confirm
+        .pipe(
+          select((id) => id),
+          take(1)
+        )
+        .subscribe((id: string) => {
+          if (id) {
+            this.store.dispatch(UserActions.DestroyAccount({ id }));
             this.sideAction();
           }
         });
